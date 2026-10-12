@@ -10,7 +10,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/sabin-khanal-950163326',
   cv: '/Sabin-Khanal-CV.pdf',
   description:
-    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Building secure, tested digital banking systems with Python, Flask and PostgreSQL at Best Finance Company.',
+    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Building secure, tested backend systems with Python, Flask and PostgreSQL at Best Finance Company.',
 };
 
 export const education = { degree: 'BSc (Hons) Computing', school: 'The British College', year: 2025 };
