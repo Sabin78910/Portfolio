@@ -1,0 +1,406 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ProjectVisual from '../components/ProjectVisual.astro';
+import photo from '../assets/sabin-portrait.webp';
+import { profile, nav, stack, shipped, experience, projects, skills, labs, products, platform } from '../data/profile';
+
+// Product screenshots, keyed by `shot` in profile.ts
+const shots = import.meta.glob<{ default: ImageMetadata }>('../assets/shots/*.{webp,jpg}', { eager: true });
+const shot = (name: string) => Object.entries(shots).find(([k]) => k.includes(`/${name}.`))![1].default;
+
+const year = new Date().getFullYear();
+const headline = ['I', 'engineer', 'the', 'systems', 'behind'];
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role,
+  url: Astro.site?.href,
+  image: new URL('/og.png', Astro.site).href,
+  email: `mailto:${profile.email}`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
+  worksFor: { '@type': 'Organization', name: 'Best Finance Company Ltd.' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'The British College' },
+  sameAs: [profile.github, profile.linkedin],
+};
+
+const commands = [
+  ...nav.map((n) => ({ label: `Go to ${n.label}`, hint: 'Section', href: n.href })),
+  { label: 'Go to Skills', hint: 'Section', href: '#skills' },
+  ...products.filter((pr) => 'live' in pr).map((pr) => ({ label: `Open ${pr.name}`, hint: 'Live app', href: (pr as { live: string }).live, external: true })),
+  { label: 'Open Sabin Labs', hint: `All ${labs.count} products`, href: labs.hub, external: true },
+  { label: 'Copy email address', hint: profile.email, action: 'copy' },
+  { label: 'Download CV', hint: 'PDF', href: profile.cv, download: true },
+  { label: 'Open GitHub', hint: 'github.com/Sabin78910', href: profile.github, external: true },
+  { label: 'Open LinkedIn', hint: 'linkedin.com', href: profile.linkedin, external: true },
+];
+---
+
+<Base title={`${profile.name} — ${profile.role}`} description={profile.description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(personLd)} />
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="nav__pill">
+      <a class="nav__brand" href="#top" aria-label={`${profile.name}, back to top`}>
+        <span class="nav__mark" aria-hidden="true">SK</span>
+        <span class="nav__name">{profile.name}</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav__links">
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+      <div class="nav__actions">
+        <button class="kbd-btn" type="button" data-cmdk-open aria-label="Open menu (Ctrl or Command + K)">
+          <kbd>⌘</kbd><kbd>K</kbd><span class="kbd-btn__touch">Menu</span>
+        </button>
+        <a class="btn btn--primary btn--sm" href={profile.cv} download>Résumé</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ── Hero ─────────────────────────────────────────── -->
+    <section id="top" class="hero">
+      <div class="hero__bg" aria-hidden="true">
+        <canvas class="hero__aurora" data-aurora></canvas>
+        <div class="hero__grid"></div>
+      </div>
+
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="status"><span class="status__dot"></span>Building digital banking at Best Finance Company</p>
+          <h1 class="hero__title">
+            {headline.map((w, i) => <><span class="word" style={`--i:${i}`}><span>{w}</span></span>{' '}</>)}
+            <span class="word" style="--i:5"><span class="grad">digital banking.</span></span>
+          </h1>
+          <p class="hero__lead">
+            {profile.role} in {profile.location}. I build secure, tested backend services with Python, Flask and
+            PostgreSQL — and the interfaces people use on top of them.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#products">See what I’ve shipped <span aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost" href="#contact">Get in touch</a>
+          </div>
+        </div>
+
+        <figure class="profile" data-tilt data-spot>
+          <div class="profile__photo">
+            <Image src={photo} alt="Portrait of Sabin Khanal" widths={[340, 500]} sizes="(max-width: 860px) 90vw, 330px" priority />
+          </div>
+          <figcaption class="profile__meta">
+            <div>
+              <strong>{profile.name}</strong>
+              <span>{profile.role}</span>
+            </div>
+            <div class="profile__time">
+              <span class="mono" data-clock>--:--</span>
+              <span>Kathmandu</span>
+            </div>
+          </figcaption>
+          <span class="profile__glare" aria-hidden="true"></span>
+        </figure>
+      </div>
+
+      <div class="marquee" aria-label="Technologies I work with">
+        <ul class="marquee__track">
+          {stack.map((s) => <li>{s}</li>)}
+          {stack.map((s) => <li aria-hidden="true">{s}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Products (Sabin Labs) ───────────────────────── -->
+    <section id="products" class="section">
+      <div class="wrap">
+        <header class="section__head section__head--split" data-reveal>
+          <div>
+            <p class="eyebrow"><span class="mono">01</span> Sabin Labs</p>
+            <h2>{labs.count} products. <span class="grad">One platform.</span></h2>
+          </div>
+          <p class="muted section__aside">
+            My product studio. Apps, games and APIs I design, build and ship, with CI, security scans and automated
+            deploys on every repo.
+          </p>
+        </header>
+
+        <div class="products">
+          {products.map((pr, i) => (
+            <article class={`product card product--${pr.shape} ${i === 0 ? 'product--lead' : ''}`} data-spot data-reveal>
+              <div class="product__media">
+                {pr.shape === 'phone' ? (
+                  <div class="phone">
+                    <Image src={shot(pr.shot)} alt={`${pr.name} app screen`} widths={[240, 450]} sizes="240px" />
+                  </div>
+                ) : (
+                  <Image src={shot(pr.shot)} alt={`${pr.name} screenshot`} widths={[480, 960]} sizes="(max-width: 900px) 100vw, 720px" />
+                )}
+              </div>
+              <div class="product__body">
+                <p class="eyebrow">{pr.kind}</p>
+                <h3>{pr.name}</h3>
+                <p class="muted">{pr.summary}</p>
+                <ul class="chips" aria-label="Tech stack">{pr.stack.map((t) => <li>{t}</li>)}</ul>
+                <p class="product__links">
+                  {'live' in pr && <a class="btn btn--primary btn--sm" href={pr.live} target="_blank" rel="noopener">Open app ↗<span class="visually-hidden"> {pr.name}</span></a>}
+                  <a class="btn btn--ghost btn--sm" href={pr.repo} target="_blank" rel="noopener">Code ↗<span class="visually-hidden"> for {pr.name}</span></a>
+                </p>
+              </div>
+            </article>
+          ))}
+
+          <article class="platform card" data-spot data-reveal>
+            <div class="platform__body">
+              <p class="eyebrow">{platform.kind}</p>
+              <h3>{platform.name}</h3>
+              <p class="muted">{platform.summary}</p>
+              <ul class="chips" aria-label="Tech stack">{platform.stack.map((t) => <li>{t}</li>)}</ul>
+              <p class="product__links">
+                <a class="btn btn--primary btn--sm" href={labs.hub} target="_blank" rel="noopener">See all {labs.count} products ↗</a>
+                <a class="btn btn--ghost btn--sm" href={platform.repo} target="_blank" rel="noopener">Code ↗<span class="visually-hidden"> for {platform.name}</span></a>
+              </p>
+            </div>
+            <a class="term" href={platform.live} target="_blank" rel="noopener" aria-label="Live health check for the sync API">
+              <span class="term__bar" aria-hidden="true"><i></i><i></i><i></i></span>
+              <code><span class="term__prompt">$</span> curl sync-api.sabin-apps.workers.dev/v1/health</code>
+              <code class="term__ok">HTTP/2 200 · ok</code>
+              <code class="muted">ciphertext only · zero passwords</code>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Work ─────────────────────────────────────────── -->
+    <section id="work" class="section">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <p class="eyebrow"><span class="mono">02</span> Projects</p>
+          <h2>Built end to end.</h2>
+        </header>
+        <div class="projects">
+          {projects.map((p, i) => (
+            <article class="project card" data-spot data-reveal>
+              <div class="project__visual" data-tilt>
+                <ProjectVisual kind={p.visual} />
+              </div>
+              <div class="project__body">
+                <p class="eyebrow"><span class="mono">{String(i + 1).padStart(2, '0')}</span> {p.kind}</p>
+                <h3>{p.title}</h3>
+                <p class="project__summary">{p.summary}</p>
+                <ul class="ticks">
+                  {p.points.map((pt) => <li>{pt}</li>)}
+                </ul>
+                <ul class="chips" aria-label="Tech stack">
+                  {p.stack.map((s) => <li>{s}</li>)}
+                </ul>
+                {'repo' in p && (
+                  <p><a class="link" href={p.repo} target="_blank" rel="noopener">View code ↗<span class="visually-hidden"> for {p.title}</span></a></p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="more" data-reveal>
+          <a class="link" href={profile.github} target="_blank" rel="me noopener">More on GitHub <span aria-hidden="true">↗</span></a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── About (bento) ────────────────────────────────── -->
+    <section id="about" class="section">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <p class="eyebrow"><span class="mono">03</span> About</p>
+          <h2>Quiet, correct systems.</h2>
+        </header>
+        <div class="bento">
+          <article class="tile tile--story card" data-spot data-reveal>
+            <p class="tile__big">
+              Software that moves money should be <span class="grad">boring in the best way</span> — correct, secure and
+              always on.
+            </p>
+            <p class="muted">
+              I work across the Transaction &amp; Digital Banking and IT teams at Best Finance Company Ltd. I build
+              internal platforms, help keep the Digital Lending System fast, secure and compliant, and test my own work
+              before it reaches production. A background in QA means I write code thinking about how it could break.
+            </p>
+          </article>
+
+          <article class="tile tile--now card" data-spot data-reveal>
+            <p class="eyebrow">Now</p>
+            <h3>Transaction &amp; Digital Banking</h3>
+            <p class="muted">Best Finance Company Ltd. · since Jun 2026</p>
+            <p class="status status--sm"><span class="status__dot"></span>Shipping to production</p>
+          </article>
+
+          <article class="tile tile--clock card" data-spot data-reveal>
+            <p class="eyebrow">Local time</p>
+            <p class="tile__clock mono" data-clock data-seconds>--:--:--</p>
+            <p class="muted">Kathmandu · UTC+5:45</p>
+          </article>
+
+          <article class="tile tile--edu card" data-spot data-reveal>
+            <p class="eyebrow">Education</p>
+            <h3>BSc (Hons) Computing</h3>
+            <p class="muted">The British College · 2025</p>
+          </article>
+
+          <article class="tile tile--shipped card" data-spot data-reveal>
+            <p class="eyebrow">Shipped at BFC</p>
+            <ul class="shipped">
+              {shipped.map((s) => (
+                <li><strong>{s.name}</strong><span class="mono">{s.note}</span></li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="tile tile--principles card" data-spot data-reveal>
+            <p class="eyebrow">How I work</p>
+            <ul class="principles">
+              <li><span class="mono">01</span>Correct before clever</li>
+              <li><span class="mono">02</span>Secure by default</li>
+              <li><span class="mono">03</span>Tested before shipped</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Experience ───────────────────────────────────── -->
+    <section id="experience" class="section">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <p class="eyebrow"><span class="mono">04</span> Experience</p>
+          <h2>Where I’ve worked.</h2>
+        </header>
+        <ol class="jobs">
+          {experience.map((job) => (
+            <li class="job card" data-spot data-reveal>
+              <div class="job__head">
+                <h3>{job.company}</h3>
+                <span class="muted">{job.place}</span>
+              </div>
+              {job.roles.map((r) => (
+                <div class="role">
+                  <p class="role__period mono">{r.period}</p>
+                  <div>
+                    <h4>{r.title}</h4>
+                    <ul class="ticks">
+                      {r.points.map((p) => <li>{p}</li>)}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Skills ───────────────────────────────────────── -->
+    <section id="skills" class="section">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <p class="eyebrow"><span class="mono">05</span> Toolkit</p>
+          <h2>What I build with.</h2>
+        </header>
+        <div class="skills">
+          {skills.map((s) => (
+            <div class="skill card" data-spot data-reveal>
+              <h3 class="eyebrow">{s.group}</h3>
+              <ul class="chips">
+                {s.items.map((it) => <li>{it}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ──────────────────────────────────────── -->
+    <section id="contact" class="section contact">
+      <div class="wrap contact__inner">
+        <div class="contact__copy" data-reveal>
+          <p class="eyebrow"><span class="mono">06</span> Contact</p>
+          <h2>Let’s build something <span class="grad">reliable.</span></h2>
+          <p class="muted">
+            Open to backend and full-stack roles, freelance projects and conversations about fintech systems.
+          </p>
+          <div class="email">
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <button class="btn btn--ghost btn--sm" type="button" data-copy={profile.email}>
+              <span data-copy-status aria-live="polite">Copy</span>
+            </button>
+          </div>
+          <ul class="socials">
+            <li><a class="link" href={profile.linkedin} target="_blank" rel="me noopener">LinkedIn ↗</a></li>
+            <li><a class="link" href={profile.github} target="_blank" rel="me noopener">GitHub ↗</a></li>
+            <li><a class="link" href={profile.cv} download>Résumé (PDF) ↓</a></li>
+          </ul>
+        </div>
+
+        <form class="form card" action="/api/contact" method="post" data-contact data-spot data-reveal novalidate>
+          <div class="field">
+            <label for="f-name">Name</label>
+            <input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" />
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" />
+          </div>
+          <div class="field">
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" rows="5" required minlength="10" maxlength="5000"></textarea>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label for="f-company">Company</label>
+            <input id="f-company" name="company" tabindex="-1" autocomplete="off" />
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">
+            <span data-submit-label>Send message</span>
+          </button>
+          <p class="form__status" role="status" aria-live="polite" data-form-status></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p>© {year} {profile.name} · Kathmandu, Nepal</p>
+      <p class="muted">Press <kbd>⌘</kbd><kbd>K</kbd> to navigate · <a class="link" href="#top">Back to top ↑</a></p>
+    </div>
+  </footer>
+
+  <!-- ── Command palette ───────────────────────────────── -->
+  <dialog class="cmdk" data-cmdk aria-label="Command menu">
+    <div class="cmdk__box">
+      <input class="cmdk__input" type="text" placeholder="Type a command or search…" aria-label="Search commands" data-cmdk-input autocomplete="off" />
+      <ul class="cmdk__list" role="listbox" data-cmdk-list>
+        {commands.map((c) => (
+          <li role="option" aria-selected="false">
+            <a
+              href={c.href ?? '#'}
+              data-action={c.action}
+              download={c.download ? '' : undefined}
+              target={c.external ? '_blank' : undefined}
+              rel={c.external ? 'noopener' : undefined}
+            >
+              <span>{c.label}</span><span class="cmdk__hint">{c.hint}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="cmdk__foot mono">↑↓ navigate · ↵ select · esc close</p>
+    </div>
+  </dialog>
+
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</Base>

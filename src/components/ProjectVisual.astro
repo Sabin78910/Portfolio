@@ -1,0 +1,68 @@
+---
+// Illustrative UI art for each project (no screenshots yet) — pure HTML/SVG, zero image weight.
+interface Props {
+  kind: 'store' | 'market' | 'data';
+}
+const { kind } = Astro.props;
+
+// Deterministic "random" scatter for the PCA plot.
+const points = Array.from({ length: 42 }, (_, i) => {
+  const a = (i * 137.508 * Math.PI) / 180;
+  const r = 18 + ((i * 53) % 70);
+  return { x: 160 + Math.cos(a) * r * 1.5, y: 110 + Math.sin(a) * r * 0.62 - (i % 7) * 2, c: i % 3 };
+});
+const bars = [42, 68, 55, 81, 64, 92, 76];
+---
+
+<div class={`pv pv--${kind}`} aria-hidden="true">
+  {kind === 'store' && (
+    <div class="pv-window">
+      <div class="pv-bar"><span></span><span></span><span></span><i>nshandicrafts.com.np</i></div>
+      <div class="pv-store">
+        <div class="pv-filters"><b></b><b></b><b></b><b></b></div>
+        <div class="pv-grid">
+          {['रू 2,450', 'रू 1,180', 'रू 3,900', 'रू 860', 'रू 5,200', 'रू 1,640'].map((p, i) => (
+            <div class="pv-product" style={`--h:${(i * 47) % 360}`}>
+              <div class="pv-thumb"></div>
+              <span class="pv-price">{p}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="pv-pill pv-pill--cart">Cart · 3 items · VAT incl.</div>
+    </div>
+  )}
+
+  {kind === 'market' && (
+    <div class="pv-window">
+      <div class="pv-bar"><span></span><span></span><span></span><i>Trader dashboard</i></div>
+      <div class="pv-dash">
+        <div class="pv-chart">
+          {bars.map((h) => <span style={`--v:${h}%`}></span>)}
+        </div>
+        <div class="pv-rows">
+          {['Order #1042', 'Order #1041', 'Order #1040'].map((o, i) => (
+            <div class="pv-row"><span>{o}</span><em class={i === 0 ? 'is-new' : ''}>{i === 0 ? 'Paid' : 'Collected'}</em></div>
+          ))}
+        </div>
+      </div>
+      <div class="pv-otp">{['4', '8', '1', '9', '2', '7'].map((d) => <span>{d}</span>)}</div>
+      <div class="pv-pill">PayPal ✓ verified</div>
+    </div>
+  )}
+
+  {kind === 'data' && (
+    <div class="pv-window">
+      <div class="pv-bar"><span></span><span></span><span></span><i>pca_components.R</i></div>
+      <svg class="pv-plot" viewBox="0 0 320 220">
+        <line x1="20" y1="110" x2="300" y2="110" class="axis" />
+        <line x1="160" y1="15" x2="160" y2="205" class="axis" />
+        <line x1="40" y1="160" x2="290" y2="55" class="pc" />
+        {points.map((p) => <circle cx={p.x} cy={p.y} r="3.2" class={`pt pt--${p.c}`} />)}
+        <text x="292" y="104" class="lbl">PC1</text>
+        <text x="166" y="24" class="lbl">PC2</text>
+      </svg>
+      <div class="pv-tags"><span>MICE ✓</span><span>IQR ✓</span><span>Min–Max ✓</span></div>
+    </div>
+  )}
+</div>

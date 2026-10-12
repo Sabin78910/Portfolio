@@ -1,0 +1,23 @@
+{
+  "name": "sabin-khanal-portfolio",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test src/lib/*.test.ts"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^11.0.14",
+    "astro": "^7.3.8"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "overrides": {
+    "@vercel/routing-utils": {
+      "path-to-regexp": "6.3.0"
+    }
+  }
+}
