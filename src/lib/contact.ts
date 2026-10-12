@@ -3,7 +3,8 @@ export type ContactResult =
   | { ok: true; data: ContactInput }
   | { ok: false; spam?: true; error: string };
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+// Non-empty domain labels: rejects addresses like a@example..com
+const EMAIL = /^[^\s@]+@(?:[^\s@.]+\.)+[^\s@.]{2,}$/;
 
 // Trust boundary: everything from the form is untrusted until it passes here.
 export function validateContact(raw: unknown): ContactResult {
