@@ -12,6 +12,8 @@ test('accepts a valid message and trims it', () => {
 test('rejects bad input and flags honeypot spam', () => {
   assert.equal(validateContact(null).ok, false);
   assert.equal(validateContact({ ...good, email: 'not-an-email' }).ok, false);
+  assert.equal(validateContact({ ...good, email: 'asha@example..com' }).ok, false);
+  assert.equal(validateContact({ ...good, email: 'asha.rai@mail.example.com.np' }).ok, true);
   assert.equal(validateContact({ ...good, message: 'short' }).ok, false);
   assert.equal(validateContact({ ...good, message: 'x'.repeat(5001) }).ok, false);
   assert.equal(validateContact({ ...good, name: 42 }).ok, false);

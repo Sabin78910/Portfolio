@@ -3,9 +3,12 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import photo from '../assets/sabin-portrait.webp';
-import { profile, nav, stack, bfcWork, experience, projects, skills } from '../data/profile';
+import { profile, nav, stack, bfcWork, experience, projects, skills, education } from '../data/profile';
 
 const year = new Date().getFullYear();
+const [currentJob] = experience;
+const [currentRole] = currentJob.roles;
+const since = currentRole.period.split(' — ')[0];
 const headline = ['I', 'engineer', 'the', 'systems', 'behind'];
 
 const personLd = {
@@ -17,8 +20,8 @@ const personLd = {
   image: new URL('/og.png', Astro.site).href,
   email: `mailto:${profile.email}`,
   address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
-  worksFor: { '@type': 'Organization', name: 'Best Finance Company Ltd.' },
-  alumniOf: { '@type': 'CollegeOrUniversity', name: 'The British College' },
+  worksFor: { '@type': 'Organization', name: currentJob.company },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education.school },
   sameAs: [profile.github, profile.linkedin],
 };
 
@@ -100,7 +103,7 @@ const commands = [
           </figcaption>
           <span class="profile__glare" aria-hidden="true"></span>
           <p class="proof proof--a"><span class="status__dot"></span>Digital banking at BFC</p>
-          <p class="proof proof--b"><span class="proof__tick">✓</span>BSc (Hons) Computing</p>
+          <p class="proof proof--b"><span class="proof__tick">✓</span>{education.degree}</p>
         </figure>
       </div>
 
@@ -170,8 +173,8 @@ const commands = [
 
           <article class="tile tile--now card" data-spot data-reveal>
             <p class="eyebrow">Now</p>
-            <h3>Transaction &amp; Digital Banking</h3>
-            <p class="muted">Best Finance Company Ltd. · since Jun 2026</p>
+            <h3>{currentRole.title}</h3>
+            <p class="muted">{currentJob.company} · since {since}</p>
             <p class="status status--sm"><span class="status__dot"></span>Shipping to production</p>
           </article>
 
@@ -183,8 +186,8 @@ const commands = [
 
           <article class="tile tile--edu card" data-spot data-reveal>
             <p class="eyebrow">Education</p>
-            <h3>BSc (Hons) Computing</h3>
-            <p class="muted">The British College · 2025</p>
+            <h3>{education.degree}</h3>
+            <p class="muted">{education.school} · {education.year}</p>
           </article>
 
           <article class="tile tile--shipped card" data-spot data-reveal>

@@ -211,7 +211,7 @@ form?.addEventListener('submit', async (e) => {
     form.classList.add('is-sent');
     say('Thanks — your message is on its way. I’ll get back to you soon.', 'ok');
   } catch (err) {
-    say(`${(err as Error).message} You can also email me at sabinkhanal13@gmail.com.`, 'err');
+    say(`${(err as Error).message} You can also email me at ${$('[data-copy]')?.dataset.copy ?? 'the address above'}.`, 'err');
   } finally {
     button.disabled = false;
     label!.textContent = 'Send message';

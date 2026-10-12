@@ -122,7 +122,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 | Layer | Choice | Reason |
 |---|---|---|
 | Framework | Astro 7 (static pages plus one server route) | HTML-first. Content works without JS, which avoids Rohan's empty-shell problem |
-| Fonts | Geist + Geist Mono, self-hosted via the Astro Fonts API, preloaded | No third-party render-blocking request. Metric-matched fallbacks give CLS 0 |
+| Fonts | Space Grotesk (display) + Geist (body), self-hosted via the Astro Fonts API and preloaded; system monospace | No third-party render-blocking request. Metric-matched fallbacks give CLS 0 |
 | Motion | Vanilla JS + CSS (no GSAP/Lenis) | About 20 KB less JS. Native scroll is better for usability |
 | Hero visual | Raw WebGL fragment shader | Stripe-grade gradient for about 2 KB. Pauses offscreen. CSS fallback |
 | Backend | `POST /api/contact` (Vercel function): validation, honeypot, per-IP rate limit, email via Resend | A real contact pipeline with no third-party form widget |
@@ -146,7 +146,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 | JS shipped (gzipped) | ≤ 25 KB | ✅ ~3.5 KB |
 | Total page weight | ≤ 300 KB | ✅ 161 KB (vs. 1.5–7.5 MB for competitors) |
 | Readable with JS disabled | yes | ✅ content is static HTML; form posts natively |
-| Contact API validation, honeypot, rate limit | unit-tested | ✅ 3 tests pass; manual curl checks: 400 / 200 (bot) / 503 (not configured) / 303 (no-JS) / 429 (flood) |
+| Contact API validation, honeypot, rate limit | unit-tested | ✅ 10 tests pass (validation, rate limit and the API route with a fake Resend); manual curl checks: 400 / 200 (bot) / 503 (not configured) / 303 (no-JS) / 429 (flood) |
 | Works offline after first visit | yes | ✅ verified in headless Chrome: offline reload renders the full page |
 | Installable (PWA) | yes | ✅ manifest + 192/512 maskable icons + service worker |
 | Keyboard operation incl. ⌘K, focus, reduced motion | yes | ✅ |

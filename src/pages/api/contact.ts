@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { validateContact, allowRequest } from '../../lib/contact';
+import { validateContact, allowRequest } from '../../lib/contact.ts';
 
 export const prerender = false;
 
@@ -43,6 +43,7 @@ export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
       subject: `Portfolio message from ${name}`,
       text: `${message}\n\n— ${name} <${email}>`,
     }),
+    signal: AbortSignal.timeout(10_000), // don't hold the visitor for the whole function timeout
   }).catch(() => null);
 
   if (!res?.ok) return fail('Could not send right now — please email me directly.', 502);

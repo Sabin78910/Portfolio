@@ -1,5 +1,6 @@
 // Offline support: network-first for pages, stale-while-revalidate for assets. Bump VERSION to drop old caches.
-const VERSION = 'sk-v1';
+const VERSION = 'sk-v2';
+const cacheable = (res) => res.ok && !/no-store/i.test(res.headers.get('Cache-Control') ?? '');
 const PRECACHE = ['/', '/favicon.svg', '/icon-192.png', '/Sabin-Khanal-CV.pdf'];
 
 self.addEventListener('install', (e) => {
@@ -23,11 +24,14 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       fetch(request)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put('/', copy));
+          // Only the home page may be stored under '/', so a 404 can never replace it.
+          if (url.pathname === '/' && cacheable(res)) {
+            const copy = res.clone();
+            caches.open(VERSION).then((c) => c.put('/', copy));
+          }
           return res;
         })
-        .catch(() => caches.match('/')),
+        .catch(async () => (await caches.match('/')) ?? Response.error()),
     );
     return;
   }
@@ -37,10 +41,10 @@ self.addEventListener('fetch', (e) => {
       const cached = await cache.match(request);
       const network = fetch(request)
         .then((res) => {
-          if (res.ok) cache.put(request, res.clone());
+          if (cacheable(res)) cache.put(request, res.clone());
           return res;
         })
-        .catch(() => cached);
+        .catch(() => cached ?? Response.error());
       return cached ?? network;
     }),
   );
