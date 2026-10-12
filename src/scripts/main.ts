@@ -1,4 +1,5 @@
 import { startAurora } from './aurora.ts';
+import { startHypercube } from './hypercube-view.ts';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -9,6 +10,7 @@ const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySel
 const aurora = $<HTMLCanvasElement>('[data-aurora]');
 const motionBtn = $<HTMLButtonElement>('[data-motion-toggle]');
 let setAuroraPaused: ((p: boolean) => void) | undefined;
+let cube: ReturnType<typeof startHypercube>;
 const storedPause = (() => {
   try {
     return localStorage.getItem('motion') === 'paused';
@@ -21,6 +23,7 @@ const applyMotion = (paused: boolean) => {
   motionBtn?.setAttribute('aria-pressed', String(paused));
   if (motionBtn) motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
   setAuroraPaused?.(paused);
+  cube?.setPaused(paused);
 };
 if (reduced && motionBtn) motionBtn.hidden = true;
 applyMotion(storedPause);
@@ -41,6 +44,22 @@ if (aurora)
       setAuroraPaused?.(document.documentElement.classList.contains('motion-paused'));
     }),
   );
+
+// ── Hypercube: a live 4D/6D/8D object behind the profile card ────────────
+const cubeCanvas = $<HTMLCanvasElement>('[data-hypercube]');
+if (cubeCanvas) {
+  cube = startHypercube(cubeCanvas, reduced);
+  cube?.setPaused(document.documentElement.classList.contains('motion-paused'));
+  const label = $('[data-dim-label]');
+  $$<HTMLButtonElement>('[data-dim]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const d = Number(btn.dataset.dim);
+      cube?.setDimension(d);
+      $$('[data-dim]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      if (label) label.textContent = String(d);
+    }),
+  );
+}
 
 // ── Reveal on scroll ─────────────────────────────────────────────────────
 const io = new IntersectionObserver(
