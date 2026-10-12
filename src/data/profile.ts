@@ -28,6 +28,8 @@ export const stack = [
   'JavaScript', 'SQL', 'R', 'Git', 'Agile / Scrum', 'QA & UAT',
 ];
 
+export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
+
 // Systems at Best Finance Company (from the CV).
 export const bfcWork = [
   { name: 'Employee Appraisal System', note: 'Built · Python · Flask · PostgreSQL · REST' },
@@ -79,6 +81,7 @@ export const experience = [
 export const projects = [
   {
     visual: 'data',
+    color: 'mint',
     title: 'Concrete Compressive Strength',
     repo: 'https://github.com/Sabin78910/concrete-strength-analysis',
     kind: 'ML preprocessing pipeline',
@@ -92,6 +95,7 @@ export const projects = [
   },
   {
     visual: 'market',
+    color: 'sun',
     title: 'GrocerEase',
     repo: 'https://github.com/Sabin78910/GrocerEase',
     kind: 'Multi-vendor marketplace',
@@ -106,6 +110,7 @@ export const projects = [
   },
   {
     visual: 'store',
+    color: 'coral',
     title: 'N & S Handicrafts',
     kind: 'E-commerce platform',
     summary:
