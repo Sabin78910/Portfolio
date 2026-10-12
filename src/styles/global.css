@@ -963,6 +963,7 @@ kbd {
 .more-products .muted,
 .more-products .mono {
   font-size: 0.75rem;
+  white-space: nowrap;
 }
 .more-products .mono {
   color: var(--mint);
@@ -997,6 +998,44 @@ kbd {
   background: rgb(255 255 255 / 0.05);
   font-size: 0.72rem;
   color: #c3c8d1;
+}
+
+
+/* Features that shipped after the portfolio launched (src/data/feature-tracker.json) */
+.new-feature {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  justify-self: start;
+  width: fit-content;
+  padding: 0.25rem 0.65rem 0.25rem 0.3rem;
+  border: 1px solid rgb(69 240 181 / 0.35);
+  border-radius: 999px;
+  background: rgb(69 240 181 / 0.08);
+  font-size: 0.78rem;
+  color: #c9f9e6;
+}
+.new-feature > span {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--bg);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.new-feature--inline {
+  white-space: nowrap;
+}
+.more-products li {
+  display: grid;
+}
+.more-products a > span:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
 }
 
 /* Projects */
