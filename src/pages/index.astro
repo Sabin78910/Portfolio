@@ -3,13 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import photo from '../assets/sabin-portrait.webp';
-import tracker from '../data/feature-tracker.json';
-import { shippedFor } from '../lib/shipped';
-import { profile, nav, stack, shipped, experience, projects, skills, labs, products, platform, stats, moreProducts, pipeline } from '../data/profile';
-
-// Product screenshots, keyed by `shot` in profile.ts
-const shots = import.meta.glob<{ default: ImageMetadata }>('../assets/shots/*.{webp,jpg}', { eager: true });
-const shot = (name: string) => Object.entries(shots).find(([k]) => k.includes(`/${name}.`))![1].default;
+import { profile, nav, stack, bfcWork, experience, projects, skills } from '../data/profile';
 
 const year = new Date().getFullYear();
 const headline = ['I', 'engineer', 'the', 'systems', 'behind'];
@@ -30,10 +24,6 @@ const personLd = {
 
 const commands = [
   ...nav.map((n) => ({ label: `Go to ${n.label}`, hint: 'Section', href: n.href })),
-  { label: 'Go to Projects', hint: 'Section', href: '#work' },
-  { label: 'Go to Skills', hint: 'Section', href: '#skills' },
-  ...products.filter((pr) => 'live' in pr).map((pr) => ({ label: `Open ${pr.name}`, hint: 'Live app', href: (pr as { live: string }).live, external: true })),
-  { label: 'Open Sabin Labs', hint: `All ${labs.count} products`, href: labs.hub, external: true },
   { label: 'Copy email address', hint: profile.email, action: 'copy' },
   { label: 'Download CV', hint: 'PDF', href: profile.cv, download: true },
   { label: 'Open GitHub', hint: 'github.com/Sabin78910', href: profile.github, external: true },
@@ -84,11 +74,11 @@ const commands = [
             <span class="word" style="--i:5"><span class="grad">digital banking.</span></span>
           </h1>
           <p class="hero__lead">
-            {profile.role} at Best Finance Company in Kathmandu. Outside work I run Sabin Labs: Android, web and game
-            apps shipped by a cloud pipeline that builds, tests and deploys with my laptop off.
+            {profile.role} at Best Finance Company in Kathmandu. I build secure, tested backend services with Python,
+            Flask and PostgreSQL, and the interfaces people use on top of them.
           </p>
           <div class="hero__cta">
-            <a class="btn btn--primary" href="#products">See what I’ve shipped <span aria-hidden="true">→</span></a>
+            <a class="btn btn--primary" href="#work">View projects <span aria-hidden="true">→</span></a>
             <a class="btn btn--ghost" href={profile.cv} download>Download résumé</a>
           </div>
           <p class="hero__micro">Open to backend &amp; full-stack roles <span aria-hidden="true">✦</span> Kathmandu, UTC+5:45</p>
@@ -109,17 +99,9 @@ const commands = [
             </div>
           </figcaption>
           <span class="profile__glare" aria-hidden="true"></span>
-          <p class="proof proof--a"><span class="status__dot"></span><span data-online-count>Checking live apps…</span></p>
-          <p class="proof proof--b"><span class="proof__tick">✓</span>1,560+ tests in CI</p>
+          <p class="proof proof--a"><span class="status__dot"></span>Digital banking at BFC</p>
+          <p class="proof proof--b"><span class="proof__tick">✓</span>BSc (Hons) Computing</p>
         </figure>
-      </div>
-
-      <div class="wrap">
-        <dl class="stats">
-          {stats.map((st) => (
-            <div><dt>{st.label}</dt><dd class="mono">{st.value}</dd></div>
-          ))}
-        </dl>
       </div>
 
       <div class="marquee" aria-label="Technologies I work with">
@@ -130,132 +112,12 @@ const commands = [
       </div>
     </section>
 
-    <!-- ── Products (Sabin Labs) ───────────────────────── -->
-    <section id="products" class="section">
-      <div class="wrap">
-        <header class="section__head section__head--split" data-reveal>
-          <div>
-            <p class="eyebrow"><span class="mono">01</span> Sabin Labs</p>
-            <h2>{labs.count} products. <span class="grad">One platform.</span></h2>
-          </div>
-          <p class="muted section__aside">
-            My product studio. Apps, games and APIs I design, build and ship, with CI, security scans and automated
-            deploys on every repo.
-          </p>
-        </header>
-
-        <div class="products">
-          {products.map((pr, i) => (
-            <article class={`product card product--${pr.shape} ${i === 0 ? 'product--lead' : ''}`} data-spot data-reveal>
-              <div class="product__media">
-                {pr.shape === 'phone' ? (
-                  <div class="phone">
-                    <Image src={shot(pr.shot)} alt={`${pr.name} app screen`} widths={[240, 450]} sizes="240px" />
-                  </div>
-                ) : (
-                  <Image src={shot(pr.shot)} alt={`${pr.name} screenshot`} widths={[480, 960]} sizes="(max-width: 900px) 100vw, 720px" />
-                )}
-              </div>
-              <div class="product__body">
-                <p class="eyebrow">{pr.kind}</p>
-                <div class="product__title">
-                  <h3>{pr.name}</h3>
-                  <span class="badges">
-                    {'live' in pr && <span class="ping" data-ping={pr.live}>Checking…</span>}
-                    <span class="badge mono">✓ {pr.tests} tests</span>
-                  </span>
-                </div>
-                {shippedFor(tracker, pr.name).map((f) => <p class="new-feature"><span>New</span>{f.label}</p>)}
-                <p class="muted">{pr.summary}</p>
-                <ul class="chips" aria-label="Tech stack">{pr.stack.map((t) => <li>{t}</li>)}</ul>
-                <p class="product__links">
-                  {'live' in pr && <a class="btn btn--primary btn--sm" href={pr.live} target="_blank" rel="noopener">Open app ↗<span class="visually-hidden"> {pr.name}</span></a>}
-                  <a class="btn btn--ghost btn--sm" href={pr.repo} target="_blank" rel="noopener">Code ↗<span class="visually-hidden"> for {pr.name}</span></a>
-                </p>
-              </div>
-            </article>
-          ))}
-
-          <article class="platform card" data-spot data-reveal>
-            <div class="platform__body">
-              <p class="eyebrow">{platform.kind}</p>
-              <div class="product__title">
-                <h3>{platform.name}</h3>
-                <span class="badges">
-                  <span class="ping" data-ping={platform.live}>Checking…</span>
-                  <span class="badge mono">✓ {platform.tests} tests</span>
-                </span>
-              </div>
-              <p class="muted">{platform.summary}</p>
-              <ul class="chips" aria-label="Tech stack">{platform.stack.map((t) => <li>{t}</li>)}</ul>
-              <p class="product__links">
-                <a class="btn btn--primary btn--sm" href={labs.hub} target="_blank" rel="noopener">See all {labs.count} products ↗</a>
-                <a class="btn btn--ghost btn--sm" href={platform.repo} target="_blank" rel="noopener">Code ↗<span class="visually-hidden"> for {platform.name}</span></a>
-              </p>
-            </div>
-            <a class="term" href={platform.live} target="_blank" rel="noopener" aria-label="Live health check for the sync API">
-              <span class="term__bar" aria-hidden="true"><i></i><i></i><i></i></span>
-              <code><span class="term__prompt">$</span> curl sync-api.sabin-apps.workers.dev/v1/health</code>
-              <code class="term__ok">HTTP/2 200 · ok</code>
-              <code class="muted">ciphertext only · zero passwords</code>
-            </a>
-          </article>
-        </div>
-
-        <div class="more-products" data-reveal>
-          <p class="eyebrow">Also in the suite</p>
-          <ul>
-            {moreProducts.map((m) => (
-              <li>
-                <a href={m.href} target="_blank" rel="noopener">
-                  <span>
-                    {m.name}
-                    {shippedFor(tracker, m.name).map((f) => <span class="new-feature new-feature--inline"><span>New</span>{f.label}</span>)}
-                  </span>
-                  <span class="muted">{m.kind}</span>
-                  <span class="mono">✓ {m.tests}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Systems ──────────────────────────────────────── -->
-    <section id="systems" class="section">
-      <div class="wrap">
-        <header class="section__head section__head--split" data-reveal>
-          <div>
-            <p class="eyebrow"><span class="mono">02</span> Systems</p>
-            <h2>A release loop that <span class="grad">runs itself.</span></h2>
-          </div>
-          <p class="muted section__aside">
-            Every repo runs on the same loop in GitHub's cloud. I set direction and review; the pipeline plans, builds,
-            tests, ships and checks its own work. A red main branch becomes a new issue automatically.
-          </p>
-        </header>
-        <ol class="pipeline" aria-label="Release loop, step by step">
-          {pipeline.map((p, i) => (
-            <li class="card" data-spot data-reveal style={`--i:${i}`}>
-              <span class="pipeline__n mono">{i === 0 ? <span class="pipeline__trigger" aria-hidden="true">⚡</span> : null}{String(i + 1).padStart(2, '0')}</span>
-              <h3>{p.step}</h3>
-              <p class="muted">{p.text}</p>
-              <code class="pipeline__file mono">{p.file}</code>
-              <span class="pipeline__pulse" aria-hidden="true"></span>
-              {i % 3 !== 2 && i < pipeline.length - 1 && <span class="pipeline__arrow" aria-hidden="true">→</span>}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
     <!-- ── Work ─────────────────────────────────────────── -->
     <section id="work" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">03</span> Projects</p>
-          <h2>Built end to end.</h2>
+          <p class="eyebrow"><span class="mono">01</span> Projects</p>
+          <h2>Projects built end to end.</h2>
         </header>
         <div class="projects">
           {projects.map((p, i) => (
@@ -290,7 +152,7 @@ const commands = [
     <section id="about" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">04</span> About</p>
+          <p class="eyebrow"><span class="mono">02</span> About</p>
           <h2>Quiet, correct systems.</h2>
         </header>
         <div class="bento">
@@ -326,9 +188,9 @@ const commands = [
           </article>
 
           <article class="tile tile--shipped card" data-spot data-reveal>
-            <p class="eyebrow">Shipped at BFC</p>
+            <p class="eyebrow">Systems at Best Finance Company</p>
             <ul class="shipped">
-              {shipped.map((s) => (
+              {bfcWork.map((s) => (
                 <li><strong>{s.name}</strong><span class="mono">{s.note}</span></li>
               ))}
             </ul>
@@ -350,7 +212,7 @@ const commands = [
     <section id="experience" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">05</span> Experience</p>
+          <p class="eyebrow"><span class="mono">03</span> Experience</p>
           <h2>Where I’ve worked.</h2>
         </header>
         <ol class="jobs">
@@ -381,7 +243,7 @@ const commands = [
     <section id="skills" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">06</span> Toolkit</p>
+          <p class="eyebrow"><span class="mono">04</span> Skills</p>
           <h2>What I build with.</h2>
         </header>
         <div class="skills">
@@ -401,7 +263,7 @@ const commands = [
     <section id="contact" class="section contact">
       <div class="wrap contact__inner">
         <div class="contact__copy" data-reveal>
-          <p class="eyebrow"><span class="mono">07</span> Contact</p>
+          <p class="eyebrow"><span class="mono">05</span> Contact</p>
           <h2>Let’s build something <span class="grad">reliable.</span></h2>
           <p class="muted">
             Open to backend and full-stack roles, freelance projects and conversations about fintech systems.
