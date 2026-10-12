@@ -171,3 +171,13 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 - [Recreating Stripe, Linear, Vercel design systems — OpenDesigner](https://opendesigner.io/pl/blog/recreating-stripe-linear-vercel-design-systems-with-design-md)
 - [Best developer portfolio examples 2026 — DevPlaybook](https://devplaybook.cc/blog/best-developer-portfolio-examples-2025)
 - [Best web developer portfolio examples — Elementor](https://elementor.com/blog/best-web-developer-portfolio-examples/)
+
+---
+
+## Addendum: "4D / 8D / 16D", made literal (12 Oct 2026)
+
+Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **real n-dimensional hypercube**, rendered live:
+- **Geometry** (`src/lib/hypercube.ts`, unit-tested): 2ⁿ vertices, n·2ⁿ⁻¹ edges, rotation in n-D planes, and a Petrie-style projection to 2D.
+- **Interaction:** 4D / 6D / 8D switches and drag to spin. It pauses with *Pause motion*, offscreen and in background tabs, and shows a still frame with reduced motion.
+- **Cost:** 2D canvas, edges batched by axis and depth (≈ 32 strokes per frame even at 8D's 1,024 edges). About 2 KB of JS.
+- **Why not 16D:** a 16-cube has 65,536 vertices and 524,288 edges, too many to draw smoothly on a phone every frame. 8D is the honest ceiling.

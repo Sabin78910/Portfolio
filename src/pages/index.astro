@@ -87,6 +87,8 @@ const commands = [
           <p class="hero__micro">Open to backend &amp; full-stack roles <span aria-hidden="true">✦</span> Kathmandu, UTC+5:45</p>
         </div>
 
+        <div class="hero__visual">
+          <canvas class="hyper" data-hypercube aria-hidden="true"></canvas>
         <figure class="profile" data-tilt data-spot>
           <div class="profile__photo">
             <Image src={photo} alt="Portrait of Sabin Khanal" widths={[340, 500]} sizes="(max-width: 860px) 90vw, 330px" priority />
@@ -105,6 +107,15 @@ const commands = [
           <p class="proof proof--a"><span class="status__dot"></span>Developer at BFC</p>
           <p class="proof proof--b"><span class="proof__tick">✓</span>{education.degree}</p>
         </figure>
+          <div class="dims" role="group" aria-label="Hypercube dimension">
+            <span class="dims__label">A real <b data-dim-label>4</b>-dimensional hypercube · drag to spin</span>
+            <span class="dims__btns">
+              {[4, 6, 8].map((d) => (
+                <button type="button" data-dim={d} aria-pressed={d === 4 ? 'true' : 'false'}>{d}D</button>
+              ))}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div class="marquee" aria-label="Technologies I work with">
