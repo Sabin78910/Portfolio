@@ -21,7 +21,7 @@ void main(){
 }`;
 const VERT = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
 
-export function startAurora(canvas: HTMLCanvasElement, still: boolean) {
+export function startAurora(canvas: HTMLCanvasElement, still: boolean): ((paused: boolean) => void) | undefined {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
   if (!gl) return; // CSS gradient fallback stays visible
 
@@ -71,24 +71,30 @@ export function startAurora(canvas: HTMLCanvasElement, still: boolean) {
   draw(12000); // first frame now, even if the animation loop never starts
   canvas.classList.add('is-ready');
 
-  if (still) return;
-
   addEventListener('pointermove', (e) => {
     mouse.tx = e.clientX / innerWidth;
     mouse.ty = 1 - e.clientY / innerHeight;
   });
 
   let raf = 0;
+  let onScreen = true;
+  let paused = still;
   const loop = (time: number) => {
     draw(time);
     raf = requestAnimationFrame(loop);
   };
+  const run = () => {
+    cancelAnimationFrame(raf);
+    if (!paused && onScreen && !document.hidden) raf = requestAnimationFrame(loop);
+  };
   new IntersectionObserver(([e]) => {
-    cancelAnimationFrame(raf);
-    if (e.isIntersecting && !document.hidden) raf = requestAnimationFrame(loop);
+    onScreen = e.isIntersecting;
+    run();
   }).observe(canvas);
-  document.addEventListener('visibilitychange', () => {
-    cancelAnimationFrame(raf);
-    if (!document.hidden) raf = requestAnimationFrame(loop);
-  });
+  document.addEventListener('visibilitychange', run);
+
+  return (p: boolean) => {
+    paused = still || p; // OS reduced-motion always wins over the page toggle
+    run();
+  };
 }

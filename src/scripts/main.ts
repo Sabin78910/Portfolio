@@ -5,11 +5,55 @@ const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
 
-// ── Aurora ───────────────────────────────────────────────────────────────
+// ── Aurora + pause motion (WCAG 2.2.2) ───────────────────────────────────
 const aurora = $<HTMLCanvasElement>('[data-aurora]');
+const motionBtn = $<HTMLButtonElement>('[data-motion-toggle]');
+let setAuroraPaused: ((p: boolean) => void) | undefined;
+const storedPause = (() => {
+  try {
+    return localStorage.getItem('motion') === 'paused';
+  } catch {
+    return false;
+  }
+})();
+const applyMotion = (paused: boolean) => {
+  document.documentElement.classList.toggle('motion-paused', paused);
+  motionBtn?.setAttribute('aria-pressed', String(paused));
+  if (motionBtn) motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
+  setAuroraPaused?.(paused);
+};
+if (reduced && motionBtn) motionBtn.hidden = true;
+applyMotion(storedPause);
+motionBtn?.addEventListener('click', () => {
+  const paused = !document.documentElement.classList.contains('motion-paused');
+  applyMotion(paused);
+  try {
+    localStorage.setItem('motion', paused ? 'paused' : 'on');
+  } catch {}
+});
+
 // Shader compile is the heaviest main-thread task; keep it off the critical path.
 const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
-if (aurora) addEventListener('load', () => idle(() => startAurora(aurora, reduced)));
+if (aurora)
+  addEventListener('load', () =>
+    idle(() => {
+      setAuroraPaused = startAurora(aurora, reduced);
+      setAuroraPaused?.(document.documentElement.classList.contains('motion-paused'));
+    }),
+  );
+
+// ── Live status: ping each product (opaque no-cors response = reachable) ──
+addEventListener('load', () =>
+  idle(() =>
+    $$('[data-ping]').forEach(async (el) => {
+      const ok = await fetch(el.dataset.ping!, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(8000) })
+        .then(() => true)
+        .catch(() => false);
+      el.textContent = ok ? 'Online' : 'Unreachable';
+      el.dataset.state = ok ? 'up' : 'down';
+    }),
+  ),
+);
 
 // ── Reveal on scroll ─────────────────────────────────────────────────────
 const io = new IntersectionObserver(

@@ -143,8 +143,8 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 | LCP (mobile, simulated 4G) | ≤ 2.0 s | ✅ 2.0 s |
 | CLS | 0 | ✅ 0 |
 | TBT | ≤ 50 ms | ✅ 0 ms |
-| JS shipped (gzipped) | ≤ 25 KB | ✅ ~3.2 KB |
-| Total page weight | ≤ 300 KB | ✅ 297 KB incl. 5 product screenshots (vs. 1.5–7.5 MB for competitors) |
+| JS shipped (gzipped) | ≤ 25 KB | ✅ ~3.5 KB |
+| Total page weight | ≤ 300 KB | ✅ 279 KB incl. 5 product screenshots (vs. 1.5–7.5 MB for competitors) |
 | Readable with JS disabled | yes | ✅ content is static HTML; form posts natively |
 | Contact API validation, honeypot, rate limit | unit-tested | ✅ 3 tests pass; manual curl checks: 400 / 200 (bot) / 503 (not configured) / 303 (no-JS) / 429 (flood) |
 | Works offline after first visit | yes | ✅ verified in headless Chrome: offline reload renders the full page |

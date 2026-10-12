@@ -14,15 +14,15 @@ export const profile = {
 
 export const nav = [
   { href: '#products', label: 'Products' },
-  { href: '#work', label: 'Projects' },
+  { href: '#systems', label: 'Systems' },
   { href: '#about', label: 'About' },
   { href: '#experience', label: 'Experience' },
   { href: '#contact', label: 'Contact' },
 ];
 
 export const stack = [
-  'Python', 'Flask', 'PostgreSQL', 'REST APIs', 'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX',
-  'JavaScript', 'SQL', 'R', 'Git', 'Agile / Scrum', 'QA & UAT',
+  'Python', 'Flask', 'FastAPI', 'PostgreSQL', 'TypeScript', 'React', 'Kotlin', 'Jetpack Compose',
+  'Unity', 'Cloudflare Workers', 'Laravel', 'GitHub Actions', 'CodeQL', 'Agile / Scrum',
 ];
 
 export const labs = {
@@ -30,47 +30,59 @@ export const labs = {
   count: 15,
 };
 
+// Source: portfolio-web project cards; per-project test counts across all 15 repos sum to 1,560.
+export const stats = [
+  { value: '15', label: 'Products shipped' },
+  { value: '3', label: 'Live APIs' },
+  { value: '1,560+', label: 'Automated tests' },
+  { value: '0', label: 'Laptops needed to ship' },
+];
+
 // Live Sabin Labs products (source: sabin-labs/src/catalog.ts). `shape` picks the card media layout.
 export const products = [
   {
     name: 'NEPSE Lens',
     kind: 'Fintech · Web + Android',
     summary: 'Nepal Stock Exchange on mobile: live board, sector heatmap, broker accumulation per stock, alerts and portfolio P/L.',
-    stack: ['TypeScript', 'PWA', 'Android'],
+    stack: ['React', 'TypeScript', 'Python', 'GitHub Actions'],
     live: 'https://sabin78910.github.io/nepse-lens/',
     repo: 'https://github.com/Sabin78910/nepse-lens',
     shot: 'nepse-lens',
     shape: 'wide',
+    tests: 86,
   },
   {
     name: 'Khabar Pulse',
     kind: 'News · Web + Android',
     summary: 'Nepal and world news from 37 sources, with duplicate stories merged and every source credited.',
-    stack: ['TypeScript', 'PWA', 'Android'],
+    stack: ['React', 'TypeScript', 'Cloudflare Workers', 'RSS'],
     live: 'https://sabin78910.github.io/khabar-pulse/',
     repo: 'https://github.com/Sabin78910/khabar-pulse',
     shot: 'khabar-pulse',
     shape: 'phone',
+    tests: 78,
   },
   {
     name: 'Ludo Live',
     kind: 'Multiplayer game · Web + Android',
     summary: 'Online Ludo with friends: provably fair dice, smart bots, pass-and-play and no ads in matches.',
-    stack: ['React', 'Cloudflare Durable Objects'],
+    stack: ['React', 'TypeScript', 'Cloudflare Workers', 'Durable Objects'],
     live: 'https://sabin78910.github.io/ludo-live/',
     repo: 'https://github.com/Sabin78910/ludo-live',
     shot: 'ludo-live',
     shape: 'phone',
+    tests: 140,
   },
   {
     name: 'Prism Pop',
     kind: 'Puzzle game · Web + Android',
     summary: 'An original match-3 with power combos. No lives, no waiting, unlimited seeded levels.',
-    stack: ['TypeScript', 'PWA', 'Android'],
+    stack: ['TypeScript', 'Canvas', 'Vite', 'Capacitor'],
     live: 'https://sabin78910.github.io/prism-pop-game/',
     repo: 'https://github.com/Sabin78910/prism-pop-game',
     shot: 'prism-pop',
     shape: 'phone',
+    tests: 66,
   },
   {
     name: 'Block Drop',
@@ -80,6 +92,7 @@ export const products = [
     repo: 'https://github.com/Sabin78910/blockdrop-puzzle-unity',
     shot: 'block-drop',
     shape: 'wide',
+    tests: 42,
   },
 ] as const;
 
@@ -88,10 +101,34 @@ export const platform = {
   kind: 'Platform · API',
   summary:
     'End-to-end encrypted sync behind every Sabin Labs web app. The server only ever stores ciphertext, and one code links your devices — no passwords, no email.',
-  stack: ['Cloudflare Workers', 'Durable Objects', 'TypeScript'],
+  stack: ['TypeScript', 'Cloudflare Workers', 'Durable Objects', 'Web Crypto'],
+  tests: 20,
   live: 'https://sync-api.sabin-apps.workers.dev/v1/health',
   repo: 'https://github.com/Sabin78910/sync-api',
 };
+
+// The rest of the suite, shown as a compact list.
+export const moreProducts = [
+  { name: 'Todo', kind: 'Web', tests: 128, href: 'https://sabin78910.github.io/todo-web/' },
+  { name: 'Weather', kind: 'Web', tests: 111, href: 'https://sabin78910.github.io/weather-dashboard-web/' },
+  { name: 'Loan Calculator', kind: 'Web', tests: 139, href: 'https://sabin78910.github.io/loan-calculator-web/' },
+  { name: 'Expense Tracker', kind: 'Android', tests: 192, href: 'https://github.com/Sabin78910/expense-tracker-android' },
+  { name: 'EMI Calculator', kind: 'Android', tests: 164, href: 'https://github.com/Sabin78910/emi-calculator-android' },
+  { name: 'Notes', kind: 'Android', tests: 160, href: 'https://github.com/Sabin78910/notes-android' },
+  { name: 'Inventory API', kind: 'API', tests: 95, href: 'https://github.com/Sabin78910/inventory-api-node' },
+  { name: 'Bookstore API', kind: 'API', tests: 84, href: 'https://github.com/Sabin78910/bookstore-api-python' },
+  { name: 'House Price ML', kind: 'ML', tests: 55, href: 'https://github.com/Sabin78910/house-price-ml' },
+];
+
+// The release loop every repo runs on (devops-hq + per-repo workflows).
+export const pipeline = [
+  { step: 'Planner', text: 'A research pass queues small, testable issues per repo.', file: 'weekly-improve.yml' },
+  { step: 'Ready issue', text: 'Every change starts as a scoped issue with acceptance criteria.', file: 'GitHub Issues' },
+  { step: 'Cloud AI developer', text: 'Writes the tests first, then the code, and opens a PR.', file: 'claude-agent.yml' },
+  { step: 'CI gate', text: 'Lint, typecheck, tests, build, npm audit and CodeQL must pass.', file: 'ci.yml · codeql.yml' },
+  { step: 'Deploy', text: 'GitHub Pages, Cloudflare Workers, Render and signed Android bundles.', file: 'deploy.yml' },
+  { step: 'Watch', text: 'devops-hq checks every repo every 6 hours and opens alerts.', file: 'watch.yml' },
+];
 
 export const shipped = [
   { name: 'Employee Appraisal System', note: 'Python · Flask · PostgreSQL · REST' },
@@ -184,9 +221,9 @@ export const projects = [
 ] as const;
 
 export const skills = [
-  { group: 'Languages', items: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'Java', 'HTML', 'CSS'] },
-  { group: 'Backend', items: ['Flask', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'PHPMailer', 'PayPal API'] },
-  { group: 'Databases', items: ['PostgreSQL', 'MySQL', 'Oracle Database', 'Triggers & Sequences'] },
-  { group: 'Data & ML', items: ['Data cleaning', 'MICE imputation', 'Outlier detection', 'Feature scaling', 'PCA', 'ggplot2'] },
-  { group: 'Practice', items: ['Agile / Scrum', 'UAT & QA testing', 'System integration', 'Git & GitHub'] },
+  { group: 'Backend', items: ['Python', 'Flask', 'FastAPI', 'Node.js', 'REST APIs', 'Laravel 11', 'PHP'] },
+  { group: 'Web', items: ['TypeScript', 'React', 'Astro', 'Vite', 'PWA', 'WebGL', 'HTML & CSS'] },
+  { group: 'Android & games', items: ['Kotlin', 'Jetpack Compose', 'Room', 'Unity', 'C#', 'Capacitor'] },
+  { group: 'Data & cloud', items: ['PostgreSQL', 'MySQL', 'Oracle', 'Cloudflare Workers', 'scikit-learn', 'pandas', 'R'] },
+  { group: 'Practice', items: ['CI/CD (GitHub Actions)', 'Automated testing', 'CodeQL', 'Agile / Scrum', 'UAT & QA'] },
 ];
