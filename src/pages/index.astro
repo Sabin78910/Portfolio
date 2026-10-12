@@ -61,7 +61,8 @@ const commands = [
         <button class="kbd-btn" type="button" data-cmdk-open aria-label="Open menu (Ctrl or Command + K)">
           <kbd>⌘</kbd><kbd>K</kbd><span class="kbd-btn__touch">Menu</span>
         </button>
-        <a class="btn btn--primary btn--sm" href={profile.cv} download>Résumé</a>
+        <a class="btn btn--ghost btn--sm hide-xs" href={profile.cv} download>Résumé</a>
+        <a class="btn btn--primary btn--sm" href="#contact">Let’s talk</a>
       </div>
     </div>
   </header>
@@ -88,8 +89,9 @@ const commands = [
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#products">See what I’ve shipped <span aria-hidden="true">→</span></a>
-            <a class="btn btn--ghost" href="#contact">Get in touch</a>
+            <a class="btn btn--ghost" href={profile.cv} download>Download résumé</a>
           </div>
+          <p class="hero__micro">Open to backend &amp; full-stack roles <span aria-hidden="true">✦</span> Kathmandu, UTC+5:45</p>
         </div>
 
         <figure class="profile" data-tilt data-spot>
@@ -107,6 +109,8 @@ const commands = [
             </div>
           </figcaption>
           <span class="profile__glare" aria-hidden="true"></span>
+          <p class="proof proof--a"><span class="status__dot"></span><span data-online-count>Checking live apps…</span></p>
+          <p class="proof proof--b"><span class="proof__tick">✓</span>1,560+ tests in CI</p>
         </figure>
       </div>
 
@@ -231,13 +235,15 @@ const commands = [
             tests, ships and checks its own work. A red main branch becomes a new issue automatically.
           </p>
         </header>
-        <ol class="pipeline">
+        <ol class="pipeline" aria-label="Release loop, step by step">
           {pipeline.map((p, i) => (
             <li class="card" data-spot data-reveal style={`--i:${i}`}>
-              <span class="pipeline__n mono">{String(i + 1).padStart(2, '0')}</span>
+              <span class="pipeline__n mono">{i === 0 ? <span class="pipeline__trigger" aria-hidden="true">⚡</span> : null}{String(i + 1).padStart(2, '0')}</span>
               <h3>{p.step}</h3>
               <p class="muted">{p.text}</p>
               <code class="pipeline__file mono">{p.file}</code>
+              <span class="pipeline__pulse" aria-hidden="true"></span>
+              {i % 3 !== 2 && i < pipeline.length - 1 && <span class="pipeline__arrow" aria-hidden="true">→</span>}
             </li>
           ))}
         </ol>

@@ -44,15 +44,21 @@ if (aurora)
 
 // ── Live status: ping each product (opaque no-cors response = reachable) ──
 addEventListener('load', () =>
-  idle(() =>
-    $$('[data-ping]').forEach(async (el) => {
-      const ok = await fetch(el.dataset.ping!, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(8000) })
-        .then(() => true)
-        .catch(() => false);
-      el.textContent = ok ? 'Online' : 'Unreachable';
-      el.dataset.state = ok ? 'up' : 'down';
-    }),
-  ),
+  idle(async () => {
+    const pings = $$('[data-ping]');
+    const results = await Promise.all(
+      pings.map(async (el) => {
+        const ok = await fetch(el.dataset.ping!, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(8000) })
+          .then(() => true)
+          .catch(() => false);
+        el.textContent = ok ? 'Online' : 'Unreachable';
+        el.dataset.state = ok ? 'up' : 'down';
+        return ok;
+      }),
+    );
+    const count = $('[data-online-count]');
+    if (count) count.textContent = `${results.filter(Boolean).length}/${results.length} live apps online`;
+  }),
 );
 
 // ── Reveal on scroll ─────────────────────────────────────────────────────
