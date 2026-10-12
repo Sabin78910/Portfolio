@@ -1,0 +1,20 @@
+# CodeRabbit reviews every PR once the CodeRabbit GitHub App is installed on this repo.
+language: en-GB
+reviews:
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: 'src/pages/api/**'
+      instructions: >-
+        Trust boundary. Check input validation, rate limiting, error handling that never leaks internals,
+        and that secrets are only read from process.env.
+    - path: 'public/sw.js'
+      instructions: Never cache /api/ responses or cross-origin requests. VERSION must change when cached files change.
+    - path: 'src/**/*.{astro,css}'
+      instructions: Keep AA contrast, visible focus, prefers-reduced-motion support and zero layout shift.
+chat:
+  auto_reply: true
