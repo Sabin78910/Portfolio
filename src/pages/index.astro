@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import photo from '../assets/sabin-portrait.webp';
-import { profile, nav, stack, shipped, experience, projects, skills, labs, products, platform } from '../data/profile';
+import { profile, nav, stack, shipped, experience, projects, skills, labs, products, platform, stats, moreProducts, pipeline } from '../data/profile';
 
 // Product screenshots, keyed by `shot` in profile.ts
 const shots = import.meta.glob<{ default: ImageMetadata }>('../assets/shots/*.{webp,jpg}', { eager: true });
@@ -28,6 +28,7 @@ const personLd = {
 
 const commands = [
   ...nav.map((n) => ({ label: `Go to ${n.label}`, hint: 'Section', href: n.href })),
+  { label: 'Go to Projects', hint: 'Section', href: '#work' },
   { label: 'Go to Skills', hint: 'Section', href: '#skills' },
   ...products.filter((pr) => 'live' in pr).map((pr) => ({ label: `Open ${pr.name}`, hint: 'Live app', href: (pr as { live: string }).live, external: true })),
   { label: 'Open Sabin Labs', hint: `All ${labs.count} products`, href: labs.hub, external: true },
@@ -66,6 +67,7 @@ const commands = [
   <main id="main">
     <!-- ── Hero ─────────────────────────────────────────── -->
     <section id="top" class="hero">
+      <button class="motion-toggle btn btn--ghost btn--sm" type="button" data-motion-toggle aria-pressed="false">Pause motion</button>
       <div class="hero__bg" aria-hidden="true">
         <canvas class="hero__aurora" data-aurora></canvas>
         <div class="hero__grid"></div>
@@ -79,8 +81,8 @@ const commands = [
             <span class="word" style="--i:5"><span class="grad">digital banking.</span></span>
           </h1>
           <p class="hero__lead">
-            {profile.role} in {profile.location}. I build secure, tested backend services with Python, Flask and
-            PostgreSQL — and the interfaces people use on top of them.
+            {profile.role} at Best Finance Company in Kathmandu. Outside work I run Sabin Labs: Android, web and game
+            apps shipped by a cloud pipeline that builds, tests and deploys with my laptop off.
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#products">See what I’ve shipped <span aria-hidden="true">→</span></a>
@@ -104,6 +106,14 @@ const commands = [
           </figcaption>
           <span class="profile__glare" aria-hidden="true"></span>
         </figure>
+      </div>
+
+      <div class="wrap">
+        <dl class="stats">
+          {stats.map((st) => (
+            <div><dt>{st.label}</dt><dd class="mono">{st.value}</dd></div>
+          ))}
+        </dl>
       </div>
 
       <div class="marquee" aria-label="Technologies I work with">
@@ -142,7 +152,13 @@ const commands = [
               </div>
               <div class="product__body">
                 <p class="eyebrow">{pr.kind}</p>
-                <h3>{pr.name}</h3>
+                <div class="product__title">
+                  <h3>{pr.name}</h3>
+                  <span class="badges">
+                    {'live' in pr && <span class="ping" data-ping={pr.live}>Checking…</span>}
+                    <span class="badge mono">✓ {pr.tests} tests</span>
+                  </span>
+                </div>
                 <p class="muted">{pr.summary}</p>
                 <ul class="chips" aria-label="Tech stack">{pr.stack.map((t) => <li>{t}</li>)}</ul>
                 <p class="product__links">
@@ -156,7 +172,13 @@ const commands = [
           <article class="platform card" data-spot data-reveal>
             <div class="platform__body">
               <p class="eyebrow">{platform.kind}</p>
-              <h3>{platform.name}</h3>
+              <div class="product__title">
+                <h3>{platform.name}</h3>
+                <span class="badges">
+                  <span class="ping" data-ping={platform.live}>Checking…</span>
+                  <span class="badge mono">✓ {platform.tests} tests</span>
+                </span>
+              </div>
               <p class="muted">{platform.summary}</p>
               <ul class="chips" aria-label="Tech stack">{platform.stack.map((t) => <li>{t}</li>)}</ul>
               <p class="product__links">
@@ -172,6 +194,47 @@ const commands = [
             </a>
           </article>
         </div>
+
+        <div class="more-products" data-reveal>
+          <p class="eyebrow">Also in the suite</p>
+          <ul>
+            {moreProducts.map((m) => (
+              <li>
+                <a href={m.href} target="_blank" rel="noopener">
+                  <span>{m.name}</span>
+                  <span class="muted">{m.kind}</span>
+                  <span class="mono">✓ {m.tests}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Systems ──────────────────────────────────────── -->
+    <section id="systems" class="section">
+      <div class="wrap">
+        <header class="section__head section__head--split" data-reveal>
+          <div>
+            <p class="eyebrow"><span class="mono">02</span> Systems</p>
+            <h2>A release loop that <span class="grad">runs itself.</span></h2>
+          </div>
+          <p class="muted section__aside">
+            Every repo runs on the same loop in GitHub's cloud. I set direction and review; the pipeline plans, builds,
+            tests, ships and checks its own work. A red main branch becomes a new issue automatically.
+          </p>
+        </header>
+        <ol class="pipeline">
+          {pipeline.map((p, i) => (
+            <li class="card" data-spot data-reveal style={`--i:${i}`}>
+              <span class="pipeline__n mono">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{p.step}</h3>
+              <p class="muted">{p.text}</p>
+              <code class="pipeline__file mono">{p.file}</code>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
 
@@ -179,7 +242,7 @@ const commands = [
     <section id="work" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">02</span> Projects</p>
+          <p class="eyebrow"><span class="mono">03</span> Projects</p>
           <h2>Built end to end.</h2>
         </header>
         <div class="projects">
@@ -215,7 +278,7 @@ const commands = [
     <section id="about" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">03</span> About</p>
+          <p class="eyebrow"><span class="mono">04</span> About</p>
           <h2>Quiet, correct systems.</h2>
         </header>
         <div class="bento">
@@ -275,7 +338,7 @@ const commands = [
     <section id="experience" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">04</span> Experience</p>
+          <p class="eyebrow"><span class="mono">05</span> Experience</p>
           <h2>Where I’ve worked.</h2>
         </header>
         <ol class="jobs">
@@ -306,7 +369,7 @@ const commands = [
     <section id="skills" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="mono">05</span> Toolkit</p>
+          <p class="eyebrow"><span class="mono">06</span> Toolkit</p>
           <h2>What I build with.</h2>
         </header>
         <div class="skills">
@@ -326,7 +389,7 @@ const commands = [
     <section id="contact" class="section contact">
       <div class="wrap contact__inner">
         <div class="contact__copy" data-reveal>
-          <p class="eyebrow"><span class="mono">06</span> Contact</p>
+          <p class="eyebrow"><span class="mono">07</span> Contact</p>
           <h2>Let’s build something <span class="grad">reliable.</span></h2>
           <p class="muted">
             Open to backend and full-stack roles, freelance projects and conversations about fintech systems.

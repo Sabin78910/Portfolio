@@ -13,7 +13,8 @@
   --grad: linear-gradient(100deg, var(--violet) 0%, var(--cyan) 55%, var(--mint) 100%);
 
   --sans: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, monospace; /* system: no font download */
+  --display: var(--font-display), var(--font-sans), system-ui, sans-serif;
   --pad: clamp(1rem, 4vw, 2.5rem);
   --max: 1180px;
   --radius: 20px;
@@ -79,6 +80,14 @@ textarea {
 }
 [id] {
   scroll-margin-top: 6rem;
+}
+/* Sabin Labs brand: Space Grotesk for display type */
+h1,
+h2,
+h3,
+.tile__big,
+.nav__brand {
+  font-family: var(--display);
 }
 
 .wrap {
@@ -825,6 +834,169 @@ kbd {
 }
 .term__ok {
   color: var(--mint);
+}
+
+
+/* ── Stats, status badges, more products, pipeline, motion toggle ────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgb(14 16 21 / 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+@media (min-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.2rem;
+  padding: 1.1rem 1.25rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stats dt {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.stats dd {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.motion-toggle {
+  position: absolute;
+  right: var(--pad);
+  top: 5.25rem;
+  z-index: 2;
+}
+@media (max-width: 760px) {
+  .motion-toggle {
+    position: static;
+    align-self: flex-end;
+    margin: -1.5rem var(--pad) 1rem 0;
+  }
+}
+.motion-paused .marquee__track,
+.motion-paused .status__dot::after {
+  animation-play-state: paused;
+}
+.product__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.badge,
+.ping {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ping::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  background: var(--muted);
+  vertical-align: 1px;
+}
+.ping[data-state='up'] {
+  color: var(--mint);
+  border-color: rgb(69 240 181 / 0.35);
+}
+.ping[data-state='up']::before {
+  background: var(--mint);
+}
+.ping[data-state='down'] {
+  color: #ffb4a8;
+}
+.more-products {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.more-products ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.5rem;
+}
+.more-products a {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.more-products a:hover {
+  border-color: rgb(139 124 255 / 0.5);
+  background: rgb(139 124 255 / 0.06);
+}
+.more-products .muted,
+.more-products .mono {
+  font-size: 0.75rem;
+}
+.more-products .mono {
+  color: var(--mint);
+}
+.pipeline {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  counter-reset: step;
+}
+.pipeline li {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.4rem;
+  transition-delay: calc(var(--i) * 60ms);
+}
+.pipeline h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.pipeline__n {
+  color: var(--violet);
+  font-size: 0.8rem;
+}
+.pipeline__file {
+  justify-self: start;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.05);
+  font-size: 0.72rem;
+  color: #c3c8d1;
 }
 
 /* Projects */

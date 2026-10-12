@@ -37,8 +37,8 @@ const ogImage = new URL('/og.png', Astro.site);
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
+    <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-sans" preload />
-    <Font cssVariable="--font-mono" />
     <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again -->
     <script is:inline>document.documentElement.classList.add('js');</script>
     <slot name="head" />
