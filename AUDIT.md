@@ -181,3 +181,33 @@ Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **re
 - **Interaction:** 4D / 6D / 8D switches and drag to spin. It pauses with *Pause motion*, offscreen and in background tabs, and shows a still frame with reduced motion.
 - **Cost:** 2D canvas, edges batched by axis and depth (≈ 32 strokes per frame even at 8D's 1,024 edges). About 2 KB of JS.
 - **Why not 16D:** a 16-cube has 65,536 vertices and 524,288 edges, too many to draw smoothly on a phone every frame. 8D is the honest ceiling.
+
+---
+
+## Addendum: v3 "Dopamine" redesign (12 Oct 2026)
+
+**Why:** the owner's feedback was that the dark v2 still looked outdated. A fresh full-page review found five causes: near-monochrome dark-grey surfaces, every section built from the same box grid, large dead gaps, text-heavy Experience and Skills, and a muddy 2020-era "dark SaaS" hero.
+
+**Research:** *dopamine design* (Adobe's term) is a named 2026 trend. It replaces muted minimalism with saturated colour blocks, oversized type and playful shapes ([TechWyse](https://www.techwyse.com/blog/website-design/web-design-trends-dopamine-design-2026), [daisyUI trends](https://trends.daisyui.com/trend/dopamine-design/)). It overlaps with 2026 neo-brutalism (thick borders, hard shadows, flat colour) and with the owner's reference, monday.com.
+
+**System:**
+- Off-white base `#F6F5F1` and ink `#111114`.
+- Four brights used as solid blocks: violet `#5B3DF5` (white text), coral `#FF7A59`, sun `#FFD23F` and mint `#2BD99F`, plus sky `#7CC7FF` for accents.
+- 2px ink borders with hard offset shadows. Buttons and cards press into their shadow.
+- Highlighter "stickers" on key words. Each project gets its own colour block, and the bento tiles are colour-coded.
+- A tilted yellow tech band. Skills are colour-coded rows instead of a box grid. Contact sits on a violet band.
+- Removed: the WebGL aurora and the cursor spotlight (no longer needed). Kept: the live hypercube (recoloured), CV-only content, backend, PWA and ⌘K.
+
+**Contrast (WCAG):**
+
+| Pair | Ratio |
+|---|---|
+| ink on bg | 17.3 |
+| muted on bg | 6.4 |
+| ink on coral | 7.3 |
+| ink on sun | 13.1 |
+| ink on mint | 10.4 |
+| ink on sky | 10.3 |
+| white on violet | 6.1 |
+
+**Result:** Lighthouse mobile 99 / 100 / 100 / 100, desktop 100 / 100 / 100 / 100, CLS 0, 163 KB.

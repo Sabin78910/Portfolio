@@ -1,4 +1,3 @@
-import { startAurora } from './aurora.ts';
 import { startHypercube } from './hypercube-view.ts';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -6,10 +5,8 @@ const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
 
-// ── Aurora + pause motion (WCAG 2.2.2) ───────────────────────────────────
-const aurora = $<HTMLCanvasElement>('[data-aurora]');
+// ── Pause motion (WCAG 2.2.2) ────────────────────────────────────────────
 const motionBtn = $<HTMLButtonElement>('[data-motion-toggle]');
-let setAuroraPaused: ((p: boolean) => void) | undefined;
 let cube: ReturnType<typeof startHypercube>;
 const storedPause = (() => {
   try {
@@ -22,7 +19,6 @@ const applyMotion = (paused: boolean) => {
   document.documentElement.classList.toggle('motion-paused', paused);
   motionBtn?.setAttribute('aria-pressed', String(paused));
   if (motionBtn) motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
-  setAuroraPaused?.(paused);
   cube?.setPaused(paused);
 };
 if (reduced && motionBtn) motionBtn.hidden = true;
@@ -34,16 +30,6 @@ motionBtn?.addEventListener('click', () => {
     localStorage.setItem('motion', paused ? 'paused' : 'on');
   } catch {}
 });
-
-// Shader compile is the heaviest main-thread task; keep it off the critical path.
-const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
-if (aurora)
-  addEventListener('load', () =>
-    idle(() => {
-      setAuroraPaused = startAurora(aurora, reduced);
-      setAuroraPaused?.(document.documentElement.classList.contains('motion-paused'));
-    }),
-  );
 
 // ── Hypercube: a live 4D/6D/8D object behind the profile card ────────────
 const cubeCanvas = $<HTMLCanvasElement>('[data-hypercube]');
@@ -73,17 +59,8 @@ const io = new IntersectionObserver(
 );
 $$('[data-reveal]').forEach((el) => io.observe(el));
 
-// ── Pointer light (spotlight) + 3D tilt ──────────────────────────────────
+// ── 3D tilt ──────────────────────────────────
 if (finePointer && !reduced) {
-  document.addEventListener('pointermove', (e) => {
-    const spot = (e.target as Element).closest<HTMLElement>('[data-spot]');
-    if (spot) {
-      const r = spot.getBoundingClientRect();
-      spot.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      spot.style.setProperty('--my', `${e.clientY - r.top}px`);
-    }
-  });
-
   $$('[data-tilt]').forEach((el) => {
     el.addEventListener('pointermove', (e) => {
       const r = el.getBoundingClientRect();

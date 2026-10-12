@@ -3,9 +3,9 @@ import { vertices, edges, rotate, project } from '../lib/hypercube.ts';
 // Live n-dimensional hypercube on a 2D canvas. Edges are batched by axis and depth bucket,
 // so even 8D (1,024 edges) is a few dozen strokes per frame.
 const PALETTE = [
-  [139, 124, 255], // violet
-  [61, 217, 235], // cyan
-  [69, 240, 181], // mint
+  [91, 61, 245], // violet
+  [255, 122, 89], // coral
+  [18, 184, 134], // mint (deepened for a light background)
 ];
 const BUCKETS = 4;
 
@@ -76,7 +76,7 @@ export function startHypercube(canvas: HTMLCanvasElement, still: boolean) {
       const [r, g, b] = axisColor(axis, n);
       for (let k = 0; k < BUCKETS; k++) {
         const depth = (k + 0.5) / BUCKETS; // far → near
-        ctx.strokeStyle = `rgb(${r} ${g} ${b} / ${(n > 4 ? 0.1 : 0.16) + depth * (n > 4 ? 0.45 : 0.65)})`;
+        ctx.strokeStyle = `rgb(${r} ${g} ${b} / ${(n > 4 ? 0.14 : 0.22) + depth * (n > 4 ? 0.5 : 0.7)})`;
         ctx.lineWidth = (0.7 + depth * (n > 4 ? 1 : 1.8)) * dpr;
         ctx.stroke(paths[axis * BUCKETS + k]);
       }
