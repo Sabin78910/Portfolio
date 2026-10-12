@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
 const [currentJob] = experience;
 const [currentRole] = currentJob.roles;
 const since = currentRole.period.split(' — ')[0];
-const headline = ['I', 'engineer', 'the', 'systems', 'behind'];
+const headline = ['I', 'engineer', 'secure,', 'reliable'];
 
 const personLd = {
   '@context': 'https://schema.org',
@@ -71,14 +71,14 @@ const commands = [
 
       <div class="wrap hero__inner">
         <div class="hero__copy">
-          <p class="status"><span class="status__dot"></span>Building digital banking at Best Finance Company</p>
+          <p class="status"><span class="status__dot"></span>Currently at Best Finance Company</p>
           <h1 class="hero__title">
             {headline.map((w, i) => <><span class="word" style={`--i:${i}`}><span>{w}</span></span>{' '}</>)}
-            <span class="word" style="--i:5"><span class="grad">digital banking.</span></span>
+            <span class="word" style="--i:4"><span class="grad">backend systems.</span></span>
           </h1>
           <p class="hero__lead">
-            {profile.role} at Best Finance Company in Kathmandu. I build secure, tested backend services with Python,
-            Flask and PostgreSQL, and the interfaces people use on top of them.
+            {profile.role} at Best Finance Company in Kathmandu. I work with Python, Flask and PostgreSQL, test before
+            anything ships, and build the interfaces people use on top.
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#work">View projects <span aria-hidden="true">→</span></a>
@@ -102,7 +102,7 @@ const commands = [
             </div>
           </figcaption>
           <span class="profile__glare" aria-hidden="true"></span>
-          <p class="proof proof--a"><span class="status__dot"></span>Digital banking at BFC</p>
+          <p class="proof proof--a"><span class="status__dot"></span>Developer at BFC</p>
           <p class="proof proof--b"><span class="proof__tick">✓</span>{education.degree}</p>
         </figure>
       </div>
@@ -165,7 +165,7 @@ const commands = [
               always on.
             </p>
             <p class="muted">
-              I work across the Transaction &amp; Digital Banking and IT teams at Best Finance Company Ltd. I build
+              At Best Finance Company Ltd. I work across the transaction and IT teams. I build
               internal platforms, help keep the Digital Lending System fast, secure and compliant, and test my own work
               before it reaches production. A background in QA means I write code thinking about how it could break.
             </p>
