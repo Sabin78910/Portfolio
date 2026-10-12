@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import photo from '../assets/sabin-portrait.webp';
+import tracker from '../data/feature-tracker.json';
+import { shippedFor } from '../lib/shipped';
 import { profile, nav, stack, shipped, experience, projects, skills, labs, products, platform, stats, moreProducts, pipeline } from '../data/profile';
 
 // Product screenshots, keyed by `shot` in profile.ts
@@ -159,6 +161,7 @@ const commands = [
                     <span class="badge mono">✓ {pr.tests} tests</span>
                   </span>
                 </div>
+                {shippedFor(tracker, pr.name).map((f) => <p class="new-feature"><span>New</span>{f.label}</p>)}
                 <p class="muted">{pr.summary}</p>
                 <ul class="chips" aria-label="Tech stack">{pr.stack.map((t) => <li>{t}</li>)}</ul>
                 <p class="product__links">
@@ -201,7 +204,10 @@ const commands = [
             {moreProducts.map((m) => (
               <li>
                 <a href={m.href} target="_blank" rel="noopener">
-                  <span>{m.name}</span>
+                  <span>
+                    {m.name}
+                    {shippedFor(tracker, m.name).map((f) => <span class="new-feature new-feature--inline"><span>New</span>{f.label}</span>)}
+                  </span>
                   <span class="muted">{m.kind}</span>
                   <span class="mono">✓ {m.tests}</span>
                 </a>
