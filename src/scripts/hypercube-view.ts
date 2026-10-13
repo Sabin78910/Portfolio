@@ -76,7 +76,7 @@ export function startHypercube(canvas: HTMLCanvasElement, still: boolean) {
       const [r, g, b] = axisColor(axis, n);
       for (let k = 0; k < BUCKETS; k++) {
         const depth = (k + 0.5) / BUCKETS; // far → near
-        ctx.strokeStyle = `rgb(${r} ${g} ${b} / ${(n > 4 ? 0.07 : 0.12) + depth * (n > 4 ? 0.34 : 0.5)})`;
+        ctx.strokeStyle = `rgb(${r} ${g} ${b} / ${(n > 4 ? 0.06 : 0.09) + depth * (n > 4 ? 0.28 : 0.38)})`;
         ctx.lineWidth = (0.7 + depth * (n > 4 ? 1 : 1.8)) * dpr;
         ctx.stroke(paths[axis * BUCKETS + k]);
       }
