@@ -5,6 +5,16 @@ Once this is set up, every push to `main` redeploys automatically. Your laptop c
 
 ---
 
+
+## Your domain today (checked 13 Oct 2026)
+`sabinkhanal.com.np` already serves a site titled "Sabin Khanal" from a **LiteSpeed** shared host (typical cPanel hosting).
+- **Recommended:** follow steps 2–4 below (Vercel). The contact form, security headers and auto-deploys all work there.
+- **Before switching nameservers:** if your email (e.g. `you@sabinkhanal.com.np`) is hosted on that LiteSpeed/cPanel account, copy its
+  MX, SPF (TXT) and DKIM records into Vercel DNS first, or mail will stop.
+- **Staying on the LiteSpeed host instead:** run `npm run build` and upload the contents of `.vercel/output/static/` to `public_html`.
+  The site works, but `/api/contact` needs a server, so the form falls back to your email address. Security headers would also need to be
+  added in `.htaccess`.
+
 ## 1. Put the code on GitHub
 The code lives in **github.com/Sabin78910/Porfolio** (private). Merge the `feat/portfolio-v2` pull request into `main`.
 CI (tests + build) and CodeQL run on that PR first.
