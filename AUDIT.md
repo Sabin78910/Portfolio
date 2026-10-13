@@ -14,7 +14,7 @@ The site passes every launch gate this audit could test locally:
 - **Security:** a strict Content Security Policy with zero violations, and zero dependency vulnerabilities.
 - **Search:** complete structured data for Google's site name and person profile.
 
-Five issues were found and fixed during this audit (§7).
+Five launch issues (§7) and nine security weaknesses (§4.1) were found and fixed during this audit.
 
 Some items can only be confirmed once the domain is live: HTTPS/HSTS in production, field Core Web Vitals, and how Google renders the site name and favicon. They are listed as post-launch checks in §9.
 
@@ -62,16 +62,70 @@ Lighthouse also raises four "insight" notices (caching, compression, request cha
 | 404 handling | ✅ | Unknown URLs return HTTP **404** with a branded page, so Google does not index them |
 | Mobile-friendly | ✅ | Responsive layout verified at 390 px and 1440 px; viewport meta set |
 
-## 4. Security
+## 4. Security: penetration test (VAPT), 13 October 2026
 
-| Control | Status |
+**Scope:** the static site and the single server endpoint, `POST /api/contact`. There is no database, login, file upload or admin area, so those attack classes have no target.
+
+**Method:**
+- An automated attack suite (`src/lib/security.test.ts`, 11 tests) runs against the real route handler on every CI run.
+- Live HTTP attacks against the running server.
+- A real Chrome browser driven against the production build, served with its production headers.
+- Static analysis of the CI pipeline with zizmor.
+
+**Before vs after:** 7 of the 9 attack tests that could run against the original code failed. All 11 pass now; the other 2 test rate-limit helpers that were added during hardening.
+
+### 4.1 Attack results
+
+| # | Attack | Before | After (verified live) |
+|---|---|---|---|
+| 1 | **SQL injection** (`' OR '1'='1' --`, `DROP TABLE`, `UNION SELECT`) | No database to inject into; payloads treated as text | Same, now proven by tests. Payloads in the email field are refused (400). Email is sent as plain text only, never HTML. |
+| 2 | **XSS**, stored and reflected (`<script>`, `onerror=`) | Not echoed | Never echoed; delivered as plain text. In the browser, **Trusted Types** block DOM injection (verified: injected inline script, DOM-built script and third-party script all blocked). |
+| 3 | **Email header injection** (CR/LF in name or email) | ❌ CR/LF reached the subject line | ✅ Control characters stripped from the name; CR/LF in email → 400 |
+| 4 | **Recipient smuggling** (`a@x.co,b@y.co`, quotes, `<>`, IP literals, `localhost`) | ❌ Several accepted | ✅ Strict WHATWG address grammar plus a real domain → 400 |
+| 5 | **Unicode spoofing**: bidi overrides ("Trojan Source"), zero-width and null characters | ❌ Passed through | ✅ Stripped (Unicode category C), NFC-normalised |
+| 6 | **Oversized body / parser abuse** (3 MB) | ❌ Fully read and parsed | ✅ **413** after at most 64 KiB, checked from Content-Length and while streaming |
+| 7 | **Content-type confusion** (`text/plain`, multipart) | ❌ Accepted | ✅ **415**. Only JSON and URL-encoded forms are accepted. |
+| 8 | **CSRF** (cross-site form post) | ✅ 403 (Astro origin check) | ✅ 403, and `text/plain` is refused even same-origin |
+| 9 | **Type confusion / prototype pollution** (arrays, `{"$ne":null}`, `__proto__`) | ✅ Rejected / harmless | ✅ Covered by tests |
+| 10 | **Brute force / flooding** | Per-IP limit, 5 per 10 min | ✅ Same limit, plus a **429 with `Retry-After`**. IPv6 is counted per **/64**, so rotating addresses inside one /64 doesn't reset the limit. |
+| 11 | **IP spoofing** (`X-Forwarded-For`) | n/a | ✅ Spoofed headers don't reset the limit (verified live). On Vercel the platform overwrites `X-Forwarded-For` to prevent spoofing. |
+| 12 | **Memory exhaustion by IP rotation** | ❌ Unbounded map | ✅ Expired keys pruned; past 10,000 live keys, new keys are refused (circuit breaker) |
+| 13 | **Response caching of API data** | ❌ No directive | ✅ `Cache-Control: no-store` |
+| 14 | **Clickjacking / framing** | ✅ | ✅ `X-Frame-Options: DENY` + `frame-ancestors 'none'` |
+| 15 | **HTTP method tampering** (GET/PUT/DELETE/PATCH) | ✅ 404 | ✅ 404 |
+
+### 4.2 Browser hardening (response headers)
+
+| Header | Setting |
 |---|---|
-| Content-Security-Policy | ✅ Scripts limited to `'self'` plus one SHA-256-hashed inline script; `object-src 'none'`, `frame-ancestors 'none'`, `form-action 'self'`. The hash is generated at build time, so it can't go stale. |
-| CSP runtime test | ✅ 0 violations, 0 console errors, 0 failed requests (home and 404, served with the production headers) |
-| HSTS · nosniff · X-Frame-Options · Referrer-Policy · Permissions-Policy · COOP | ✅ All set via `.vercel/output/config.json` |
-| Dependencies | ✅ `npm audit`: 0 vulnerabilities |
-| Contact API (`POST /api/contact`) | ✅ Server-side validation, honeypot, per-IP rate limit (5 per 10 min), 10 s upstream timeout, and the API key comes from an environment variable that is never committed. Covered by 13 automated tests. |
-| Secrets in repo | ✅ None. `.env` is git-ignored. |
+| Content-Security-Policy | `script-src 'self'` + one build-time SHA-256 hash; `object-src 'none'`; `base-uri 'self'`; `form-action 'self'`; `frame-ancestors 'none'`; **`require-trusted-types-for 'script'; trusted-types sw`** (new); `upgrade-insecure-requests` |
+| Trusted Types (new) | DOM XSS sinks reject plain strings. The only policy allowed is `sw`, pinned to `/sw.js`. |
+| Cross-Origin-Resource-Policy (new) | `same-origin`: other sites can't embed the site's resources |
+| Cross-Origin-Opener-Policy | `same-origin` |
+| Permissions-Policy | Camera, microphone, geolocation, payment, USB, Bluetooth, serial, HID, MIDI, display capture and **Topics API** all disabled |
+| HSTS · nosniff · Referrer-Policy | 1 year + subdomains · `nosniff` · `strict-origin-when-cross-origin` |
+| `/.well-known/security.txt` (new) | RFC 9116 vulnerability-disclosure contact, expires 13 Oct 2027 |
+
+Lighthouse, served with these headers, compression and immutable caching: **mobile 100 / 100 / 100 / 100**, LCP 1.8 s, CLS 0. "CSP effective against XSS" passes, the HSTS audit passes, and the Trusted Types, origin isolation and clickjacking audits flag nothing.
+
+### 4.3 Supply chain and CI
+
+| Control | Result |
+|---|---|
+| `npm audit` | 0 vulnerabilities |
+| `npm audit signatures` | Registry signatures verified; 78 packages with verified provenance attestations |
+| Secret scan of the **entire git history** (Resend, GitHub, AWS, OpenAI, Slack, Google keys, private keys, `.env`/`.pem` files) | 0 findings |
+| GitHub Actions pinned to **commit SHAs** (with Dependabot updating them) | Done for all actions; protects against tag-hijack attacks like tj-actions (2025) |
+| Least privilege | CI: `contents: read`. CodeQL: `permissions: {}` at workflow level, write only on its job. `persist-credentials: false`. |
+| zizmor 1.30 (GitHub Actions security linter, auditor mode) | 0 warnings (2 cosmetic "unnamed job" notes) |
+| CodeQL + Dependabot | Configured (CodeQL upload needs code scanning enabled, see §8) |
+
+### 4.4 Platform protections for the owner to switch on (no code; see DEPLOY.md §8)
+
+1. **Vercel WAF rate-limit rule** on `/api/contact`: shared across all servers at the edge, free on Hobby (1 rule).
+2. **Vercel BotID** (invisible CAPTCHA, Basic tier free). Deliberately *not* installed blind: it can only be tested on a live Vercel deployment, and a misconfiguration would silently block real messages. Add it after launch.
+3. **DNS email-spoofing protection:** SPF, DMARC `p=reject` and a CAA record so only Let's Encrypt can issue certificates.
+4. **HSTS preload** (optional, hard to undo): submit to hstspreload.org only once every subdomain is HTTPS.
 
 ## 5. Accessibility (WCAG 2.2 AA)
 
