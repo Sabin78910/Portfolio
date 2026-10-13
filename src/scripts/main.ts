@@ -220,6 +220,10 @@ form?.addEventListener('submit', async (e) => {
 });
 
 // ── Offline support ──────────────────────────────────────────────────────
+// The CSP enforces Trusted Types, so the worker URL must come from the one policy it allows ("sw"), pinned to /sw.js.
+type TT = { createPolicy(n: string, p: { createScriptURL(u: string): string }): { createScriptURL(u: string): string } };
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+  const tt = (window as unknown as { trustedTypes?: TT }).trustedTypes;
+  const url = tt?.createPolicy('sw', { createScriptURL: (u) => (u === '/sw.js' ? u : '') }).createScriptURL('/sw.js') ?? '/sw.js';
+  addEventListener('load', () => navigator.serviceWorker.register(url));
 }

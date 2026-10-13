@@ -31,6 +31,9 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
+  // Trusted Types: DOM XSS sinks (innerHTML, script URLs...) reject plain strings; only the "sw" policy may exist.
+  "require-trusted-types-for 'script'",
+  'trusted-types sw',
   'upgrade-insecure-requests',
 ].join('; ');
 
@@ -42,8 +45,10 @@ const route = {
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+    'Permissions-Policy':
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(), hid=(), midi=(), display-capture=(), browsing-topics=()',
     'Cross-Origin-Opener-Policy': 'same-origin',
+    'Cross-Origin-Resource-Policy': 'same-origin',
   },
   continue: true,
 };

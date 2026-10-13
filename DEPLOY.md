@@ -81,6 +81,23 @@ Resend → **Domains → Add domain** → `sabinkhanal.com.np` → copy the DNS 
 - **Dependabot + CodeQL:** run automatically from `.github/`. Enable *Dependabot alerts* in the repo's
   **Settings → Code security** if prompted.
 
+## 8. Security switches (10 min, after the site is live)
+1. **Edge rate limit (free):** Vercel → project → **Firewall → Configure → + New Rule**
+   - Name: `contact-form`. If **Request Path** *equals* `/api/contact` and **Method** *equals* `POST`
+   - Then **Rate Limit**: Fixed Window, **60 s**, **5 requests**, key **IP**, action **Default (429)** → **Save** → **Review Changes → Publish**
+   The site already limits each IP inside the function. This rule adds the same limit at Vercel's edge, shared by every server.
+2. **Stop people sending fake email "from" your domain.** Vercel → Domains → `sabinkhanal.com.np` → DNS Records → add:
+
+   | Name | Type | Value | Use when |
+   |---|---|---|---|
+   | `@` | TXT | `v=spf1 -all` | You send **no** email from this domain. If you verify the domain in Resend (step 6), use the SPF value Resend gives you instead. |
+   | `_dmarc` | TXT | `v=DMARC1; p=reject; adkim=s; aspf=s` | Always |
+   | `@` | CAA | `0 issue "letsencrypt.org"` | Always (Vercel's certificates come from Let's Encrypt) |
+
+3. **Optional, after launch:** Vercel BotID (invisible CAPTCHA, free Basic tier). Ask Claude to add it once the site is live, so it can be tested on the real deployment.
+4. **Optional, hard to undo:** HSTS preload at hstspreload.org, only if every subdomain will always be HTTPS.
+5. Check **securityheaders.com** and **observatory.mozilla.org** with your live URL.
+
 ## Later: Google Play
 The site is an installable PWA. To list it on the Play Store, wrap it as a **Trusted Web Activity** with
 [Bubblewrap](https://github.com/GoogleChromeLabs/bubblewrap) (`npx @bubblewrap/cli init --manifest https://sabinkhanal.com.np/manifest.webmanifest`),
