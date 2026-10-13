@@ -25,8 +25,8 @@ export const nav = [
 ];
 
 export const stack = [
-  'Python', 'Flask', 'FastAPI', 'PostgreSQL', 'REST APIs', 'pytest', 'Docker', 'GitHub Actions',
-  'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX', 'SQL', 'Linux', 'Agile / Scrum', 'QA & UAT',
+  'Python', 'Flask', 'FastAPI', 'PostgreSQL', 'REST APIs', 'pytest', 'Docker', 'GitHub Actions', 'AWS',
+  'React', 'Next.js', 'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX', 'SQL', 'Linux', 'Agile / Scrum', 'QA & UAT',
 ];
 
 export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
@@ -173,12 +173,22 @@ export const projects = [
 // Skills, regrouped for presentation. Every CV skill appears here (enforced by src/lib/skills.test.ts).
 // `tools` render as logo tiles; `capabilities` render as described rows.
 export const skills = [
-  { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'HTML', 'CSS', 'Java'] },
-  { group: 'Backend & frameworks', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer', 'PayPal API'] },
+  { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'Java'] },
+  { group: 'Backend & APIs', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'PHPMailer', 'PayPal API'] },
+  { group: 'Frontend', tools: ['React', 'Next.js', 'HTML', 'CSS', 'Bootstrap 5'] },
   {
     group: 'Databases',
     tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
     capabilities: [{ icon: 'logic', title: 'Database logic', detail: 'Database triggers and sequences for integrity and keys' }],
+  },
+  {
+    group: 'Cloud, DevOps & testing',
+    tools: ['AWS', 'Docker', 'GitHub Actions', 'Linux', 'pytest', 'Git', 'GitHub', 'VS Code'],
+    capabilities: [
+      { icon: 'shield', title: 'Testing & QA', detail: 'Automated API tests (pytest), functional, UAT and production testing' },
+      { icon: 'pipeline', title: 'CI/CD', detail: 'GitHub Actions: lint, tests and pip-audit on every push; Docker deployments' },
+      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints and system integration alongside business and IT teams' },
+    ],
   },
   {
     group: 'Data & ML',
@@ -187,15 +197,13 @@ export const skills = [
       { icon: 'layers', title: 'Feature engineering', detail: 'Feature scaling (Min–Max) and PCA' },
       { icon: 'chart', title: 'Analysis & visualisation', detail: 'Correlation analysis and ggplot2' },
     ],
-    evidence: { label: 'Applied in Concrete Compressive Strength', href: '#work' },
+    evidence: { label: 'Applied in Concrete Compressive Strength', href: '#projects' },
   },
+  // Roadmap, not claimed experience: rendered as a dashed "learning" card and kept off the CV.
   {
-    group: 'Testing, DevOps & tools',
-    tools: ['pytest', 'Docker', 'GitHub Actions', 'Linux', 'Git', 'GitHub', 'VS Code'],
-    capabilities: [
-      { icon: 'shield', title: 'Testing & QA', detail: 'Automated API tests (pytest), functional, UAT and production testing' },
-      { icon: 'pipeline', title: 'CI/CD', detail: 'GitHub Actions: lint, tests and pip-audit on every push; Docker deployments' },
-      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints and system integration alongside business and IT teams' },
-    ],
+    group: 'Learning next',
+    learning: true,
+    note: 'My 2026 roadmap toward senior backend work. Studying now, not yet used in production.',
+    tools: ['TypeScript', 'Kubernetes', 'Terraform', 'Redis', 'OpenTelemetry', 'LLMs & RAG'],
   },
 ];

@@ -290,3 +290,11 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 - **The Bookstore REST API is the lead project** on both the CV and the site. Mercer's junior postings ask for Python, REST/HTTP, testing, CI and Git.
 - **The CV is one page, ATS-safe and single-column.** Text extraction confirms every target keyword. The original is kept at `cv/Sabin-Khanal-CV-original.pdf`.
 - **Still missing (owner input needed):** impact numbers for the BFC systems, degree classification, spoken languages, and relocation or work eligibility for India.
+
+## Addendum: 2026 stack update (13 Oct 2026)
+- Owner confirmed **AWS** and **React / Next.js**. They are added to the site (new *Frontend* group; *Cloud, DevOps & testing* strip) and to the CV, which is still one page with every keyword verified via pypdf.
+- **Data & AI:** kept to what the CV evidences (the MICE/IQR/PCA pipeline). No unproven AI claims.
+- **Learning next:** a dashed card tagged "2026 roadmap" lists TypeScript, Kubernetes, Terraform, Redis, OpenTelemetry, and LLMs & RAG. It says plainly that these are not yet used in production, and a test keeps them out of the claimed groups.
+- Fixed the Data & ML evidence link (`#work` → `#projects`). Service worker is now `sk-v7`.
+- Lighthouse mobile: 99 / 100 / 100 / 100, LCP 2.1 s, CLS 0.
+

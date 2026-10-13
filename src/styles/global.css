@@ -1232,7 +1232,6 @@ kbd {
   }
   .stack__cell--full {
     grid-column: 1 / -1;
-    order: 1;
   }
   .stack__cell--full .stack__layer {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -1294,6 +1293,31 @@ kbd {
 .stack__count {
   font-size: 0.75rem;
   color: var(--muted-2);
+}
+/* Roadmap card: dashed and quieter, so it never reads as claimed experience. */
+.stack__tag {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgb(165 180 252 / 0.35);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: #c7d2fe;
+}
+.stack__note {
+  margin-top: -0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  transform: translateZ(20px);
+}
+.stack__cell--learning .stack__card {
+  border-style: dashed;
+  background: transparent;
+}
+.stack__cell--learning .tool {
+  border-style: dashed;
+  background: transparent;
+}
+.stack__cell--learning .tool svg {
+  opacity: 0.75;
 }
 .stack__layer {
   display: grid;
