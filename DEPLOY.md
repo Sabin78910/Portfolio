@@ -6,14 +6,12 @@ Once this is set up, every push to `main` redeploys automatically. Your laptop c
 ---
 
 
-## Your domain today (checked 13 Oct 2026)
-`sabinkhanal.com.np` already serves a site titled "Sabin Khanal" from a **LiteSpeed** shared host (typical cPanel hosting).
-- **Recommended:** follow steps 2–4 below (Vercel). The contact form, security headers and auto-deploys all work there.
-- **Before switching nameservers:** if your email (e.g. `you@sabinkhanal.com.np`) is hosted on that LiteSpeed/cPanel account, copy its
-  MX, SPF (TXT) and DKIM records into Vercel DNS first, or mail will stop.
-- **Staying on the LiteSpeed host instead:** run `npm run build` and upload the contents of `.vercel/output/static/` to `public_html`.
-  The site works, but `/api/contact` needs a server, so the form falls back to your email address. Security headers would also need to be
-  added in `.htaccess`.
+## Your domain today (DNS checked 13 Oct 2026)
+- **DNS is hosted by your current web host** (nameservers `ns1–ns4.mysecurecloudhost.com`, a cPanel host), not by the .np registry.
+- The site record is `A 103.138.189.197` (the old LiteSpeed site) with a **10-minute TTL**. `www` points to the same place.
+- Email records exist on that host (`MX 0 sabinkhanal.com.np`, plus an SPF TXT). Leave them alone.
+- So the **fastest and safest launch is Route A in step 4**: change two records in that host's DNS panel. The switch is live in about 10–30 minutes, with no registry wait and no risk to email. Keep that hosting account active while it serves your DNS.
+- Write down the old A record (`103.138.189.197`). Putting it back is your 10-minute rollback.
 
 ## 1. Put the code on GitHub
 The code lives in **github.com/Sabin78910/Porfolio** (private). Merge the `feat/portfolio-v2` pull request into `main`.
@@ -42,23 +40,21 @@ The form sends email through **Resend** (free: 3,000 emails/month).
 > Until you verify your own domain in Resend (step 6), messages are sent from `onboarding@resend.dev`.
 > Resend only allows that sender to email the address you signed up with, so sign up to Resend with `CONTACT_TO`.
 
-## 4. Connect the domain (5 min + registry wait)
-The .np registry (register.com.np, run by Mercantile) only accepts **nameservers**, not individual DNS records.
-So let Vercel host the DNS:
+## 4. Connect the domain
+First add the domain in Vercel: project → **Settings → Domains** → add `sabinkhanal.com.np`, then `www.sabinkhanal.com.np` set to
+**redirect to** `sabinkhanal.com.np`. Vercel then shows the DNS values it wants. **Use exactly what Vercel shows you.**
 
-1. Vercel → project → **Settings → Domains** → add `sabinkhanal.com.np`. Then add `www.sabinkhanal.com.np` and set it to
-   **redirect to** `sabinkhanal.com.np`.
-2. Vercel shows the domain as *Invalid configuration*. Choose the **Nameservers** option. It lists two nameservers,
-   typically `ns1.vercel-dns.com` and `ns2.vercel-dns.com`. **Use exactly what Vercel shows you.**
-3. Go to **register.com.np** → log in → **Domain list** → select `sabinkhanal.com.np` → **Edit DNS**.
-4. Replace the nameservers with Vercel's two. Enter hostnames only (FQDN), not IP addresses. Submit once.
-5. Wait. The registry processes changes **twice a day** and propagation takes **up to 24–48 hours**.
-   Do not resubmit, because repeated changes delay it. If nothing happens after 48 hours, email
-   `hostmaster@mercantile.com.np`.
-6. When Vercel shows **Valid Configuration**, HTTPS is issued automatically. Open https://sabinkhanal.com.np 🎉
+### Route A: fastest (about 10–30 min), recommended
+1. Log in to your current hosting (**mysecurecloudhost** / cPanel) → **Zone Editor** (or "DNS Zone Editor") → `sabinkhanal.com.np`.
+2. Edit the **A** record for `sabinkhanal.com.np` and replace `103.138.189.197` with Vercel's A value (e.g. `76.76.21.21` or the IP Vercel shows).
+3. Edit `www`: make it a **CNAME** to the value Vercel shows (e.g. `cname.vercel-dns.com`).
+4. **Do not touch** the MX or SPF (TXT) records; they run your email.
+5. Within about 10–30 minutes Vercel shows **Valid Configuration** and issues HTTPS automatically.
 
-> **Do you already use email on this domain** (e.g. Zoho or Google Workspace)? Before switching nameservers, copy its
-> MX/TXT records into Vercel → **Domains → sabinkhanal.com.np → DNS Records**, or your email will stop working.
+### Route B: move DNS to Vercel (slower, 24–48 h; only if you're leaving the old host)
+1. First copy every MX/TXT record from the old host into Vercel → Domains → DNS Records.
+2. **register.com.np** → Domain list → `sabinkhanal.com.np` → **Edit DNS** → set Vercel's two nameservers → submit **once**.
+3. The registry processes changes twice a day. If nothing has changed after 48 h, email `hostmaster@mercantile.com.np`.
 
 ## 5. Check the live site (5 min)
 - [ ] https://sabinkhanal.com.np loads with a padlock, and www redirects to it
@@ -86,12 +82,12 @@ Resend → **Domains → Add domain** → `sabinkhanal.com.np` → copy the DNS 
    - Name: `contact-form`. If **Request Path** *equals* `/api/contact` and **Method** *equals* `POST`
    - Then **Rate Limit**: Fixed Window, **60 s**, **5 requests**, key **IP**, action **Default (429)** → **Save** → **Review Changes → Publish**
    The site already limits each IP inside the function. This rule adds the same limit at Vercel's edge, shared by every server.
-2. **Stop people sending fake email "from" your domain.** Vercel → Domains → `sabinkhanal.com.np` → DNS Records → add:
+2. **Stop people sending fake email "from" your domain.** Add these where your DNS lives (Route A: the cPanel Zone Editor; Route B: Vercel → Domains → DNS Records):
 
    | Name | Type | Value | Use when |
    |---|---|---|---|
-   | `@` | TXT | `v=spf1 -all` | You send **no** email from this domain. If you verify the domain in Resend (step 6), use the SPF value Resend gives you instead. |
-   | `_dmarc` | TXT | `v=DMARC1; p=reject; adkim=s; aspf=s` | Always |
+   | `@` | TXT | `v=spf1 -all` | **Only** if you never send email from this domain. Your host already has an SPF record for its mail server; if you use `@sabinkhanal.com.np` email, keep that record and don't add this one. |
+   | `_dmarc` | TXT | `v=DMARC1; p=reject; adkim=s; aspf=s` if you send no email from the domain; otherwise start with `v=DMARC1; p=none` | Always |
    | `@` | CAA | `0 issue "letsencrypt.org"` | Always (Vercel's certificates come from Let's Encrypt) |
 
 3. **Optional, after launch:** Vercel BotID (invisible CAPTCHA, free Basic tier). Ask Claude to add it once the site is live, so it can be tested on the real deployment.
