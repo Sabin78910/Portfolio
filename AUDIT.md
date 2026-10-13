@@ -300,3 +300,4 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 - Lighthouse mobile: 99 / 100 / 100 / 100, LCP 2.1 s, CLS 0.
 
 - Owner added **Android development** and **game development**. They appear in the *Frontend, mobile & games* card and on a new CV line (*Mobile & games*). The CV stays one page; "system integration" was dropped from its DevOps line because the experience bullets already cover it.
+- Capability rows now show titles only (owner request). Detail-level skills such as MICE, PCA, triggers and UAT remain on the CV.
