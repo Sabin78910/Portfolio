@@ -1,6 +1,6 @@
 # Deploying to sabinkhanal.com.np
 
-Total time: about 20 minutes of clicking, then up to 48 hours for the .np registry to switch DNS.
+Total time: about 1 hour of clicking. With Route A (step 4) the domain switches in 10–30 minutes, with no registry wait.
 Once this is set up, every push to `main` redeploys automatically. Your laptop can stay off.
 
 ---
