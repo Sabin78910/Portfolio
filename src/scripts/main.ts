@@ -6,7 +6,8 @@ const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
 
 // ── Pause motion (WCAG 2.2.2) ────────────────────────────────────────────
-const motionBtn = $<HTMLButtonElement>('[data-motion-toggle]');
+// The toggle lives in the ⌘K menu (WCAG 2.2.2); its hint shows the current state.
+const motionHint = $('[data-action="motion"] .cmdk__hint');
 let cube: ReturnType<typeof startHypercube>;
 const storedPause = (() => {
   try {
@@ -17,19 +18,17 @@ const storedPause = (() => {
 })();
 const applyMotion = (paused: boolean) => {
   document.documentElement.classList.toggle('motion-paused', paused);
-  motionBtn?.setAttribute('aria-pressed', String(paused));
-  if (motionBtn) motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
+  if (motionHint) motionHint.textContent = paused ? 'Paused — select to resume' : 'Accessibility';
   cube?.setPaused(paused);
 };
-if (reduced && motionBtn) motionBtn.hidden = true;
 applyMotion(storedPause);
-motionBtn?.addEventListener('click', () => {
+const toggleMotion = () => {
   const paused = !document.documentElement.classList.contains('motion-paused');
   applyMotion(paused);
   try {
     localStorage.setItem('motion', paused ? 'paused' : 'on');
   } catch {}
-});
+};
 
 // ── Hypercube: a live 4D/6D/8D object behind the profile card ────────────
 const cubeCanvas = $<HTMLCanvasElement>('[data-hypercube]');
@@ -160,6 +159,12 @@ dlg?.addEventListener('click', async (e) => {
   if (e.target === dlg) return dlg.close(); // backdrop click
   const a = (e.target as Element).closest('a');
   if (!a) return;
+  if (a.dataset.action === 'motion') {
+    e.preventDefault();
+    toggleMotion();
+    setTimeout(() => dlg.close(), 500);
+    return;
+  }
   if (a.dataset.action === 'copy') {
     e.preventDefault();
     const hint = a.querySelector('.cmdk__hint')!;

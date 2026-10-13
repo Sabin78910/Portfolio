@@ -2,8 +2,9 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
+import SkillsShowcase from '../components/SkillsShowcase.astro';
 import photo from '../assets/sabin-portrait.webp';
-import { profile, nav, stack, bfcWork, experience, projects, skills, education, principles, highlights } from '../data/profile';
+import { profile, nav, stack, bfcWork, experience, projects, education, principles } from '../data/profile';
 
 const year = new Date().getFullYear();
 const [currentJob] = experience;
@@ -30,6 +31,7 @@ const commands = [
   { label: 'Download CV', hint: 'PDF', href: profile.cv, download: true },
   { label: 'Open GitHub', hint: 'github.com/Sabin78910', href: profile.github, external: true },
   { label: 'Open LinkedIn', hint: 'linkedin.com', href: profile.linkedin, external: true },
+  { label: 'Pause motion', hint: 'Accessibility', action: 'motion' },
 ];
 ---
 
@@ -105,18 +107,10 @@ const commands = [
                 <button type="button" data-dim={d} aria-pressed={d === 4 ? 'true' : 'false'}>{d}D</button>
               ))}
             </span>
-            <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Pause motion</button>
           </div>
         </div>
       </div>
 
-      <div class="wrap">
-        <dl class="stats">
-          {highlights.map((h) => (
-            <div><dt>{h.label}</dt><dd>{h.value}</dd></div>
-          ))}
-        </dl>
-      </div>
     </section>
 
     <div class="marquee" aria-label="Technologies I work with">
@@ -171,7 +165,7 @@ const commands = [
         </header>
         <div class="bento">
           <article class="tile tile--story card card--accent" data-reveal>
-            <p class="tile__big">Software that moves money should be <span class="grad">boring in the best way</span> — correct, secure and always on.</p>
+            <p class="tile__big">Transaction processing engines should be <span class="grad">relentlessly predictable</span> in the best way—unwaveringly secure, impeccably accurate, and continuously online.</p>
             <p class="muted">
               At Best Finance Company Ltd. I work across the transaction and IT teams. I build internal platforms, help
               keep the Digital Lending System fast, secure and compliant, and test my own work before it reaches
@@ -253,18 +247,10 @@ const commands = [
       <div class="wrap">
         <header class="section__head" data-reveal>
           <p class="eyebrow">Skills</p>
-          <h2>What I build with.</h2>
+          <h2>The stack behind <span class="grad">the systems.</span></h2>
+          <p class="section__sub muted">Languages, frameworks and databases I use in production, plus the data and delivery practices around them.</p>
         </header>
-        <div class="skills card" data-reveal>
-          {skills.map((s) => (
-            <div class="skill">
-              <h3 class="skill__group">{s.group}</h3>
-              <ul class="chips">
-                {s.items.map((it) => <li>{it}</li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <SkillsShowcase />
       </div>
     </section>
 

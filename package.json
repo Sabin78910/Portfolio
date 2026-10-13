@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^11.0.14",
-    "astro": "^7.3.8"
+    "astro": "^7.3.8",
+    "simple-icons": "^16.35.0"
   },
   "engines": {
     "node": ">=22.18.0"
