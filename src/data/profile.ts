@@ -161,11 +161,7 @@ export const skills = [
   { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'Java'] },
   { group: 'Backend & APIs', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'PHPMailer', 'PayPal API'] },
   { group: 'Frontend, mobile & games', tools: ['React', 'Next.js', 'HTML', 'CSS', 'Bootstrap 5', 'Android development', 'Game development'] },
-  {
-    group: 'Databases',
-    tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
-    capabilities: [{ icon: 'logic', title: 'Database logic' }],
-  },
+  { group: 'Databases', tools: ['PostgreSQL', 'MySQL', 'Oracle Database'] },
   {
     group: 'Cloud, DevOps & testing',
     tools: ['AWS', 'Docker', 'GitHub Actions', 'Linux', 'pytest', 'Git', 'GitHub', 'VS Code'],
