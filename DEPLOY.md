@@ -51,10 +51,35 @@ First add the domain in Vercel: project → **Settings → Domains** → add `sa
 4. **Do not touch** the MX or SPF (TXT) records; they run your email.
 5. Within about 10–30 minutes Vercel shows **Valid Configuration** and issues HTTPS automatically.
 
-### Route B: move DNS to Vercel (slower, 24–48 h; only if you're leaving the old host)
-1. First copy every MX/TXT record from the old host into Vercel → Domains → DNS Records.
-2. **register.com.np** → Domain list → `sabinkhanal.com.np` → **Edit DNS** → set Vercel's two nameservers → submit **once**.
-3. The registry processes changes twice a day. If nothing has changed after 48 h, email `hostmaster@mercantile.com.np`.
+### Route B: official .np registry, nameservers at register.com.np (1–3 business days)
+Your domain stays registered with Nepal's official registry either way. This route moves the DNS itself to Vercel.
+
+**1. Check your registry account first**
+- Log in at **register.com.np/login**. The username is the email address used when the domain was registered; use **User Login** to recover it.
+- Open the **Active Domain** tab and confirm `sabinkhanal.com.np` is listed.
+  - If it shows **Reverification**, complete that first. Unverified domains get parked.
+  - If it isn't under your login (some hosting companies register .com.np domains for clients), ask your host or `hostmaster@mercantile.com.np` to put it under your email.
+- Make sure the contact email is current; renewal reminders go there 15 days before expiry.
+
+**2. Prepare Vercel before switching (so nothing breaks)**
+- Vercel → **Domains** → add `sabinkhanal.com.np` → choose **Nameservers**. Note the two it shows (normally `ns1.vercel-dns.com`, `ns2.vercel-dns.com`).
+- **Email:** first check whether you use `@sabinkhanal.com.np` email (cPanel → Email Accounts). If you do, add these in Vercel → Domains → **DNS Records** *before* switching. Your MX currently points at the bare domain, which will move to Vercel, so email needs its own name:
+
+  | Name | Type | Value |
+  |---|---|---|
+  | `mail` | A | `103.138.189.197` |
+  | `@` | MX | `mail.sabinkhanal.com.np` (priority 0) |
+  | `@` | TXT | your current SPF, copied exactly from cPanel |
+
+  If you have no email accounts, skip this.
+
+**3. Submit the change once**
+- register.com.np → **Active Domain** → **EDIT DNS** → replace the nameservers with Vercel's (hostnames, not IPs; both of them, in order).
+- **Upload the documents the form asks for.** The registry says requests without required documents are ignored. Typically that's a scan of your citizenship certificate and a short signed request letter.
+- Submit **once**. Requests are handled manually, first come first served, usually within 1–3 business days, then up to 48 h to spread.
+- If nothing has changed after 72 h, email `hostmaster@mercantile.com.np` with the domain name. Don't resubmit.
+
+**4. When Vercel shows Valid Configuration**, HTTPS is automatic. Add Google's TXT, CAA and DMARC records in **Vercel DNS** (steps 5–8).
 
 ## 5. Check the live site (5 min)
 - [ ] https://sabinkhanal.com.np loads with a padlock, and www redirects to it
