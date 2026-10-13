@@ -19,9 +19,11 @@ const ogImage = new URL('/og.png', Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Sabin Khanal" />
+    <meta name="robots" content="max-image-preview:large" />
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sabin Khanal" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -34,6 +36,8 @@ const ogImage = new URL('/og.png', Astro.site);
     <meta name="theme-color" content="#070b16" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Google Search favicons must be PNG/ICO etc. (not SVG), square, ideally a multiple of 48px -->
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
