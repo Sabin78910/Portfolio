@@ -1,0 +1,90 @@
+---
+// Skills as 3D-tilt cards: real brand logos (simple-icons, CC0) for tools, a check list for capabilities.
+// Rendered at build time — ships as static SVG, no client JS.
+import * as si from 'simple-icons';
+import { skills } from '../data/profile';
+
+type Brand = { path: string; hex: string };
+const brands: Record<string, Brand> = {
+  Python: si.siPython,
+  PHP: si.siPhp,
+  JavaScript: si.siJavascript,
+  R: si.siR,
+  HTML: si.siHtml5,
+  CSS: si.siCss,
+  Java: si.siOpenjdk,
+  Flask: si.siFlask,
+  'Laravel 11': si.siLaravel,
+  'Bootstrap 5': si.siBootstrap,
+  PostgreSQL: si.siPostgresql,
+  MySQL: si.siMysql,
+  Git: si.siGit,
+  GitHub: si.siGithub,
+  'PayPal API': si.siPaypal,
+};
+
+// Generic line icons (24×24, stroke) for tools without an official logo.
+const glyphs: Record<string, string> = {
+  SQL: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  'Oracle Database': '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  'REST APIs': '<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>',
+  'Oracle APEX': '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+  PHPMailer: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  'VS Code': '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+};
+
+// Dark brand colours (GitHub, OpenJDK, PayPal) would vanish on navy — fall back to the text colour.
+const lum = (hex: string) => {
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const tone = (hex: string) => (lum(hex) < 0.32 ? '#e8ecf4' : `#${hex}`);
+
+const layout = ['wide', 'wide', 'third', 'third', 'third'];
+const groups = skills.map((g, i) => ({
+  ...g,
+  size: layout[i] ?? 'third',
+  tools: g.items.filter((it) => brands[it] || glyphs[it]),
+  capabilities: g.items.filter((it) => !brands[it] && !glyphs[it]),
+}));
+---
+
+<div class="stack">
+  {groups.map((g) => (
+    <article class={`stack__cell stack__cell--${g.size}`} data-reveal>
+     <div class="stack__card" data-tilt>
+      <span class="stack__sheen" aria-hidden="true"></span>
+      <header class="stack__head">
+        <h3>{g.group}</h3>
+        <span class="stack__count mono">{String(g.items.length).padStart(2, '0')}</span>
+      </header>
+      <div class="stack__layer">
+        {g.tools.length > 0 && (
+          <ul class="stack__tools">
+            {g.tools.map((t) => (
+              <li class="tool" style={brands[t] ? `--brand:${tone(brands[t].hex)}` : '--brand:#a5b4fc'}>
+                {brands[t] ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d={brands[t].path} fill="currentColor" /></svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs[t]} />
+                )}
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {g.capabilities.length > 0 && (
+          <ul class="stack__caps">
+            {g.capabilities.map((c) => (
+              <li>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                {c}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+     </div>
+    </article>
+  ))}
+</div>

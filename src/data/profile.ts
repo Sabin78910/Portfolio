@@ -28,14 +28,6 @@ export const stack = [
   'JavaScript', 'SQL', 'R', 'Git', 'Agile / Scrum', 'QA & UAT',
 ];
 
-// Hero stat strip: every value is from the CV.
-export const highlights = [
-  { value: '3', label: 'Systems I build & maintain at BFC' },
-  { value: '3', label: 'End-to-end projects' },
-  { value: 'BSc (Hons)', label: 'Computing · The British College' },
-  { value: 'Python · Flask · PostgreSQL', label: 'Core stack' },
-];
-
 export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
 
 // Systems at Best Finance Company (from the CV).
