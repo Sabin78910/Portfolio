@@ -1,4 +1,4 @@
-# Launch Audit: sabinkhanal.com.np
+# Launch Audit: sabinkhanal13.com.np
 
 **Subject:** Sabin Khanal, Backend & Web Developer, personal portfolio
 **Date:** 13 October 2026 · **Build:** `feat/portfolio-v2` (Astro 7, Vercel) · **Verdict:** ✅ Ready to deploy and submit to Google
@@ -48,7 +48,7 @@ Lighthouse also raises four "insight" notices (caching, compression, request cha
 |---|---|---|
 | Title | ✅ | "Sabin Khanal — Backend & Web Developer" (38 chars) |
 | Meta description | ✅ | 163 chars, an accurate summary. Google sets no length limit but may truncate in results². |
-| Canonical URL | ✅ | `https://sabinkhanal.com.np/` |
+| Canonical URL | ✅ | `https://sabinkhanal13.com.np/` |
 | `robots.txt` | ✅ | Allows all crawlers; references the sitemap |
 | `sitemap.xml` | ✅ | Lists the home page |
 | Site name in results | ✅ | `WebSite` structured data (`name`, `url`) on the home page, as Google requires³ |
@@ -153,7 +153,7 @@ Lighthouse, served with these headers, compression and immutable caching: **mobi
 
 1. **Not live yet.** Production HTTPS, HSTS, the `www` → apex redirect and real-user Core Web Vitals can only be confirmed after deployment. A low-traffic site may never collect enough visits for field data in Search Console. In that case, lab scores are the reference.
 2. **Google decides presentation.** Meeting the guidelines makes the site eligible for a site name, favicon and profile signals, but Google does not guarantee they will appear³ ⁵. Ranking first for "Sabin Khanal" mostly depends on links from LinkedIn and GitHub (see §9).
-3. **Email on the domain.** If any email uses `@sabinkhanal.com.np`, copy its MX/TXT records into Vercel DNS *before* switching nameservers.
+3. **Email on the domain.** If any email uses `@sabinkhanal13.com.np`, copy its MX/TXT records into Vercel DNS *before* switching nameservers.
 4. **Contact form** needs `RESEND_API_KEY` and `CONTACT_TO` in Vercel. Until they are set, the form tells visitors to use the email address shown on the page.
 5. **Rate limit** is held in memory per serverless instance. That is enough for a portfolio; move it to a shared store (e.g. Upstash Redis) if the form is ever abused.
 6. **CodeQL check** on the private repository fails only at the upload step, because GitHub code scanning isn't enabled for private repos without GitHub Code Security. The analysis itself finds nothing, and the site's `test-and-build` CI passes.
@@ -163,7 +163,7 @@ Lighthouse, served with these headers, compression and immutable caching: **mobi
 
 **Deploy (owner, per `DEPLOY.md`)**
 - [ ] Merge the PR into `main`, import the repo into Vercel, and add `RESEND_API_KEY` and `CONTACT_TO`
-- [ ] Add `sabinkhanal.com.np` and `www` (redirect to the apex) in Vercel; switch nameservers at register.com.np (24–48 h)
+- [ ] Add `sabinkhanal13.com.np` and `www` (redirect to the apex) in Vercel; switch nameservers at register.com.np (24–48 h)
 - [ ] Confirm the padlock, the `www` redirect, and a test message arriving from the contact form
 
 **Google (day of launch)**
@@ -197,7 +197,7 @@ The earlier research, design rationale and change log, kept for reference. Numbe
 
 ### Portfolio competitive audit & design rationale
 
-**Subject:** sabinkhanal.com.np — personal portfolio of Sabin Khanal, Backend & Web Developer (fintech), Kathmandu
+**Subject:** sabinkhanal13.com.np — personal portfolio of Sabin Khanal, Backend & Web Developer (fintech), Kathmandu
 **Date:** 12 Oct 2026
 **Method:** live Lighthouse 13.5 runs (mobile, simulated 4G, headless Chrome), visual inspection of each site in a browser, and a review of 2026 design-trend literature and Awwwards judging criteria.
 
@@ -220,7 +220,7 @@ The earlier research, design rationale and change log, kept for reference. Numbe
 | ayushbajgai.com | **49** | 100 | 96 | 91 | 7.4 s | **0.838** | 0 ms | 3.38 MB |
 | brittanychiang.com | 75 | 96 | 100 | 100 | 10.7 s | 0 | 0 ms | 1.52 MB |
 | bruno-simon.com | **31** | 74 | 100 | 82 | 25.3 s | 0 | 1,330 ms | 7.55 MB |
-| **Target: sabinkhanal.com.np** | **≥ 95** | **100** | **100** | **100** | **≤ 2.0 s** | **0** | **≤ 50 ms** | **≤ 300 KB** |
+| **Target: sabinkhanal13.com.np** | **≥ 95** | **100** | **100** | **100** | **≤ 2.0 s** | **0** | **≤ 50 ms** | **≤ 300 KB** |
 
 CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference sites visibly jump while loading.
 
@@ -327,7 +327,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 | Android | Installable PWA now; Play Store via Trusted Web Activity (Bubblewrap) later | One codebase, no duplicate native app to maintain |
 | SEO | Canonical URL, Open Graph image, JSON-LD `Person`, sitemap, robots | Rich previews when shared on LinkedIn or WhatsApp |
 | Quality | Unit tests (`node:test`), GitHub Actions CI (test + build on every push) | Regressions are caught before deploy |
-| Hosting | Vercel (or any Node host), domain `sabinkhanal.com.np` | Global CDN. Runs with your laptop off |
+| Hosting | Vercel (or any Node host), domain `sabinkhanal13.com.np` | Global CDN. Runs with your laptop off |
 
 ---
 
@@ -475,7 +475,7 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 | SEO and sharing | ✅ canonical, Open Graph and Twitter image, JSON-LD `Person`, sitemap, robots, 404 page, installable PWA manifest |
 
 #### Owner actions before going live
-1. **Hosting:** sabinkhanal.com.np currently serves an older site from a LiteSpeed shared host. See `DEPLOY.md` § "Your domain today".
+1. **Hosting:** *(corrected 13 Oct 2026)* this note described `sabinkhanal.com.np` (no 13), which belongs to someone else. The owner's domain is `sabinkhanal13.com.np`; see `DEPLOY.md` § "Your domain today".
 2. **Email:** set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
 3. **Merge** PR #1, then follow `DEPLOY.md`.
 

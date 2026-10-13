@@ -1,4 +1,4 @@
-# Sabin Khanal — Portfolio (sabinkhanal.com.np)
+# Sabin Khanal — Portfolio (sabinkhanal13.com.np)
 Personal portfolio. Research and acceptance targets: `AUDIT.md`.
 
 ## Stack

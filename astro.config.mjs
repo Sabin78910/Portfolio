@@ -2,7 +2,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://sabinkhanal.com.np',
+  site: 'https://sabinkhanal13.com.np',
   adapter: vercel(),
   fonts: [
     {

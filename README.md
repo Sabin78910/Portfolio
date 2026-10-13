@@ -1,6 +1,6 @@
 # Sabin Khanal — Portfolio
 
-Production portfolio for **sabinkhanal.com.np**: Astro 7, a raw-WebGL hero, a contact API, and offline/PWA support.
+Production portfolio for **sabinkhanal13.com.np**: Astro 7, an animated 4D hypercube hero, a contact API, and offline/PWA support.
 Research, competitor audit and measured results: [AUDIT.md](AUDIT.md).
 
 ```bash
@@ -14,7 +14,7 @@ npm run build    # output in .vercel/output (static pages + serverless function)
 Everything lives in `src/data/profile.ts`. The portrait is `src/assets/sabin-portrait.webp` and the CV is `public/Sabin-Khanal-CV.pdf`.
 
 ## Deploy
-Step-by-step guide for Vercel + the sabinkhanal.com.np domain: **[DEPLOY.md](DEPLOY.md)**.
+Step-by-step guide for Vercel + the sabinkhanal13.com.np domain: **[DEPLOY.md](DEPLOY.md)**.
 
 ## Offline & Android
 The site installs as an app (Chrome → "Install app" / "Add to Home screen") and works offline after the first visit.
