@@ -111,21 +111,6 @@ export const experience = [
 
 export const projects = [
   {
-    visual: 'api',
-    color: 'indigo',
-    title: 'Bookstore REST API',
-    repo: 'https://github.com/Sabin78910/bookstore-api-python',
-    kind: 'Python REST API',
-    summary:
-      'A REST API built with FastAPI and Pydantic v2, with an automated quality gate and Docker deployment.',
-    stack: ['Python', 'FastAPI', 'Pydantic', 'pytest', 'Docker', 'GitHub Actions'],
-    points: [
-      'Filtering, sorting and pagination headers, partial updates (JSON Merge Patch)',
-      'API-key-protected writes, rate limiting and idempotency keys',
-      'CI on every push: ruff, pytest API tests, pip-audit; Docker image deployed to Render',
-    ],
-  },
-  {
     visual: 'data',
     color: 'emerald',
     title: 'Concrete Compressive Strength',
@@ -198,12 +183,5 @@ export const skills = [
       { icon: 'chart', title: 'Analysis & visualisation', detail: 'Correlation analysis and ggplot2' },
     ],
     evidence: { label: 'Applied in Concrete Compressive Strength', href: '#projects' },
-  },
-  // Roadmap, not claimed experience: rendered as a dashed "learning" card and kept off the CV.
-  {
-    group: 'Learning next',
-    learning: true,
-    note: 'My 2026 roadmap toward senior backend work. Studying now, not yet used in production.',
-    tools: ['TypeScript', 'Kubernetes', 'Terraform', 'Redis', 'OpenTelemetry', 'LLMs & RAG'],
   },
 ];

@@ -13,14 +13,7 @@ const cv = [
 ];
 
 test('every CV skill is represented in the skills data', () => {
-  const text = JSON.stringify(skills.filter((g) => !('learning' in g))).toLowerCase();
+  const text = JSON.stringify(skills).toLowerCase();
   const missing = cv.filter((s) => !text.includes(s.toLowerCase()));
   assert.deepEqual(missing, []);
-});
-
-test('roadmap items never sit among claimed skills', () => {
-  const claimed = skills.filter((g) => !('learning' in g)).flatMap((g) => ('tools' in g ? g.tools : []));
-  const roadmap = skills.filter((g) => 'learning' in g).flatMap((g) => g.tools);
-  assert.ok(roadmap.length > 0);
-  assert.deepEqual(roadmap.filter((t) => claimed.includes(t)), []);
 });

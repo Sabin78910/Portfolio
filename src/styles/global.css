@@ -1009,22 +1009,6 @@ kbd {
   background: rgb(255 255 255 / 0.04);
   font: 500 0.7rem var(--mono);
 }
-.pv-term {
-  flex: 1;
-  display: grid;
-  align-content: start;
-  gap: 0.28rem;
-  padding: 0.8rem 0.9rem 2.6rem;
-  font: 0.66rem/1.45 var(--mono);
-  color: #c3cad8;
-}
-.pv-term b {
-  color: var(--indigo);
-  font-weight: 600;
-}
-.pv-term .pv-ok {
-  color: var(--emerald);
-}
 .pv-plot {
   flex: 1;
   width: 100%;
@@ -1230,8 +1214,12 @@ kbd {
   .stack {
     grid-template-columns: repeat(2, 1fr);
   }
-  .stack__cell--full {
+  .stack__cell--full,
+  .stack__cell--wide {
     grid-column: 1 / -1;
+  }
+  .stack__cell--wide .caps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .stack__cell--full .stack__layer {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -1293,31 +1281,6 @@ kbd {
 .stack__count {
   font-size: 0.75rem;
   color: var(--muted-2);
-}
-/* Roadmap card: dashed and quieter, so it never reads as claimed experience. */
-.stack__tag {
-  padding: 0.2rem 0.6rem;
-  border: 1px solid rgb(165 180 252 / 0.35);
-  border-radius: 999px;
-  font-size: 0.7rem;
-  color: #c7d2fe;
-}
-.stack__note {
-  margin-top: -0.5rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-  transform: translateZ(20px);
-}
-.stack__cell--learning .stack__card {
-  border-style: dashed;
-  background: transparent;
-}
-.stack__cell--learning .tool {
-  border-style: dashed;
-  background: transparent;
-}
-.stack__cell--learning .tool svg {
-  opacity: 0.75;
 }
 .stack__layer {
   display: grid;
