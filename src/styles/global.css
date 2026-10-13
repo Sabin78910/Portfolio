@@ -404,7 +404,7 @@ kbd {
 /* ── Hero ────────────────────────────────────────────────────────────── */
 .hero {
   position: relative;
-  padding: 9rem 0 0;
+  padding: 9rem 0 clamp(4rem, 8vw, 6rem);
   overflow: hidden;
   isolation: isolate;
 }
@@ -722,6 +722,83 @@ kbd {
 .js [data-reveal].in {
   opacity: 1;
   transform: none;
+}
+
+
+/* Work: BFC case studies */
+.cases {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 860px) {
+  .cases {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.case {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: clamp(1.3rem, 2.6vw, 1.75rem);
+}
+.case:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--border-grad) border-box;
+  box-shadow: 0 30px 80px -40px rgb(99 102 241 / 0.55);
+}
+.case__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.case__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(var(--surface-2), var(--surface-2)) padding-box,
+    var(--border-grad) border-box;
+  color: var(--indigo-soft);
+}
+.case__icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+.case h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.case .chips {
+  margin-top: 0.2rem;
+}
+.case__foot {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.72rem;
+  color: var(--muted-2);
+}
+.project__note {
+  margin-top: 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  text-align: center;
+}
+.job__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted-2);
 }
 
 /* Projects */

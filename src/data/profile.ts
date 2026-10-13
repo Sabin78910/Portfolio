@@ -10,13 +10,14 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/sabin-khanal-950163326',
   cv: '/Sabin-Khanal-CV.pdf',
   description:
-    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Building secure, tested backend systems with Python, Flask and PostgreSQL at Best Finance Company.',
+    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Builds HR and lending systems at Best Finance Company with Python, Flask, PostgreSQL and REST APIs, tested before release.',
 };
 
 export const education = { degree: 'BSc (Hons) Computing', school: 'The British College', year: 2025 };
 
 export const nav = [
-  { href: '#work', label: 'Projects' },
+  { href: '#work', label: 'Work' },
+  { href: '#projects', label: 'Projects' },
   { href: '#about', label: 'About' },
   { href: '#experience', label: 'Experience' },
   { href: '#skills', label: 'Skills' },
@@ -30,20 +31,49 @@ export const stack = [
 
 export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
 
-// Systems at Best Finance Company (from the CV).
-export const bfcWork = [
-  { name: 'Employee Appraisal System', note: 'Built · Python · Flask · PostgreSQL · REST' },
-  { name: 'Letter Management System', note: 'Built · Flask · PostgreSQL' },
-  { name: 'Digital Lending System', note: 'Maintain · performance · security · compliance' },
+// Internal systems at Best Finance Company — wording from the CV; no confidential detail.
+export const caseStudies = [
+  {
+    name: 'Employee Appraisal System',
+    domain: 'HR technology',
+    role: 'Built',
+    purpose: 'Streamlines employee evaluations and grade increments.',
+    stack: ['Python', 'Flask', 'PostgreSQL', 'REST APIs'],
+    icon: 'people',
+  },
+  {
+    name: 'Letter Management System',
+    domain: 'Operations',
+    role: 'Built',
+    purpose: 'Centralises and manages official company correspondence.',
+    stack: ['Flask', 'PostgreSQL'],
+    icon: 'doc',
+  },
+  {
+    name: 'Digital Lending System',
+    domain: 'Financial services',
+    role: 'Maintain & enhance',
+    purpose: 'Maintained and enhanced within an Agile/Scrum team.',
+    stack: ['Performance', 'Security', 'Regulatory compliance'],
+    icon: 'lending',
+  },
+];
+
+// Domains summarised from the systems above.
+export const domains = [
+  { name: 'HR technology', note: 'Employee evaluations and grade increments' },
+  { name: 'Financial services', note: 'Digital lending, security, regulatory requirements' },
+  { name: 'Operations', note: 'Correspondence and internal IT systems' },
 ];
 
 export const experience = [
   {
     company: 'Best Finance Company Ltd.',
     place: 'Kathmandu',
+    period: 'Feb 2026 — Present',
     roles: [
       {
-        title: 'Transaction & Digital Banking',
+        title: 'Transaction & Digital Banking team',
         period: 'Jun 2026 — Present',
         points: [
           'Built an Employee Appraisal System (Python, Flask, PostgreSQL, REST APIs) that streamlines evaluations and grade increments.',
@@ -65,6 +95,7 @@ export const experience = [
   {
     company: 'Hypen Solution',
     place: 'Remote',
+    period: 'Jun 2024 — Aug 2024',
     roles: [
       {
         title: 'Freelance Tech Support & QA Specialist',
