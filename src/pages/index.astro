@@ -27,7 +27,7 @@ const personLd = {
   email: `mailto:${profile.email}`,
   address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
   worksFor: { '@type': 'Organization', name: currentJob.company },
-  alumniOf: { '@type': 'CollegeOrUniversity', name: education.school },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education.school.replace(' (UK)', '') },
   sameAs: [profile.github, profile.linkedin],
 };
 
@@ -154,7 +154,7 @@ const commands = [
       <div class="wrap">
         <header class="section__head" data-reveal>
           <p class="eyebrow">Projects</p>
-          <h2>Academic projects, <span class="grad">built end to end.</span></h2>
+          <h2>Projects, <span class="grad">built end to end.</span></h2>
         </header>
         <div class="projects">
           {projects.map((p, i) => (
@@ -220,6 +220,7 @@ const commands = [
             <p class="eyebrow">Education</p>
             <h3>{education.degree}</h3>
             <p class="muted">{education.school} · {education.year}</p>
+            <p class="muted">Delivered at {education.delivered}</p>
           </article>
 
           <article class="tile tile--shipped card" data-reveal>

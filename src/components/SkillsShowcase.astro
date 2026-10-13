@@ -14,6 +14,12 @@ const brands: Record<string, Brand> = {
   CSS: si.siCss,
   Java: si.siOpenjdk,
   Flask: si.siFlask,
+  FastAPI: si.siFastapi,
+  Pydantic: si.siPydantic,
+  pytest: si.siPytest,
+  Docker: si.siDocker,
+  'GitHub Actions': si.siGithubactions,
+  Linux: si.siLinux,
   'Laravel 11': si.siLaravel,
   'Bootstrap 5': si.siBootstrap,
   PostgreSQL: si.siPostgresql,
@@ -39,6 +45,7 @@ const glyphs: Record<string, string> = {
   chart: '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
   sprint: '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  pipeline: '<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h9"/><path d="m13 8 3.5 4-3.5 4"/>',
   plug: '<path d="M9 2v6"/><path d="M15 2v6"/><path d="M6 8h12v3a6 6 0 0 1-12 0V8z"/><path d="M12 17v5"/>',
 };
 
@@ -49,8 +56,8 @@ const lum = (hex: string) => {
 };
 const tone = (hex: string) => (lum(hex) < 0.32 ? '#e8ecf4' : `#${hex}`);
 
-// Bento layout by group: two halves, two halves, then Databases as a full-width strip.
-const sizes: Record<string, string> = { Databases: 'full' };
+// Bento layout by group: two halves, two halves, then Testing/DevOps as a full-width strip.
+const sizes: Record<string, string> = { 'Testing, DevOps & tools': 'full' };
 type Group = (typeof skills)[number] & {
   tools?: string[];
   capabilities?: { icon: string; title: string; detail: string }[];
