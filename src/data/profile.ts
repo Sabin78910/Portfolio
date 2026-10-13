@@ -156,7 +156,7 @@ export const projects = [
 ] as const;
 
 // Skills, regrouped for presentation. Every CV skill appears here (enforced by src/lib/skills.test.ts).
-// `tools` render as logo tiles; `capabilities` render as described rows.
+// `tools` render as logo tiles; `capabilities` render as titled rows (titles only, by owner choice).
 export const skills = [
   { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'Java'] },
   { group: 'Backend & APIs', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'PHPMailer', 'PayPal API'] },
@@ -164,23 +164,23 @@ export const skills = [
   {
     group: 'Databases',
     tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
-    capabilities: [{ icon: 'logic', title: 'Database logic', detail: 'Database triggers and sequences for integrity and keys' }],
+    capabilities: [{ icon: 'logic', title: 'Database logic' }],
   },
   {
     group: 'Cloud, DevOps & testing',
     tools: ['AWS', 'Docker', 'GitHub Actions', 'Linux', 'pytest', 'Git', 'GitHub', 'VS Code'],
     capabilities: [
-      { icon: 'shield', title: 'Testing & QA', detail: 'Automated API tests (pytest), functional, UAT and production testing' },
-      { icon: 'pipeline', title: 'CI/CD', detail: 'GitHub Actions: lint, tests and pip-audit on every push; Docker deployments' },
-      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints and system integration alongside business and IT teams' },
+      { icon: 'shield', title: 'Testing & QA' },
+      { icon: 'pipeline', title: 'CI/CD' },
+      { icon: 'sprint', title: 'Agile / Scrum delivery' },
     ],
   },
   {
     group: 'Data & ML',
     capabilities: [
-      { icon: 'clean', title: 'Data preparation', detail: 'Data cleaning, data imputation with MICE, outlier detection (IQR)' },
-      { icon: 'layers', title: 'Feature engineering', detail: 'Feature scaling (Min–Max) and PCA' },
-      { icon: 'chart', title: 'Analysis & visualisation', detail: 'Correlation analysis and ggplot2' },
+      { icon: 'clean', title: 'Data preparation' },
+      { icon: 'layers', title: 'Feature engineering' },
+      { icon: 'chart', title: 'Analysis & visualisation' },
     ],
     evidence: { label: 'Applied in Concrete Compressive Strength', href: '#projects' },
   },

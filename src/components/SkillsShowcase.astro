@@ -66,7 +66,7 @@ const tone = (hex: string) => (lum(hex) < 0.32 ? '#e8ecf4' : `#${hex}`);
 const sizes: Record<string, string> = { 'Cloud, DevOps & testing': 'full', 'Data & ML': 'wide' };
 type Group = (typeof skills)[number] & {
   tools?: string[];
-  capabilities?: { icon: string; title: string; detail: string }[];
+  capabilities?: { icon: string; title: string }[];
   evidence?: { label: string; href: string };
 };
 const groups = (skills as Group[]).map((g) => ({ ...g, size: sizes[g.group] ?? 'half' }));
@@ -104,10 +104,7 @@ const count = (g: Group) => (g.tools?.length ?? 0) + (g.capabilities?.length ?? 
                   <span class="cap__icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs[c.icon]} />
                   </span>
-                  <span class="cap__text">
-                    <strong>{c.title}</strong>
-                    <span>{c.detail}</span>
-                  </span>
+                  <strong class="cap__title">{c.title}</strong>
                 </li>
               ))}
             </ul>

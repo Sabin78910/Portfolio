@@ -1337,7 +1337,7 @@ kbd {
 }
 .cap {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.9rem;
   padding: 0.75rem 0.8rem;
   border: 1px solid var(--line);
@@ -1367,18 +1367,9 @@ kbd {
   width: 1.1rem;
   height: 1.1rem;
 }
-.cap__text {
-  display: grid;
-  gap: 0.1rem;
-}
-.cap__text strong {
+.cap__title {
   font-size: 0.92rem;
   font-weight: 600;
-}
-.cap__text span {
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--muted);
 }
 .stack__evidence {
   justify-self: start;
