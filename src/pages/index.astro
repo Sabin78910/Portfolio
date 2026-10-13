@@ -3,13 +3,12 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import photo from '../assets/sabin-portrait.webp';
-import { profile, nav, stack, bfcWork, experience, projects, skills, education, principles } from '../data/profile';
+import { profile, nav, stack, bfcWork, experience, projects, skills, education, principles, highlights } from '../data/profile';
 
 const year = new Date().getFullYear();
 const [currentJob] = experience;
 const [currentRole] = currentJob.roles;
 const since = currentRole.period.split(' — ')[0];
-const skillTints = ['violet', 'coral', 'sun', 'mint', 'sky'];
 
 const personLd = {
   '@context': 'https://schema.org',
@@ -41,10 +40,7 @@ const commands = [
 
   <header class="nav">
     <div class="nav__bar">
-      <a class="nav__brand" href="#top" aria-label={`${profile.name}, back to top`}>
-        <span class="nav__mark" aria-hidden="true">SK</span>
-        <span class="nav__name">{profile.name}</span>
-      </a>
+      <a class="nav__brand" href="#top" aria-label={`${profile.name}, back to top`}>{profile.name}</a>
       <nav aria-label="Primary">
         <ul class="nav__links">
           {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
@@ -63,27 +59,24 @@ const commands = [
   <main id="main">
     <!-- ── Hero ─────────────────────────────────────────── -->
     <section id="top" class="hero">
-      <div class="hero__blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__grid" aria-hidden="true"></div>
       <div class="wrap hero__inner">
         <div class="hero__copy">
-          <div class="hero__top">
-            <p class="status"><span class="status__dot"></span>Currently at Best Finance Company</p>
-            <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Pause motion</button>
-          </div>
+          <p class="badge"><span class="status__dot"></span>Currently at Best Finance Company</p>
           <h1 class="hero__title">
-            <span class="line"><span>I engineer</span></span>{' '}
-            <span class="line"><span>secure, reliable</span></span>{' '}
-            <span class="line"><span><mark class="hl">backend</mark> <mark class="hl hl--violet">systems.</mark></span></span>
+            <span class="line"><span>I engineer secure,</span></span>{' '}
+            <span class="line"><span>reliable <span class="grad">backend</span></span></span>{' '}
+            <span class="line"><span><span class="grad">systems.</span></span></span>
           </h1>
           <p class="hero__lead">
-            {profile.role} at Best Finance Company in Kathmandu. I work with Python, Flask and PostgreSQL, test before
-            anything ships, and build the interfaces people use on top.
+            {profile.role} in Kathmandu. Python, Flask and PostgreSQL, tested before anything ships.
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#work">View projects <span aria-hidden="true">→</span></a>
             <a class="btn btn--ghost" href={profile.cv} download>Download résumé</a>
           </div>
-          <p class="hero__micro">Open to backend &amp; full-stack roles <span aria-hidden="true">✦</span> Kathmandu, UTC+5:45</p>
+          <p class="hero__micro">Open to backend &amp; full-stack roles · Kathmandu, UTC+5:45</p>
         </div>
 
         <div class="hero__visual">
@@ -102,55 +95,62 @@ const commands = [
                 <span>Kathmandu</span>
               </div>
             </figcaption>
-            <p class="sticker sticker--mint"><span class="status__dot"></span>Developer at BFC</p>
-            <p class="sticker sticker--sun">✓ {education.degree}</p>
+            <p class="chip chip--a"><span class="status__dot"></span>Developer at BFC</p>
+            <p class="chip chip--b">{education.degree}</p>
           </figure>
           <div class="dims" role="group" aria-label="Hypercube dimension">
-            <span class="dims__label">A real <b data-dim-label>4</b>-dimensional hypercube · drag to spin</span>
+            <span class="dims__label">Live <b data-dim-label>4</b>D hypercube · drag to spin</span>
             <span class="dims__btns">
               {[4, 6, 8].map((d) => (
                 <button type="button" data-dim={d} aria-pressed={d === 4 ? 'true' : 'false'}>{d}D</button>
               ))}
             </span>
+            <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Pause motion</button>
           </div>
         </div>
       </div>
+
+      <div class="wrap">
+        <dl class="stats">
+          {highlights.map((h) => (
+            <div><dt>{h.label}</dt><dd>{h.value}</dd></div>
+          ))}
+        </dl>
+      </div>
     </section>
 
-    <div class="marquee-wrap">
-      <div class="marquee" aria-label="Technologies I work with">
-        <ul class="marquee__track">
-          {stack.map((s) => <li>{s}</li>)}
-          {stack.map((s) => <li aria-hidden="true">{s}</li>)}
-        </ul>
-      </div>
+    <div class="marquee" aria-label="Technologies I work with">
+      <ul class="marquee__track">
+        {stack.map((s) => <li>{s}</li>)}
+        {stack.map((s) => <li aria-hidden="true">{s}</li>)}
+      </ul>
     </div>
 
     <!-- ── Projects ─────────────────────────────────────── -->
     <section id="work" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="num">01</span> Projects</p>
-          <h2>Projects built <mark class="hl hl--coral">end to end.</mark></h2>
+          <p class="eyebrow">Projects</p>
+          <h2>Built end to end, <span class="grad">from schema to screen.</span></h2>
         </header>
         <div class="projects">
           {projects.map((p, i) => (
-            <article class={`project block block--${p.color}`} data-reveal>
+            <article class={`project card glow--${p.color}`} data-reveal>
               <div class="project__visual" data-tilt>
                 <ProjectVisual kind={p.visual} />
               </div>
               <div class="project__body">
-                <p class="eyebrow eyebrow--ink"><span class="num">{String(i + 1).padStart(2, '0')}</span> {p.kind}</p>
+                <p class="eyebrow"><span class="num">{String(i + 1).padStart(2, '0')}</span>{p.kind}</p>
                 <h3>{p.title}</h3>
                 <p class="project__summary">{p.summary}</p>
                 <ul class="ticks">
                   {p.points.map((pt) => <li>{pt}</li>)}
                 </ul>
-                <ul class="chips chips--ink" aria-label="Tech stack">
+                <ul class="chips" aria-label="Tech stack">
                   {p.stack.map((s) => <li>{s}</li>)}
                 </ul>
                 {'repo' in p && (
-                  <p><a class="btn btn--ghost btn--sm" href={p.repo} target="_blank" rel="noopener">View code ↗<span class="visually-hidden"> for {p.title}</span></a></p>
+                  <p><a class="link" href={p.repo} target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span><span class="visually-hidden"> for {p.title}</span></a></p>
                 )}
               </div>
             </article>
@@ -163,42 +163,42 @@ const commands = [
     </section>
 
     <!-- ── About (bento) ────────────────────────────────── -->
-    <section id="about" class="section section--tint">
+    <section id="about" class="section section--alt">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="num">02</span> About</p>
-          <h2>Quiet, <mark class="hl hl--mint">correct</mark> systems.</h2>
+          <p class="eyebrow">About</p>
+          <h2>Quiet, <span class="grad">correct</span> systems.</h2>
         </header>
         <div class="bento">
-          <article class="tile tile--story block block--violet" data-reveal>
-            <p class="tile__big">Software that moves money should be boring in the best way — correct, secure and always on.</p>
-            <p>
+          <article class="tile tile--story card card--accent" data-reveal>
+            <p class="tile__big">Software that moves money should be <span class="grad">boring in the best way</span> — correct, secure and always on.</p>
+            <p class="muted">
               At Best Finance Company Ltd. I work across the transaction and IT teams. I build internal platforms, help
               keep the Digital Lending System fast, secure and compliant, and test my own work before it reaches
               production. A background in QA means I write code thinking about how it could break.
             </p>
           </article>
 
-          <article class="tile tile--now block block--white" data-reveal>
+          <article class="tile tile--now card" data-reveal>
             <p class="eyebrow">Now</p>
             <h3>{currentRole.title}</h3>
             <p class="muted">{currentJob.company} · since {since}</p>
-            <p class="status status--sm"><span class="status__dot"></span>Shipping to production</p>
+            <p class="badge badge--sm"><span class="status__dot"></span>Shipping to production</p>
           </article>
 
-          <article class="tile tile--clock block block--ink" data-reveal>
-            <p class="eyebrow eyebrow--light">Local time</p>
+          <article class="tile tile--clock card" data-reveal>
+            <p class="eyebrow">Local time</p>
             <p class="tile__clock mono" data-clock data-seconds>--:--:--</p>
-            <p>Kathmandu · UTC+5:45</p>
+            <p class="muted">Kathmandu · UTC+5:45</p>
           </article>
 
-          <article class="tile tile--edu block block--sky" data-reveal>
-            <p class="eyebrow eyebrow--ink">Education</p>
+          <article class="tile tile--edu card" data-reveal>
+            <p class="eyebrow">Education</p>
             <h3>{education.degree}</h3>
-            <p>{education.school} · {education.year}</p>
+            <p class="muted">{education.school} · {education.year}</p>
           </article>
 
-          <article class="tile tile--shipped block block--white" data-reveal>
+          <article class="tile tile--shipped card" data-reveal>
             <p class="eyebrow">Systems at Best Finance Company</p>
             <ul class="shipped">
               {bfcWork.map((s) => (
@@ -207,8 +207,8 @@ const commands = [
             </ul>
           </article>
 
-          <article class="tile tile--principles block block--sun" data-reveal>
-            <p class="eyebrow eyebrow--ink">How I work</p>
+          <article class="tile tile--principles card" data-reveal>
+            <p class="eyebrow">How I work</p>
             <ol class="principles">
               {principles.map((pr, i) => <li><span class="num">{String(i + 1).padStart(2, '0')}</span>{pr}</li>)}
             </ol>
@@ -221,12 +221,12 @@ const commands = [
     <section id="experience" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="num">03</span> Experience</p>
-          <h2>Where I’ve <mark class="hl hl--sky">worked.</mark></h2>
+          <p class="eyebrow">Experience</p>
+          <h2>Where I’ve worked.</h2>
         </header>
         <ol class="jobs">
           {experience.map((job) => (
-            <li class="job block block--white" data-reveal>
+            <li class="job card" data-reveal>
               <div class="job__head">
                 <h3>{job.company}</h3>
                 <span class="pill">{job.place}</span>
@@ -249,17 +249,17 @@ const commands = [
     </section>
 
     <!-- ── Skills ───────────────────────────────────────── -->
-    <section id="skills" class="section section--tint">
+    <section id="skills" class="section section--alt">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="num">04</span> Skills</p>
-          <h2>What I <mark class="hl">build</mark> with.</h2>
+          <p class="eyebrow">Skills</p>
+          <h2>What I build with.</h2>
         </header>
-        <div class="skills block block--white" data-reveal>
-          {skills.map((s, i) => (
+        <div class="skills card" data-reveal>
+          {skills.map((s) => (
             <div class="skill">
-              <h3 class="skill__group"><span class={`dot dot--${skillTints[i % skillTints.length]}`}></span>{s.group}</h3>
-              <ul class={`chips chips--${skillTints[i % skillTints.length]}`}>
+              <h3 class="skill__group">{s.group}</h3>
+              <ul class="chips">
                 {s.items.map((it) => <li>{it}</li>)}
               </ul>
             </div>
@@ -269,12 +269,13 @@ const commands = [
     </section>
 
     <!-- ── Contact ──────────────────────────────────────── -->
-    <section id="contact" class="contact">
+    <section id="contact" class="section contact">
+      <div class="contact__glow" aria-hidden="true"></div>
       <div class="wrap contact__inner">
         <div class="contact__copy" data-reveal>
-          <p class="eyebrow eyebrow--light"><span class="num">05</span> Contact</p>
-          <h2>Let’s build something <mark class="hl">reliable.</mark></h2>
-          <p>Open to backend and full-stack roles, freelance projects and conversations about fintech systems.</p>
+          <p class="eyebrow">Contact</p>
+          <h2>Let’s build something <span class="grad">reliable.</span></h2>
+          <p class="muted">Open to backend and full-stack roles, freelance projects and conversations about fintech systems.</p>
           <div class="email">
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <button class="btn btn--ghost btn--sm" type="button" data-copy={profile.email}>
@@ -288,7 +289,7 @@ const commands = [
           </ul>
         </div>
 
-        <form class="form block block--white" action="/api/contact" method="post" data-contact data-reveal novalidate>
+        <form class="form card card--accent" action="/api/contact" method="post" data-contact data-reveal novalidate>
           <div class="field">
             <label for="f-name">Name</label>
             <input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" />
@@ -317,7 +318,7 @@ const commands = [
   <footer class="footer">
     <div class="wrap footer__inner">
       <p>© {year} {profile.name} · Kathmandu, Nepal</p>
-      <p>Press <kbd>⌘</kbd><kbd>K</kbd> to navigate · <a class="link link--light" href="#top">Back to top ↑</a></p>
+      <p>Press <kbd>⌘</kbd><kbd>K</kbd> to navigate · <a class="link" href="#top">Back to top ↑</a></p>
     </div>
   </footer>
 
