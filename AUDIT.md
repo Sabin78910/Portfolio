@@ -294,7 +294,8 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 ## Addendum: 2026 stack update (13 Oct 2026)
 - Owner confirmed **AWS** and **React / Next.js**. They are added to the site (new *Frontend* group; *Cloud, DevOps & testing* strip) and to the CV, which is still one page with every keyword verified via pypdf.
 - **Data & AI:** kept to what the CV evidences (the MICE/IQR/PCA pipeline). No unproven AI claims.
-- **Learning next:** a dashed card tagged "2026 roadmap" lists TypeScript, Kubernetes, Terraform, Redis, OpenTelemetry, and LLMs & RAG. It says plainly that these are not yet used in production, and a test keeps them out of the claimed groups.
+- **Learning next** roadmap card was added, then removed at the owner's request. The section heading is now just "Stack", with no intro text.
+- **Bookstore REST API** was removed from the website at the owner's request. It is still on the CV. The site now shows three projects.
 - Fixed the Data & ML evidence link (`#work` → `#projects`). Service worker is now `sk-v7`.
 - Lighthouse mobile: 99 / 100 / 100 / 100, LCP 2.1 s, CLS 0.
 
