@@ -241,3 +241,43 @@ The owner chose **B**. The full site now follows it:
 | dark text on white button | 19.7 |
 
 **Result:** Lighthouse mobile 99 / 100 / 100 / 100 (LCP 1.8 s, TBT 0 ms) and desktop 100 / 100 / 100 / 100. CLS 0. 139 KB.
+
+---
+
+## Final launch audit (13 Oct 2026)
+
+**Verdict: ready to launch.** All checks pass on the production build, served with the same security headers Vercel will send.
+
+### Performance & quality (Lighthouse 13.5)
+| | Perf | A11y | Best practices | SEO | FCP | LCP | TBT | CLS | Weight |
+|---|---|---|---|---|---|---|---|---|---|
+| Mobile (run 1) | 99 | 100 | 100 | 100 | 1.2 s | 2.0 s | 10 ms | 0 | 174 KB |
+| Mobile (run 2) | 99 | 100 | 100 | 100 | 1.2 s | 2.0 s | 0 ms | 0 | 174 KB |
+| Desktop | 100 | 100 | 100 | 100 | 0.3 s | 0.4 s | 0 ms | 0 | 167 KB |
+
+Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
+
+### Security
+| Check | Result |
+|---|---|
+| Content-Security-Policy | ✅ `default-src 'self'`. Scripts are limited to self plus a SHA-256 of the one inline script, computed at build time so it can't go stale. `frame-ancestors 'none'`, `object-src 'none'` |
+| CSP in a real browser | ✅ 0 violations, 0 console errors. Hypercube, fonts, ⌘K, clock and form all work |
+| HSTS · nosniff · X-Frame-Options · Referrer-Policy · Permissions-Policy · COOP | ✅ all set |
+| Contact API | ✅ validation, honeypot, per-IP rate limit, 10 s upstream timeout. Secrets come only from env |
+| Dependencies | ✅ `npm audit`: 0 vulnerabilities (transitive `path-to-regexp` pinned to 6.3.0) |
+| Static analysis | ✅ CodeQL workflow on every PR. CodeRabbit review addressed (11 of 13 fixed, 2 explained) |
+
+### Functionality
+| Check | Result |
+|---|---|
+| Unit and route tests | ✅ 13 / 13 (contact validation, rate limit, the API route with a fake Resend, hypercube maths, CV-skill coverage) |
+| Offline (service worker) | ✅ the full page reloads with the network off |
+| Links | ✅ all anchors resolve, all files exist, GitHub links return 200. LinkedIn returns 999 (its bot block, not a broken link) |
+| Content integrity | ✅ CV-only. Every CV skill is present (`skills.test.ts`). Experience, projects and education match the CV |
+| Accessibility | ✅ Lighthouse 100, AA contrast throughout, keyboard ⌘K, visible focus, reduced-motion respected, *Pause motion* in ⌘K (WCAG 2.2.2) |
+| SEO and sharing | ✅ canonical, Open Graph and Twitter image, JSON-LD `Person`, sitemap, robots, 404 page, installable PWA manifest |
+
+### Owner actions before going live
+1. **Hosting:** sabinkhanal.com.np currently serves an older site from a LiteSpeed shared host. See `DEPLOY.md` § "Your domain today".
+2. **Email:** set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
+3. **Merge** PR #1, then follow `DEPLOY.md`.

@@ -124,10 +124,32 @@ export const projects = [
   },
 ] as const;
 
+// Skills, regrouped for presentation. Every CV skill appears here (enforced by src/lib/skills.test.ts).
+// `tools` render as logo tiles; `capabilities` render as described rows.
 export const skills = [
-  { group: 'Languages', items: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'HTML', 'CSS', 'Java'] },
-  { group: 'Backend & frameworks', items: ['Flask', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer'] },
-  { group: 'Databases', items: ['PostgreSQL', 'MySQL', 'Oracle Database', 'Database triggers', 'Sequences'] },
-  { group: 'Data & ML', items: ['Data cleaning', 'Data imputation', 'MICE', 'Outlier detection', 'Correlation analysis', 'Feature scaling', 'PCA', 'ggplot2'] },
-  { group: 'Practices & tools', items: ['Agile / Scrum', 'UAT', 'QA testing', 'System integration', 'Git', 'GitHub', 'VS Code', 'PayPal API'] },
+  { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'HTML', 'CSS', 'Java'] },
+  { group: 'Backend & frameworks', tools: ['Flask', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer'] },
+  {
+    group: 'Databases',
+    tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
+    capabilities: [{ icon: 'logic', title: 'Database logic', detail: 'Database triggers and sequences for integrity and keys' }],
+  },
+  {
+    group: 'Data & ML',
+    capabilities: [
+      { icon: 'clean', title: 'Data preparation', detail: 'Data cleaning, data imputation with MICE, outlier detection (IQR)' },
+      { icon: 'layers', title: 'Feature engineering', detail: 'Feature scaling (Min–Max) and PCA' },
+      { icon: 'chart', title: 'Analysis & visualisation', detail: 'Correlation analysis and ggplot2' },
+    ],
+    evidence: { label: 'Applied in Concrete Compressive Strength', href: '#work' },
+  },
+  {
+    group: 'Practices & tools',
+    tools: ['Git', 'GitHub', 'VS Code', 'PayPal API'],
+    capabilities: [
+      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints alongside business and IT teams' },
+      { icon: 'shield', title: 'QA testing & UAT', detail: 'Functional, UAT and production testing before release' },
+      { icon: 'plug', title: 'System integration', detail: 'Connecting internal platforms and services' },
+    ],
+  },
 ];
