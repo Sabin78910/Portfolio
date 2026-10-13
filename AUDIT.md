@@ -211,3 +211,33 @@ Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **re
 | white on violet | 6.1 |
 
 **Result:** Lighthouse mobile 99 / 100 / 100 / 100, desktop 100 / 100 / 100 / 100, CLS 0, 163 KB.
+
+---
+
+## Addendum: v4 "Midnight Premium", the owner's pick (13 Oct 2026)
+
+The owner felt v3 was too playful and asked for something more professional. Instead of guessing a fourth time, I built three hero mockups with the real photo and CV facts:
+
+- **A · Executive Light:** Stripe/Apple style.
+- **B · Midnight Premium:** Linear/Vercel style.
+- **C · Editorial:** magazine/Swiss style.
+
+The owner chose **B**. The full site now follows it:
+
+- **Base:** deep navy `#070B16` with a crisp indigo radial glow and a faint masked grid. The muddy WebGL smoke from v2 is not coming back.
+- **Type:** Geist only, with one font family. That made mobile LCP faster: 1.8 s, down from 2.0 s.
+- **Accent:** gradient text (`#A5B4FC → #818CF8 → #22D3EE`) on key phrases only. Gradient borders on the profile card, the hovered project cards, the story tile and the form.
+- **Actions:** white primary buttons, outlined secondaries, and glass chips.
+- **Hero:** stat strip under the hero, all values from the CV: 3 systems built and maintained at BFC, 3 projects, BSc (Hons), core stack. The hypercube stays (indigo/cyan/emerald, subtle).
+
+**Contrast (WCAG):**
+
+| Pair | Ratio |
+|---|---|
+| text on bg | 16.6 |
+| muted `#9AA4B8` on bg | 7.8 |
+| muted-2 `#8590A6` on surface | 5.8 |
+| indigo `#818CF8` on bg | 6.6 |
+| dark text on white button | 19.7 |
+
+**Result:** Lighthouse mobile 99 / 100 / 100 / 100 (LCP 1.8 s, TBT 0 ms) and desktop 100 / 100 / 100 / 100. CLS 0. 139 KB.

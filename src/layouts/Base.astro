@@ -31,13 +31,12 @@ const ogImage = new URL('/og.png', Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
 
-    <meta name="theme-color" content="#f6f5f1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#070b16" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
-    <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-sans" preload />
     <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again -->
     <script is:inline>document.documentElement.classList.add('js');</script>

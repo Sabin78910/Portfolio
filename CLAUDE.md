@@ -13,6 +13,6 @@ Vercel adapter for `POST /api/contact` (Resend). Service worker in `public/sw.js
 - Show only what is on the CV (`public/Sabin-Khanal-CV.pdf`): its experience, its three projects and its skills. No other projects or apps.
 - Budgets (fail the change if broken): JS ≤ 25 KB gzipped, Lighthouse mobile ≥ 95 / 100 / 100 / 100, CLS 0.
 - New logic gets a `node:test` test in `src/lib/*.test.ts` (never under `src/pages`, where files become routes). Validate everything at the API boundary.
-- Design system v3 "Dopamine" (light): tokens at the top of `src/styles/global.css`. Use `.block--{color}`, `.hl` marks, 2px ink borders and hard shadows; never add new colours without an AA check.
+- Design system v4 "Midnight Premium" (dark, the owner's choice): tokens at the top of `src/styles/global.css`. Geist only; `.grad` for gradient text, `.card`/`.card--accent` for surfaces, white `.btn--primary`. Never add colours without an AA check.
 - Respect `prefers-reduced-motion`, keep AA contrast and visible focus.
 - Never commit secrets or `.env`. `main` is protected: branch, PR, merge when CI is green.
