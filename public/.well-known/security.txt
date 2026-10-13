@@ -1,5 +1,5 @@
-# Security contact for sabinkhanal.com.np (RFC 9116). Please report vulnerabilities privately by email.
+# Security contact for sabinkhanal13.com.np (RFC 9116). Please report vulnerabilities privately by email.
 Contact: mailto:sabinkhanal13@gmail.com
 Expires: 2027-10-13T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://sabinkhanal.com.np/.well-known/security.txt
+Canonical: https://sabinkhanal13.com.np/.well-known/security.txt
