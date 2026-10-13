@@ -1,4 +1,147 @@
-# Portfolio Competitive Audit & Design Rationale
+# Launch Audit: sabinkhanal.com.np
+
+**Subject:** Sabin Khanal, Backend & Web Developer, personal portfolio
+**Date:** 13 October 2026 · **Build:** `feat/portfolio-v2` (Astro 7, Vercel) · **Verdict:** ✅ Ready to deploy and submit to Google
+
+---
+
+## 1. Executive summary
+
+The site passes every launch gate this audit could test locally:
+
+- **Lighthouse:** top scores on mobile and desktop.
+- **Core Web Vitals:** well inside Google's "good" thresholds.
+- **Security:** a strict Content Security Policy with zero violations, and zero dependency vulnerabilities.
+- **Search:** complete structured data for Google's site name and person profile.
+
+Five issues were found and fixed during this audit (§7).
+
+Some items can only be confirmed once the domain is live: HTTPS/HSTS in production, field Core Web Vitals, and how Google renders the site name and favicon. They are listed as post-launch checks in §9.
+
+## 2. Scorecard
+
+Measured with Lighthouse 13.5.0 on the production build (`npm run build`).
+
+| Category | Mobile | Desktop | Target |
+|---|---|---|---|
+| Performance | **99** | **100** | ≥ 95 |
+| Accessibility | **100** | **100** | 100 |
+| Best Practices | **100** | **100** | 100 |
+| SEO | **100** | **100** | 100 |
+
+| Metric | Mobile | Desktop | Google "good" threshold¹ |
+|---|---|---|---|
+| Largest Contentful Paint | 2.1 s | 0.4 s | ≤ 2.5 s |
+| Cumulative Layout Shift | 0 | 0 | ≤ 0.1 |
+| Total Blocking Time (lab proxy for INP) | 0 ms | 0 ms | INP ≤ 200 ms |
+| First Contentful Paint | 1.4 s | 0.3 s | — |
+| Page weight | 189 KB | 181 KB | — |
+| JavaScript (gzipped) | 3.2 KB | 3.2 KB | ≤ 25 KB (project budget) |
+
+¹ Google measures Core Web Vitals at the 75th percentile of real page loads ([web.dev](https://web.dev/articles/vitals)).
+
+Lighthouse also raises four "insight" notices (caching, compression, request chain, render-blocking CSS). They come from the plain local test server. Vercel serves hashed assets with long-lived caching and compression, so they are not expected in production.
+
+## 3. Google Search readiness
+
+| Check | Status | Detail |
+|---|---|---|
+| Title | ✅ | "Sabin Khanal — Backend & Web Developer" (38 chars) |
+| Meta description | ✅ | 163 chars, an accurate summary. Google sets no length limit but may truncate in results². |
+| Canonical URL | ✅ | `https://sabinkhanal.com.np/` |
+| `robots.txt` | ✅ | Allows all crawlers; references the sitemap |
+| `sitemap.xml` | ✅ | Lists the home page |
+| Site name in results | ✅ | `WebSite` structured data (`name`, `url`) on the home page, as Google requires³ |
+| Person profile | ✅ | `ProfilePage` → `Person` (name, job title, description, image, employer, university, GitHub/LinkedIn `sameAs`). Google lists personal "About me" pages as eligible⁴. |
+| Favicon in results | ✅ | 192×192 PNG `rel="icon"` (a multiple of 48 px; Google's list of favicon formats does not include SVG⁵), plus an SVG favicon for browsers and an Apple touch icon |
+| Large image previews | ✅ | `max-image-preview:large` |
+| Social and LinkedIn preview | ✅ | Open Graph title, description, URL, `og:site_name`, a 1200×630 image with width/height tags (LinkedIn's minimum is 1200×627⁶), and a Twitter large card |
+| Language | ✅ | `<html lang="en">` |
+| Heading outline | ✅ | One `h1`, logical `h2`/`h3` sections |
+| Image alt text | ✅ | Portrait has descriptive alt text; decorative art is `aria-hidden` |
+| 404 handling | ✅ | Unknown URLs return HTTP **404** with a branded page, so Google does not index them |
+| Mobile-friendly | ✅ | Responsive layout verified at 390 px and 1440 px; viewport meta set |
+
+## 4. Security
+
+| Control | Status |
+|---|---|
+| Content-Security-Policy | ✅ Scripts limited to `'self'` plus one SHA-256-hashed inline script; `object-src 'none'`, `frame-ancestors 'none'`, `form-action 'self'`. The hash is generated at build time, so it can't go stale. |
+| CSP runtime test | ✅ 0 violations, 0 console errors, 0 failed requests (home and 404, served with the production headers) |
+| HSTS · nosniff · X-Frame-Options · Referrer-Policy · Permissions-Policy · COOP | ✅ All set via `.vercel/output/config.json` |
+| Dependencies | ✅ `npm audit`: 0 vulnerabilities |
+| Contact API (`POST /api/contact`) | ✅ Server-side validation, honeypot, per-IP rate limit (5 per 10 min), 10 s upstream timeout, and the API key comes from an environment variable that is never committed. Covered by 13 automated tests. |
+| Secrets in repo | ✅ None. `.env` is git-ignored. |
+
+## 5. Accessibility (WCAG 2.2 AA)
+
+- Lighthouse accessibility scores 100 on mobile and desktop.
+- **WCAG 2.5.3 *Label in Name*:** fixed in this audit (§7). The ⌘K menu button's accessible name now contains its visible text, and the shortcut is exposed through `aria-keyshortcuts`.
+- Skip link, visible focus, AA colour contrast on all tokens, labelled form fields with `autocomplete`, and `prefers-reduced-motion` respected.
+
+## 6. Content integrity
+
+- All content comes from one source of truth (`src/data/profile.ts`) and matches the CV. The site shows three projects; the downloadable CV is one A4 page.
+- External links are verified: GitHub profile and both project repositories return 200. LinkedIn returns 999 to automated checks because it blocks bots, so check it by hand.
+- No invented metrics. The internal BFC systems are described without confidential detail.
+
+## 7. Issues found and fixed in this audit
+
+| # | Issue | Impact | Fix |
+|---|---|---|---|
+| 1 | No `WebSite` structured data | Google could not reliably show "Sabin Khanal" as the site name | Added `WebSite` with `name` and `url` |
+| 2 | Person markup was not tied to a profile page | Weaker entity signal for name searches | Wrapped `Person` in `ProfilePage` and added a `description` |
+| 3 | Only an SVG favicon declared | Google's favicon formats don't include SVG, so the search result could show a generic globe | Added a 192×192 PNG `rel="icon"` |
+| 4 | ⌘K button failed WCAG 2.5.3 | Voice-control users could not activate it by saying its visible label | Name now "Menu ⌘K", plus `aria-keyshortcuts` |
+| 5 | 205-character meta description repeated the name from the title | More likely to be truncated in results | Rewritten to 163 chars; added `og:site_name` and `max-image-preview:large` |
+
+## 8. Residual risks and limits
+
+1. **Not live yet.** Production HTTPS, HSTS, the `www` → apex redirect and real-user Core Web Vitals can only be confirmed after deployment. A low-traffic site may never collect enough visits for field data in Search Console. In that case, lab scores are the reference.
+2. **Google decides presentation.** Meeting the guidelines makes the site eligible for a site name, favicon and profile signals, but Google does not guarantee they will appear³ ⁵. Ranking first for "Sabin Khanal" mostly depends on links from LinkedIn and GitHub (see §9).
+3. **Email on the domain.** If any email uses `@sabinkhanal.com.np`, copy its MX/TXT records into Vercel DNS *before* switching nameservers.
+4. **Contact form** needs `RESEND_API_KEY` and `CONTACT_TO` in Vercel. Until they are set, the form tells visitors to use the email address shown on the page.
+5. **Rate limit** is held in memory per serverless instance. That is enough for a portfolio; move it to a shared store (e.g. Upstash Redis) if the form is ever abused.
+6. **CodeQL check** on the private repository fails only at the upload step, because GitHub code scanning isn't enabled for private repos without GitHub Code Security. The analysis itself finds nothing, and the site's `test-and-build` CI passes.
+7. **Evidence gap:** Android development and game development appear in Skills without a matching project on the CV. Be ready to show work if a recruiter asks.
+
+## 9. Launch checklist
+
+**Deploy (owner, per `DEPLOY.md`)**
+- [ ] Merge the PR into `main`, import the repo into Vercel, and add `RESEND_API_KEY` and `CONTACT_TO`
+- [ ] Add `sabinkhanal.com.np` and `www` (redirect to the apex) in Vercel; switch nameservers at register.com.np (24–48 h)
+- [ ] Confirm the padlock, the `www` redirect, and a test message arriving from the contact form
+
+**Google (day of launch)**
+- [ ] Search Console → **Domain** property → add the TXT record in Vercel DNS → Verify
+- [ ] Submit `sitemap.xml`; run **URL Inspection → Request indexing** on the home page
+- [ ] **Rich Results Test** on the live URL: expect `ProfilePage` detected with no errors
+- [ ] **PageSpeed Insights** on the live URL: expect results in line with §2
+- [ ] **securityheaders.com** on the live URL: all headers present
+
+**LinkedIn and GitHub**
+- [ ] Run **Post Inspector** on the URL to refresh the preview card
+- [ ] Add the site to LinkedIn **Contact info** (type: Portfolio) and to **Featured**; add it as the GitHub profile website
+
+**Week 2**
+- [ ] Search Console → Pages: confirm the home page is indexed; then search "Sabin Khanal"
+
+## Sources
+
+1. web.dev, *Web Vitals*: https://web.dev/articles/vitals
+2. Google Search Central, *Control your snippets in search results*: https://developers.google.com/search/docs/appearance/snippet
+3. Google Search Central, *Provide a site name to Google Search*: https://developers.google.com/search/docs/appearance/site-names
+4. Google Search Central, *ProfilePage structured data*: https://developers.google.com/search/docs/appearance/structured-data/profile-page
+5. Google Search Central, *Define a favicon to show in search results*: https://developers.google.com/search/docs/appearance/favicon-in-search
+6. LinkedIn Help, *Make your website shareable on LinkedIn*: https://www.linkedin.com/help/linkedin/answer/46687
+
+---
+
+## Appendix: research and change history
+
+The earlier research, design rationale and change log, kept for reference. Numbers in this appendix are from the time each entry was written; §2 above is current.
+
+### Portfolio competitive audit & design rationale
 
 **Subject:** sabinkhanal.com.np — personal portfolio of Sabin Khanal, Backend & Web Developer (fintech), Kathmandu
 **Date:** 12 Oct 2026
@@ -6,7 +149,7 @@
 
 ---
 
-## 1. Executive summary
+### 1. Executive summary
 
 1. **Every benchmarked portfolio fails mobile performance.** Scores ranged from 31 to 75, and largest contentful paint (LCP) from 7.4 s to 25.3 s. The easiest way to beat them is to be fast.
 2. **Judges and recruiters reward the same things.** Awwwards weights Design 40%, Usability 30%, Creativity 20%, Content 10%. Recruiters look for real work, clear communication, and quick access to projects and contact details.
@@ -15,7 +158,7 @@
 
 ---
 
-## 2. Benchmark — measured results (Lighthouse mobile)
+### 2. Benchmark — measured results (Lighthouse mobile)
 
 | Site | Perf | A11y | Best Pr. | SEO | LCP | CLS | TBT | Page weight |
 |---|---|---|---|---|---|---|---|---|
@@ -29,9 +172,9 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## 3. Competitor audits
+### 3. Competitor audits
 
-### 3.1 rohanpudasaini.com.np — local reference
+#### 3.1 rohanpudasaini.com.np — local reference
 - **Information architecture:** About → Experience → Projects → Skills → Security → Certifications → Contact. The structure is complete but long, and experience is shown as walls of bullet points.
 - **Visual system:** a dark neutral base and a large black-and-white editorial portrait, with good restraint. It has no accent strategy, so nothing guides the eye.
 - **Engagement mechanics:** almost none. The page is static, with no reward for interacting.
@@ -39,7 +182,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 - **Tech/perf:** a client-rendered single-page app whose initial HTML has no content. LCP is 10.4 s and CLS 0.539 (poor).
 - **Take:** specific, quantified copy. **Avoid:** content that only appears after JavaScript runs, layout shift, and text walls.
 
-### 3.2 ayushbajgai.com — local reference
+#### 3.2 ayushbajgai.com — local reference
 - **Information architecture:** Home → About → Resume → Projects → Contact. The flow is clear.
 - **Visual system:** a bold cut-out portrait on a yellow arch with high contrast. It is memorable but looks like a Bootstrap template.
 - **Engagement mechanics:** count-up counters that **render as "0"**, which hurts credibility.
@@ -47,23 +190,23 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 - **Tech/perf:** 3.4 MB page weight, LCP 7.4 s, CLS 0.838 (very poor).
 - **Take:** a confident portrait and clear CTAs. **Avoid:** fake or broken stats, heavy images, and unedited copy.
 
-### 3.3 brittanychiang.com — the most-copied developer portfolio
+#### 3.3 brittanychiang.com — the most-copied developer portfolio
 - **Information architecture:** a sticky left column (name, role, section navigation, socials) and a scrolling right column (About, Experience, Projects). It is very efficient for recruiters.
 - **Visual system:** navy `#0f172a`, slate text, a teal accent, and a cursor-following radial "spotlight".
 - **Engagement mechanics:** hover states that dim sibling items, which focuses attention.
 - **Weakness:** it is so widely cloned that it now reads as a template. LCP is 10.7 s on mobile.
 - **Take:** the spotlight and dim-the-siblings hover patterns, and a recruiter-first IA. **Avoid:** the cloned layout.
 
-### 3.4 bruno-simon.com — creative ceiling
+#### 3.4 bruno-simon.com — creative ceiling
 - **Concept:** a drivable 3D world built with Three.js. It wins awards for creativity.
 - **Cost:** 7.5 MB, LCP 25 s, TBT 1.3 s, and accessibility 74. A recruiter on a phone will probably leave before it loads.
 - **Take:** surprise and delight. **Avoid:** making the content wait for a 3D engine.
 
-### 3.5 leerob.com / emilkowal.ski — minimal school
+#### 3.5 leerob.com / emilkowal.ski — minimal school
 - Typography-only pages with near-instant loads. Their authority comes from writing and shipped products.
 - **Take:** speed and restraint. **Avoid:** being visually forgettable when you have no famous body of work yet.
 
-### 3.6 Product-grade references (not portfolios): Linear, Vercel, Stripe
+#### 3.6 Product-grade references (not portfolios): Linear, Vercel, Stripe
 - **Linear:** dark-first app UI, Inter-style type, a narrow palette, and soft gradient glows to create depth.
 - **Vercel:** monochrome, geometric, with Geist type and hairline grids.
 - **Stripe:** an indigo anchor (`#635BFF`) and animated gradient mesh hero. It is the fintech visual standard.
@@ -71,7 +214,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## 4. 2026 trend assessment
+### 4. 2026 trend assessment
 
 | Trend | Verdict | Use |
 |---|---|---|
@@ -90,7 +233,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## 5. Colour science & engagement design
+### 5. Colour science & engagement design
 
 **Palette:** derived from the fintech-trust lineage (Stripe indigo, Linear dark) plus a growth signal.
 
@@ -117,7 +260,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## 6. Architecture
+### 6. Architecture
 
 | Layer | Choice | Reason |
 |---|---|---|
@@ -134,7 +277,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## 7. Acceptance criteria — measured results (12 Oct 2026, local production build)
+### 7. Acceptance criteria — measured results (12 Oct 2026, local production build)
 
 | Criterion | Target | Result |
 |---|---|---|
@@ -154,13 +297,13 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 **Versus the benchmark:** compared with the best competitor (brittanychiang.com: 75 mobile, LCP 10.7 s), this site scores 24 points higher on mobile performance, loads its largest content about 5× faster, and weighs roughly 9× less.
 
-## 8. Known limits / owner actions
+### 8. Known limits / owner actions
 
 - **Email delivery** needs a free Resend account. Set `RESEND_API_KEY` and `CONTACT_TO` in the host's environment. Until then the form falls back to opening the visitor's email app.
 - **Play Store listing** needs a Google Play developer account (one-time fee) and a TWA build. That is a separate step.
 - **"Rank #1 forever"** cannot be guaranteed by anyone. What *can* be guaranteed is beating every benchmarked competitor on measured speed, accessibility and SEO, which this plan targets.
 
-## Sources
+### Sources
 - Lighthouse 13.5.0 runs, 12 Oct 2026 (raw JSON kept locally)
 - [Award-winning website design: what judges look for — Utsubo](https://www.utsubo.com/blog/award-winning-website-design-guide)
 - [Awwwards judging criteria — hontran.dev](https://www.hontran.dev/blog/awwwards-judging-criteria)
@@ -174,7 +317,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ---
 
-## Addendum: "4D / 8D / 16D", made literal (12 Oct 2026)
+### Addendum: "4D / 8D / 16D", made literal (12 Oct 2026)
 
 Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **real n-dimensional hypercube**, rendered live:
 - **Geometry** (`src/lib/hypercube.ts`, unit-tested): 2ⁿ vertices, n·2ⁿ⁻¹ edges, rotation in n-D planes, and a Petrie-style projection to 2D.
@@ -184,7 +327,7 @@ Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **re
 
 ---
 
-## Addendum: v3 "Dopamine" redesign (12 Oct 2026)
+### Addendum: v3 "Dopamine" redesign (12 Oct 2026)
 
 **Why:** the owner's feedback was that the dark v2 still looked outdated. A fresh full-page review found five causes: near-monochrome dark-grey surfaces, every section built from the same box grid, large dead gaps, text-heavy Experience and Skills, and a muddy 2020-era "dark SaaS" hero.
 
@@ -214,7 +357,7 @@ Earlier I treated "4D/8D/16D" as perceived depth. The hero now also shows a **re
 
 ---
 
-## Addendum: v4 "Midnight Premium", the owner's pick (13 Oct 2026)
+### Addendum: v4 "Midnight Premium", the owner's pick (13 Oct 2026)
 
 The owner felt v3 was too playful and asked for something more professional. Instead of guessing a fourth time, I built three hero mockups with the real photo and CV facts:
 
@@ -244,11 +387,11 @@ The owner chose **B**. The full site now follows it:
 
 ---
 
-## Final launch audit (13 Oct 2026)
+### Earlier launch check (13 Oct 2026, superseded by §1–9)
 
 **Verdict: ready to launch.** All checks pass on the production build, served with the same security headers Vercel will send.
 
-### Performance & quality (Lighthouse 13.5)
+#### Performance & quality (Lighthouse 13.5)
 | | Perf | A11y | Best practices | SEO | FCP | LCP | TBT | CLS | Weight |
 |---|---|---|---|---|---|---|---|---|---|
 | Mobile (run 1) | 99 | 100 | 100 | 100 | 1.2 s | 2.0 s | 10 ms | 0 | 174 KB |
@@ -257,7 +400,7 @@ The owner chose **B**. The full site now follows it:
 
 Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 
-### Security
+#### Security
 | Check | Result |
 |---|---|
 | Content-Security-Policy | ✅ `default-src 'self'`. Scripts are limited to self plus a SHA-256 of the one inline script, computed at build time so it can't go stale. `frame-ancestors 'none'`, `object-src 'none'` |
@@ -267,7 +410,7 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 | Dependencies | ✅ `npm audit`: 0 vulnerabilities (transitive `path-to-regexp` pinned to 6.3.0) |
 | Static analysis | ✅ CodeQL workflow on every PR. CodeRabbit review addressed (11 of 13 fixed, 2 explained) |
 
-### Functionality
+#### Functionality
 | Check | Result |
 |---|---|
 | Unit and route tests | ✅ 13 / 13 (contact validation, rate limit, the API route with a fake Resend, hypercube maths, CV-skill coverage) |
@@ -277,21 +420,21 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 | Accessibility | ✅ Lighthouse 100, AA contrast throughout, keyboard ⌘K, visible focus, reduced-motion respected, *Pause motion* in ⌘K (WCAG 2.2.2) |
 | SEO and sharing | ✅ canonical, Open Graph and Twitter image, JSON-LD `Person`, sitemap, robots, 404 page, installable PWA manifest |
 
-### Owner actions before going live
+#### Owner actions before going live
 1. **Hosting:** sabinkhanal.com.np currently serves an older site from a LiteSpeed shared host. See `DEPLOY.md` § "Your domain today".
 2. **Email:** set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
 3. **Merge** PR #1, then follow `DEPLOY.md`.
 
 ---
 
-## Addendum: CV upgrade for Mercer-style screening (13 Oct 2026)
+### Addendum: CV upgrade for Mercer-style screening (13 Oct 2026)
 - **Degree:** the awarding body is now named, *BSc (Hons) Computing, Leeds Beckett University (UK)*, delivered at The British College (confirmed from the college's own programme pages).
 - **New skills, each backed by public evidence** in `github.com/Sabin78910/bookstore-api-python`: FastAPI, Pydantic, pytest API tests, Docker (non-root image), GitHub Actions CI (ruff, pytest, pip-audit), CodeQL, Dependabot, and Render deployment. Linux was confirmed by the owner.
 - **The Bookstore REST API is the lead project** on both the CV and the site. Mercer's junior postings ask for Python, REST/HTTP, testing, CI and Git.
 - **The CV is one page, ATS-safe and single-column.** Text extraction confirms every target keyword. The original is kept at `cv/Sabin-Khanal-CV-original.pdf`.
 - **Still missing (owner input needed):** impact numbers for the BFC systems, degree classification, spoken languages, and relocation or work eligibility for India.
 
-## Addendum: 2026 stack update (13 Oct 2026)
+### Addendum: 2026 stack update (13 Oct 2026)
 - Owner confirmed **AWS** and **React / Next.js**. They are added to the site (new *Frontend* group; *Cloud, DevOps & testing* strip) and to the CV, which is still one page with every keyword verified via pypdf.
 - **Data & AI:** kept to what the CV evidences (the MICE/IQR/PCA pipeline). No unproven AI claims.
 - **Learning next** roadmap card was added, then removed at the owner's request. The section heading is now just "Stack", with no intro text.

@@ -17,18 +17,27 @@ const caseIcons: Record<string, string> = {
 };
 
 
-const personLd = {
-  '@context': 'https://schema.org',
+// Google: WebSite (site name in results) + ProfilePage centred on one Person (about-me pages are eligible).
+const site = Astro.site!.href;
+const person = {
   '@type': 'Person',
   name: profile.name,
+  description: profile.description,
   jobTitle: profile.role,
-  url: Astro.site?.href,
+  url: site,
   image: new URL('/og.png', Astro.site).href,
   email: `mailto:${profile.email}`,
   address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
   worksFor: { '@type': 'Organization', name: currentJob.company },
   alumniOf: { '@type': 'CollegeOrUniversity', name: education.school.replace(' (UK)', '') },
   sameAs: [profile.github, profile.linkedin],
+};
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: profile.name, url: site },
+    { '@type': 'ProfilePage', url: site, mainEntity: person },
+  ],
 };
 
 const commands = [
@@ -42,7 +51,7 @@ const commands = [
 ---
 
 <Base title={`${profile.name} — ${profile.role}`} description={profile.description}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(personLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
 
   <a class="skip" href="#main">Skip to content</a>
 
@@ -55,7 +64,7 @@ const commands = [
         </ul>
       </nav>
       <div class="nav__actions">
-        <button class="kbd-btn" type="button" data-cmdk-open aria-label="Open menu (Ctrl or Command + K)">
+        <button class="kbd-btn" type="button" data-cmdk-open aria-label="Menu ⌘K" aria-keyshortcuts="Meta+K Control+K">
           <kbd>⌘</kbd><kbd>K</kbd><span class="kbd-btn__touch">Menu</span>
         </button>
         <a class="btn btn--ghost btn--sm hide-xs" href={profile.cv} download>Résumé</a>
