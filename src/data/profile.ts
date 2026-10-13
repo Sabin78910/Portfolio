@@ -10,10 +10,10 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/sabin-khanal-950163326',
   cv: '/Sabin-Khanal-CV.pdf',
   description:
-    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Builds HR and lending systems at Best Finance Company with Python, Flask, PostgreSQL and REST APIs, tested before release.',
+    'Sabin Khanal — Backend & Web Developer in Kathmandu, Nepal. Builds HR and lending systems at Best Finance Company with Python, Flask, PostgreSQL and REST APIs, tested with pytest and shipped through CI/CD.',
 };
 
-export const education = { degree: 'BSc (Hons) Computing', school: 'The British College', year: 2025 };
+export const education = { degree: 'BSc (Hons) Computing', school: 'Leeds Beckett University (UK)', delivered: 'The British College, Kathmandu', year: 2025 };
 
 export const nav = [
   { href: '#work', label: 'Work' },
@@ -25,8 +25,8 @@ export const nav = [
 ];
 
 export const stack = [
-  'Python', 'Flask', 'PostgreSQL', 'REST APIs', 'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX',
-  'JavaScript', 'SQL', 'R', 'Git', 'Agile / Scrum', 'QA & UAT',
+  'Python', 'Flask', 'FastAPI', 'PostgreSQL', 'REST APIs', 'pytest', 'Docker', 'GitHub Actions',
+  'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX', 'SQL', 'Linux', 'Agile / Scrum', 'QA & UAT',
 ];
 
 export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
@@ -111,6 +111,21 @@ export const experience = [
 
 export const projects = [
   {
+    visual: 'api',
+    color: 'indigo',
+    title: 'Bookstore REST API',
+    repo: 'https://github.com/Sabin78910/bookstore-api-python',
+    kind: 'Python REST API',
+    summary:
+      'A REST API built with FastAPI and Pydantic v2, with an automated quality gate and Docker deployment.',
+    stack: ['Python', 'FastAPI', 'Pydantic', 'pytest', 'Docker', 'GitHub Actions'],
+    points: [
+      'Filtering, sorting and pagination headers, partial updates (JSON Merge Patch)',
+      'API-key-protected writes, rate limiting and idempotency keys',
+      'CI on every push: ruff, pytest API tests, pip-audit; Docker image deployed to Render',
+    ],
+  },
+  {
     visual: 'data',
     color: 'emerald',
     title: 'Concrete Compressive Strength',
@@ -159,7 +174,7 @@ export const projects = [
 // `tools` render as logo tiles; `capabilities` render as described rows.
 export const skills = [
   { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'HTML', 'CSS', 'Java'] },
-  { group: 'Backend & frameworks', tools: ['Flask', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer'] },
+  { group: 'Backend & frameworks', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer', 'PayPal API'] },
   {
     group: 'Databases',
     tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
@@ -175,12 +190,12 @@ export const skills = [
     evidence: { label: 'Applied in Concrete Compressive Strength', href: '#work' },
   },
   {
-    group: 'Practices & tools',
-    tools: ['Git', 'GitHub', 'VS Code', 'PayPal API'],
+    group: 'Testing, DevOps & tools',
+    tools: ['pytest', 'Docker', 'GitHub Actions', 'Linux', 'Git', 'GitHub', 'VS Code'],
     capabilities: [
-      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints alongside business and IT teams' },
-      { icon: 'shield', title: 'QA testing & UAT', detail: 'Functional, UAT and production testing before release' },
-      { icon: 'plug', title: 'System integration', detail: 'Connecting internal platforms and services' },
+      { icon: 'shield', title: 'Testing & QA', detail: 'Automated API tests (pytest), functional, UAT and production testing' },
+      { icon: 'pipeline', title: 'CI/CD', detail: 'GitHub Actions: lint, tests and pip-audit on every push; Docker deployments' },
+      { icon: 'sprint', title: 'Agile / Scrum delivery', detail: 'Sprints and system integration alongside business and IT teams' },
     ],
   },
 ];

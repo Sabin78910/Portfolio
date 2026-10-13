@@ -281,3 +281,12 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 1. **Hosting:** sabinkhanal.com.np currently serves an older site from a LiteSpeed shared host. See `DEPLOY.md` § "Your domain today".
 2. **Email:** set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
 3. **Merge** PR #1, then follow `DEPLOY.md`.
+
+---
+
+## Addendum: CV upgrade for Mercer-style screening (13 Oct 2026)
+- **Degree:** the awarding body is now named, *BSc (Hons) Computing, Leeds Beckett University (UK)*, delivered at The British College (confirmed from the college's own programme pages).
+- **New skills, each backed by public evidence** in `github.com/Sabin78910/bookstore-api-python`: FastAPI, Pydantic, pytest API tests, Docker (non-root image), GitHub Actions CI (ruff, pytest, pip-audit), CodeQL, Dependabot, and Render deployment. Linux was confirmed by the owner.
+- **The Bookstore REST API is the lead project** on both the CV and the site. Mercer's junior postings ask for Python, REST/HTTP, testing, CI and Git.
+- **The CV is one page, ATS-safe and single-column.** Text extraction confirms every target keyword. The original is kept at `cv/Sabin-Khanal-CV-original.pdf`.
+- **Still missing (owner input needed):** impact numbers for the BFC systems, degree classification, spoken languages, and relocation or work eligibility for India.

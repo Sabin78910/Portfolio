@@ -1,7 +1,7 @@
 ---
 // Illustrative UI art for each project (no screenshots yet) — pure HTML/SVG, zero image weight.
 interface Props {
-  kind: 'store' | 'market' | 'data';
+  kind: 'store' | 'market' | 'data' | 'api';
 }
 const { kind } = Astro.props;
 
@@ -48,6 +48,22 @@ const bars = [42, 68, 55, 81, 64, 92, 76];
       </div>
       <div class="pv-otp">{['4', '8', '1', '9', '2', '7'].map((d) => <span>{d}</span>)}</div>
       <div class="pv-pill">PayPal ✓ verified</div>
+    </div>
+  )}
+
+  {kind === 'api' && (
+    <div class="pv-window">
+      <div class="pv-bar"><span></span><span></span><span></span><i>bookstore-api — zsh</i></div>
+      <div class="pv-term">
+        <p><b>$</b> pytest -q</p>
+        <p class="pv-ok">........................................ passed</p>
+        <p><b>$</b> curl -i "/books?sort=-price"</p>
+        <p class="pv-ok">HTTP/1.1 200 OK</p>
+        <p>X-Total-Count: 42</p>
+        <p>RateLimit-Remaining: 59</p>
+        <p>Link: &lt;/books?page=2&gt;; rel="next"</p>
+      </div>
+      <div class="pv-tags"><span>CI ✓</span><span>pytest ✓</span><span>Docker ✓</span></div>
     </div>
   )}
 

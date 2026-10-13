@@ -1009,6 +1009,22 @@ kbd {
   background: rgb(255 255 255 / 0.04);
   font: 500 0.7rem var(--mono);
 }
+.pv-term {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 0.28rem;
+  padding: 0.8rem 0.9rem 2.6rem;
+  font: 0.66rem/1.45 var(--mono);
+  color: #c3cad8;
+}
+.pv-term b {
+  color: var(--indigo);
+  font-weight: 600;
+}
+.pv-term .pv-ok {
+  color: var(--emerald);
+}
 .pv-plot {
   flex: 1;
   width: 100%;
@@ -1221,6 +1237,9 @@ kbd {
   .stack__cell--full .stack__layer {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
+  }
+  .stack__cell--full .stack__tools {
+    grid-template-columns: repeat(auto-fill, minmax(4.6rem, 1fr));
   }
 }
 .stack__cell {

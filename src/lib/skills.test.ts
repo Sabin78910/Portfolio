@@ -8,7 +8,8 @@ const cv = [
   'Flask', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'Bootstrap 5', 'PHPMailer',
   'PostgreSQL', 'MySQL', 'Oracle Database', 'Database triggers', 'sequences',
   'Data cleaning', 'Data imputation', 'MICE', 'Outlier detection', 'Correlation analysis', 'Feature scaling', 'PCA', 'ggplot2',
-  'Agile', 'Scrum', 'UAT', 'QA testing', 'System integration', 'Git', 'GitHub', 'VS Code', 'PayPal API',
+  'Agile', 'Scrum', 'UAT', 'QA', 'System integration', 'Git', 'GitHub', 'VS Code', 'PayPal API',
+  'FastAPI', 'Pydantic', 'pytest', 'Docker', 'GitHub Actions', 'Linux',
 ];
 
 test('every CV skill is represented in the skills data', () => {
