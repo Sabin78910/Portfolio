@@ -1,5 +1,5 @@
 // Offline support: network-first for pages, stale-while-revalidate for assets. Bump VERSION to drop old caches.
-const VERSION = 'sk-v7';
+const VERSION = 'sk-v8';
 const cacheable = (res) => res.ok && !/no-store/i.test(res.headers.get('Cache-Control') ?? '');
 const PRECACHE = ['/', '/favicon.svg', '/icon-192.png', '/Sabin-Khanal-CV.pdf'];
 

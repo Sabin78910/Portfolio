@@ -160,7 +160,7 @@ export const projects = [
 export const skills = [
   { group: 'Languages', tools: ['Python', 'SQL', 'PHP', 'JavaScript', 'R', 'Java'] },
   { group: 'Backend & APIs', tools: ['Flask', 'FastAPI', 'Pydantic', 'Laravel 11', 'REST APIs', 'Oracle APEX', 'PHPMailer', 'PayPal API'] },
-  { group: 'Frontend', tools: ['React', 'Next.js', 'HTML', 'CSS', 'Bootstrap 5'] },
+  { group: 'Frontend, mobile & games', tools: ['React', 'Next.js', 'HTML', 'CSS', 'Bootstrap 5', 'Android development', 'Game development'] },
   {
     group: 'Databases',
     tools: ['PostgreSQL', 'MySQL', 'Oracle Database'],
