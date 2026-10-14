@@ -2,10 +2,9 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
-import SkillsShowcase from '../components/SkillsShowcase.astro';
 import Icon from '../components/Icon.astro';
 import photo from '../assets/sabin-portrait.webp';
-import { profile, nav, about, experience, projects, education } from '../data/profile';
+import { profile, nav, about, experience, projects, projectsIntro, education, stats, githubBand } from '../data/profile';
 import { ridgeHeight } from '../lib/ridge.ts';
 
 const year = new Date().getFullYear();
@@ -119,6 +118,16 @@ const commands = [
           </figure>
         </div>
       </div>
+      <div class="wrap">
+        <ul class="stats card card--accent" role="list" aria-label="Key metrics">
+          {stats.map((s) => (
+            <li class="stat">
+              <span class="stat__value grad">{s.value}</span>
+              <span class="stat__label">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <button class="btn btn--ghost btn--sm hero__motion" type="button" data-motion-toggle hidden>Pause motion</button>
     </section>
 
@@ -126,9 +135,8 @@ const commands = [
     <section id="about" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">About</span>
-          <p class="eyebrow">About</p>
           <h2>About <span class="grad">me</span></h2>
+          <span class="section__ghost" aria-hidden="true">About</span>
         </header>
         <div class="about">
           <div class="about__story" data-reveal>
@@ -152,9 +160,8 @@ const commands = [
     <section id="experience" class="section section--alt">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">Experience</span>
-          <p class="eyebrow">Experience</p>
           <h2>Where I’ve <span class="grad">worked.</span></h2>
+          <span class="section__ghost" aria-hidden="true">Experience</span>
           <p class="section__sub muted">{profile.summary}</p>
           <a class="btn btn--primary section__cta" href={profile.cv} download>Download CV <Icon name="download" /></a>
         </header>
@@ -178,9 +185,8 @@ const commands = [
     <section id="education" class="section">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">Education</span>
-          <p class="eyebrow">Education</p>
           <h2>Where I’ve <span class="grad">studied.</span></h2>
+          <span class="section__ghost" aria-hidden="true">Education</span>
         </header>
         <ol class="entries">
           {education.map((e) => (
@@ -199,9 +205,9 @@ const commands = [
     <section id="projects" class="section section--alt">
       <div class="wrap">
         <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">Projects</span>
-          <p class="eyebrow">Projects</p>
           <h2>Projects, <span class="grad">built end to end.</span></h2>
+          <span class="section__ghost" aria-hidden="true">Projects</span>
+          <p class="section__sub muted">{projectsIntro}</p>
         </header>
         <div class="projects">
           {projects.map((p, i) => (
@@ -216,103 +222,92 @@ const commands = [
                 <ul class="ticks">
                   {p.points.map((pt) => <li>{pt}</li>)}
                 </ul>
-                <ul class="tags">{p.stack.map((s) => <li>{s}</li>)}</ul>
               </div>
             </article>
           ))}
         </div>
-        <div class="more card card--accent" data-reveal>
-          <h3>More projects on <span class="grad">GitHub</span></h3>
-          <a class="btn btn--primary" href={profile.github} target="_blank" rel="me noopener"><Icon name="github" /> GitHub <span aria-hidden="true">↗</span></a>
-        </div>
       </div>
     </section>
 
-    <!-- ── Skills ───────────────────────────────────────── -->
-    <section id="skills" class="section">
-      <div class="wrap">
-        <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">Skills</span>
-          <p class="eyebrow">Skills</p>
-          <h2><span class="grad">Stack</span></h2>
+    <!-- ── More on GitHub: full-width band over the Himalaya outline ── -->
+    <aside class="gh" aria-labelledby="gh-title">
+      <svg class="gh__ridge" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        {ridgeLayers.map((l) => <path class={`ridge--${l.cls}`} d={l.d} />)}
+      </svg>
+      <div class="wrap gh__inner" data-reveal>
+        <header class="section__head">
+          <h2 id="gh-title">More projects on <span class="grad">GitHub</span></h2>
+          <span class="section__ghost" aria-hidden="true">GitHub</span>
         </header>
-        <SkillsShowcase />
+        <p class="gh__tagline">{githubBand.tagline}</p>
+        <p class="muted gh__sub">{githubBand.cta}</p>
+        <a class="btn btn--primary gh__btn" href={profile.github} target="_blank" rel="me noopener"><Icon name="github" /> Visit GitHub <span aria-hidden="true">↗</span></a>
       </div>
-    </section>
+    </aside>
 
     <!-- ── Contact ──────────────────────────────────────── -->
     <section id="contact" class="section contact">
       <div class="contact__glow" aria-hidden="true"></div>
       <div class="wrap">
-        <header class="section__head" data-reveal>
-          <span class="section__ghost" aria-hidden="true">Contact</span>
-          <p class="eyebrow">Contact</p>
-          <h2>Let’s build something <span class="grad">reliable.</span></h2>
-          <p class="section__sub muted">Open to software engineering and QA roles in backend, data and full-stack teams, and to conversations about HR and financial-services systems.</p>
-        </header>
-        <ul class="reach" data-reveal>
-          <li>
-            <span class="reach__icon"><Icon name="pin" /></span>
-            <span class="reach__label">Address</span>
-            <span>{profile.location}</span>
-          </li>
-          <li>
-            <span class="reach__icon"><Icon name="mail" /></span>
-            <span class="reach__label">Email</span>
-            <a href={`mailto:${profile.email}`}>{profile.email}</a>
-            <button class="btn btn--ghost btn--sm" type="button" data-copy={profile.email}>
-              <span data-copy-status aria-live="polite">Copy</span>
-            </button>
-          </li>
-          <li>
-            <span class="reach__icon"><Icon name="linkedin" /></span>
-            <span class="reach__label">LinkedIn</span>
-            <a href={profile.linkedin} target="_blank" rel="me noopener">{profile.name} <span aria-hidden="true">↗</span></a>
-          </li>
-          <li>
-            <span class="reach__icon"><Icon name="download" /></span>
-            <span class="reach__label">Resume</span>
-            <a href={profile.cv} download>Download CV</a>
-          </li>
-        </ul>
+        <div class="contact__card card card--accent" data-reveal>
 
-        <form class="form card card--accent" action="/api/contact" method="post" data-contact data-reveal novalidate>
-          <h3 class="form__title">Have a question? <span class="muted">Send a message.</span></h3>
-          <div class="field">
-            <label for="f-name">Name</label>
-            <input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" />
+          <!-- Left: info panel -->
+          <div class="contact__info">
+            <header class="section__head contact__head">
+              <p class="eyebrow">Let’s build something</p>
+              <h2>Get in <span class="grad">touch.</span></h2>
+            </header>
+            <p class="contact__desc muted">Have a project or role in mind? Let’s talk. Write a message here, or reach me directly.</p>
+            <div class="contact__actions">
+              <a class="btn btn--primary" href={`mailto:${profile.email}`}>Email</a>
+              <button class="btn" type="button" data-copy={profile.email}>
+                <span data-copy-status aria-live="polite">Copy email</span>
+              </button>
+              <a class="btn" href={profile.github} target="_blank" rel="me noopener">GitHub</a>
+            </div>
           </div>
-          <div class="field">
-            <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" />
-          </div>
-          <div class="field">
-            <label for="f-message">Message</label>
-            <textarea id="f-message" name="message" rows="5" required minlength="10" maxlength="5000"></textarea>
-          </div>
-          <div class="hp" aria-hidden="true">
-            <label for="f-company">Company</label>
-            <input id="f-company" name="company" tabindex="-1" autocomplete="off" />
-          </div>
-          <button class="btn btn--primary btn--block" type="submit">
-            <span data-submit-label>Send message</span>
-          </button>
-          <p class="form__status" role="status" aria-live="polite" data-form-status></p>
-        </form>
+
+          <!-- Right: form -->
+          <form class="form" action="/api/contact" method="post" data-contact novalidate>
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" />
+            </div>
+            <div class="field">
+              <label for="f-email">Your email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" />
+            </div>
+            <div class="field">
+              <label for="f-subject">What’s it about?</label>
+              <select id="f-subject" name="subject">
+                <option value="role">A role or interview</option>
+                <option value="project">A project or collaboration</option>
+                <option value="question">A question</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-message">Message</label>
+              <textarea id="f-message" name="message" rows="5" required minlength="10" maxlength="5000"></textarea>
+            </div>
+            <div class="hp" aria-hidden="true">
+              <label for="f-company">Company</label>
+              <input id="f-company" name="company" tabindex="-1" autocomplete="off" />
+            </div>
+            <button class="btn btn--primary form__send" type="submit">
+              <span data-submit-label>Send by email</span>
+            </button>
+            <p class="form__status" role="status" aria-live="polite" data-form-status></p>
+          </form>
+
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="wrap footer__inner">
-      <p>Find me on</p>
-      <ul class="icon-links">
-        {iconLinks.map((l) => (
-          <li><a class="icon-btn" href={l.href} aria-label={l.label} target={l.external ? '_blank' : undefined} rel={l.external ? 'me noopener' : undefined}><Icon name={l.icon} /></a></li>
-        ))}
-      </ul>
-      <p class="footer__copy">© {year} {profile.name}. All rights reserved.</p>
-      <p class="footer__copy">Press <kbd>⌘</kbd><kbd>K</kbd> to navigate · <a class="link" href="#top">Back to top ↑</a></p>
+      <p class="footer__copy">© {year} {profile.name}</p>
     </div>
   </footer>
 

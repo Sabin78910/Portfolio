@@ -93,9 +93,10 @@ async function copy(text: string) {
 }
 $$<HTMLButtonElement>('[data-copy]').forEach((btn) => {
   const status = btn.querySelector('[data-copy-status]')!;
+  const idle = status.textContent;
   btn.addEventListener('click', async () => {
     status.textContent = (await copy(btn.dataset.copy!)) ? 'Copied ✓' : 'Copy failed';
-    setTimeout(() => (status.textContent = 'Copy'), 2000);
+    setTimeout(() => (status.textContent = idle), 2000);
   });
 });
 
@@ -167,6 +168,7 @@ dlg?.addEventListener('click', async (e) => {
 const form = $<HTMLFormElement>('[data-contact]');
 const formStatus = $('[data-form-status]');
 const label = $('[data-submit-label]');
+const labelIdle = label?.textContent;
 const say = (msg: string, tone: 'ok' | 'err' | '' = '') => {
   if (!formStatus) return;
   formStatus.textContent = msg;
@@ -203,7 +205,7 @@ form?.addEventListener('submit', async (e) => {
     say(`${(err as Error).message} You can also email me at ${$('[data-copy]')?.dataset.copy ?? 'the address above'}.`, 'err');
   } finally {
     button.disabled = false;
-    label!.textContent = 'Send message';
+    label!.textContent = labelIdle!;
   }
 });
 
