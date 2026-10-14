@@ -1012,7 +1012,7 @@ kbd {
 .pv-plot {
   flex: 1;
   width: 100%;
-  padding: 0.4rem 0.6rem 2.2rem;
+  padding: 0.4rem 0.6rem 0.8rem;
 }
 .pv-plot .axis {
   stroke: rgb(255 255 255 / 0.14);
@@ -1035,21 +1035,6 @@ kbd {
 .pv-plot .lbl {
   fill: var(--muted-2);
   font: 9px var(--mono);
-}
-.pv-tags {
-  position: absolute;
-  left: 0.7rem;
-  bottom: 0.7rem;
-  display: flex;
-  gap: 0.35rem;
-}
-.pv-tags span {
-  padding: 0.28rem 0.55rem;
-  border: 1px solid rgb(52 211 153 / 0.3);
-  border-radius: 999px;
-  background: rgb(52 211 153 / 0.1);
-  color: var(--emerald);
-  font: 500 0.62rem var(--mono);
 }
 
 /* About bento */
