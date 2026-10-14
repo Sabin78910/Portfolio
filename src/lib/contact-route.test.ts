@@ -1,20 +1,22 @@
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { POST } from '../pages/api/contact.ts';
+import { mailer, type Mail } from './mailer.ts';
 
-// Drives the real route handler with a fake Resend; no network, no email sent.
-const realFetch = globalThis.fetch;
-let calls: { url: string; init: RequestInit }[] = [];
-const fakeResend = (status: number) => {
+// Drives the real route handler with a fake SMTP transport; no network, no email sent.
+const realSend = mailer.send;
+let calls: Mail[] = [];
+const fakeSmtp = (ok: boolean) => {
   calls = [];
-  globalThis.fetch = (async (url: string, init: RequestInit) => {
-    calls.push({ url, init });
-    return new Response('{}', { status });
-  }) as typeof fetch;
+  mailer.send = async (mail: Mail) => {
+    calls.push(mail);
+    return ok;
+  };
 };
 afterEach(() => {
-  globalThis.fetch = realFetch;
-  delete process.env.RESEND_API_KEY;
+  mailer.send = realSend;
+  delete process.env.SMTP_USER;
+  delete process.env.SMTP_PASS;
   delete process.env.CONTACT_TO;
 });
 
@@ -30,12 +32,13 @@ const good = { name: 'Asha Rai', email: 'asha@example.com', message: 'Hello, is 
 const json = (o: object) => call(JSON.stringify(o), 'application/json');
 const form = (o: Record<string, string>) => call(new URLSearchParams(o).toString(), 'application/x-www-form-urlencoded');
 const configure = () => {
-  process.env.RESEND_API_KEY = 're_test';
+  process.env.SMTP_USER = 'owner@gmail.com';
+  process.env.SMTP_PASS = 'app password';
   process.env.CONTACT_TO = 'owner@example.com';
 };
 
 test('JSON: invalid input is a 400 with a message; nothing is sent', async () => {
-  fakeResend(200);
+  fakeSmtp(true);
   const res = await json({ ...good, email: 'nope' });
   assert.equal(res.status, 400);
   assert.match((await res.json()).error, /valid email/);
@@ -44,41 +47,39 @@ test('JSON: invalid input is a 400 with a message; nothing is sent', async () =>
 
 test('JSON: honeypot gets a fake success and nothing is sent', async () => {
   configure();
-  fakeResend(200);
+  fakeSmtp(true);
   const res = await json({ ...good, company: 'Bots Inc' });
   assert.equal(res.status, 200);
   assert.equal(calls.length, 0);
 });
 
 test('JSON: missing email config is a 503', async () => {
-  fakeResend(200);
+  fakeSmtp(true);
   assert.equal((await json(good)).status, 503);
   assert.equal(calls.length, 0);
 });
 
-test('JSON: valid message is sent to Resend with reply-to and a timeout', async () => {
+test('JSON: valid message goes to the owner with the visitor as reply-to', async () => {
   configure();
-  fakeResend(200);
+  fakeSmtp(true);
   const res = await json(good);
   assert.equal(res.status, 200);
   assert.deepEqual(await res.json(), { ok: true });
-  assert.equal(calls[0].url, 'https://api.resend.com/emails');
-  assert.equal((calls[0].init.headers as Record<string, string>).Authorization, 'Bearer re_test');
-  const sent = JSON.parse(calls[0].init.body as string);
-  assert.deepEqual(sent.to, ['owner@example.com']);
-  assert.equal(sent.reply_to, good.email);
-  assert.ok(calls[0].init.signal, 'request must carry an abort signal');
+  assert.equal(calls[0].to, 'owner@example.com');
+  assert.equal(calls[0].replyTo, good.email);
+  assert.match(calls[0].subject, /Asha Rai/);
+  assert.match(calls[0].text, /backend role/);
 });
 
-test('JSON: Resend failure is a 502', async () => {
+test('JSON: a refused send is a 502', async () => {
   configure();
-  fakeResend(500);
+  fakeSmtp(false);
   assert.equal((await json(good)).status, 502);
 });
 
 test('Form posts redirect back to the contact section', async () => {
   configure();
-  fakeResend(200);
+  fakeSmtp(true);
   const ok = await form(good);
   assert.equal(ok.status, 303);
   assert.equal(ok.headers.get('Location'), '/?sent=1#contact');
@@ -88,7 +89,7 @@ test('Form posts redirect back to the contact section', async () => {
 
 test('Sixth message from one address within the window is a 429', async () => {
   configure();
-  fakeResend(200);
+  fakeSmtp(true);
   const from = (n: number) =>
     POST({
       request: new Request('http://localhost/api/contact', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(good) }),

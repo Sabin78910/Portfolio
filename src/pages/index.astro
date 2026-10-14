@@ -148,10 +148,6 @@ const commands = [
               <p class="eyebrow">{c.domain}</p>
               <h3>{c.name}</h3>
               <p class="muted">{c.purpose}</p>
-              <ul class="chips" aria-label="Stack and focus">
-                {c.stack.map((s) => <li>{s}</li>)}
-              </ul>
-              <p class="case__foot mono">Internal system · {currentJob.company}</p>
             </article>
           ))}
         </div>
@@ -170,7 +166,6 @@ const commands = [
             <article class={`project card glow--${p.color}`} data-reveal>
               <figure class="project__visual" data-tilt>
                 <ProjectVisual kind={p.visual} />
-                <figcaption class="project__note">Illustrative interface</figcaption>
               </figure>
               <div class="project__body">
                 <p class="eyebrow"><span class="num">{String(i + 1).padStart(2, '0')}</span>{p.kind}</p>
@@ -178,9 +173,6 @@ const commands = [
                 <p class="project__summary">{p.summary}</p>
                 <ul class="ticks">
                   {p.points.map((pt) => <li>{pt}</li>)}
-                </ul>
-                <ul class="chips" aria-label="Tech stack">
-                  {p.stack.map((s) => <li>{s}</li>)}
                 </ul>
                 {'repo' in p && (
                   <p><a class="link" href={p.repo} target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span><span class="visually-hidden"> for {p.title}</span></a></p>

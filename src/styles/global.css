@@ -278,24 +278,6 @@ kbd {
   font-size: 0.78rem;
   color: var(--muted);
 }
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-.chips li {
-  padding: 0.3rem 0.72rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.03);
-  font-size: 0.8rem;
-  color: #c3cad8;
-  transition: border-color 0.2s, color 0.2s;
-}
-.chips li:hover {
-  border-color: rgb(165 180 252 / 0.45);
-  color: var(--text);
-}
 .ticks {
   display: grid;
   gap: 0.45rem;
@@ -775,24 +757,6 @@ kbd {
   font-weight: 600;
   letter-spacing: -0.025em;
 }
-.case .chips {
-  margin-top: 0.2rem;
-}
-.case__foot {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-  font-size: 0.72rem;
-  color: var(--muted-2);
-}
-.project__note {
-  margin-top: 0.55rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted-2);
-  text-align: center;
-}
 .job__meta {
   display: inline-flex;
   align-items: center;
@@ -896,6 +860,7 @@ kbd {
 }
 .pv-store {
   flex: 1;
+  min-height: 0; /* the window has a fixed height: let the product grid shrink into it instead of overflowing */
   display: grid;
   grid-template-columns: 22% 1fr;
   gap: 0.7rem;
@@ -918,14 +883,17 @@ kbd {
 .pv-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 0.55rem;
+  min-height: 0;
 }
 .pv-product {
   display: grid;
+  grid-template-rows: 1fr auto; /* thumbnail takes what is left, the price keeps its own line */
   gap: 0.3rem;
+  min-height: 0;
 }
 .pv-thumb {
-  aspect-ratio: 1;
   border-radius: 8px;
   background: linear-gradient(135deg, hsl(calc(220 + var(--h) / 4) 70% 62% / 0.6), hsl(calc(190 + var(--h) / 6) 80% 50% / 0.3));
 }
