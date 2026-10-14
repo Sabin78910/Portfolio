@@ -418,9 +418,6 @@ kbd {
     grid-template-columns: 1.3fr 1fr;
   }
 }
-.hero__copy > .badge {
-  animation: fade 0.8s var(--ease) both;
-}
 .hero__title {
   margin: 1.6rem 0 1.4rem;
   font-size: clamp(2.6rem, 5.6vw, 4.7rem);
@@ -461,12 +458,6 @@ kbd {
   gap: 0.75rem;
   margin-top: 2rem;
   animation: fade 0.9s 0.5s var(--ease) both;
-}
-.hero__micro {
-  margin-top: 1.1rem;
-  font-size: 0.85rem;
-  color: var(--muted-2);
-  animation: fade 0.9s 0.6s var(--ease) both;
 }
 @keyframes fade {
   from {
@@ -572,10 +563,6 @@ kbd {
   white-space: nowrap;
   animation: bob 6s ease-in-out infinite;
 }
-.chip--a {
-  top: 10%;
-  left: -2.5rem;
-}
 .chip--b {
   bottom: 24%;
   right: -2.25rem;
@@ -587,9 +574,6 @@ kbd {
   }
 }
 @media (max-width: 960px) {
-  .chip--a {
-    left: -0.5rem;
-  }
   .chip--b {
     right: -0.5rem;
   }
@@ -829,7 +813,6 @@ kbd {
   background: radial-gradient(80% 70% at 50% 0%, rgb(52 211 153 / 0.2), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgb(129 140 248 / 0.2), transparent 60%), var(--surface-2);
 }
 .pv-window {
-  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -902,9 +885,8 @@ kbd {
   color: #c3cad8;
 }
 .pv-pill {
-  position: absolute;
-  right: 0.7rem;
-  bottom: 0.7rem;
+  align-self: flex-end; /* its own row under the grid (which shrinks to fit), so it never covers a price */
+  margin: 0 0.7rem 0.7rem;
   padding: 0.32rem 0.62rem;
   border: 1px solid rgb(52 211 153 / 0.35);
   border-radius: 999px;
@@ -920,9 +902,10 @@ kbd {
 .pv-dash {
   flex: 1;
   display: grid;
+  min-height: 0;
   grid-template-columns: 1.1fr 1fr;
   gap: 0.8rem;
-  padding: 0.8rem 0.8rem 3rem;
+  padding: 0.8rem;
 }
 .pv-chart {
   display: flex;
@@ -947,6 +930,8 @@ kbd {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap; /* a wrapped row on phones makes the dashboard taller than its window */
   padding: 0.42rem 0.55rem;
   border-radius: 7px;
   background: rgb(255 255 255 / 0.04);
@@ -961,9 +946,7 @@ kbd {
   color: var(--emerald);
 }
 .pv-otp {
-  position: absolute;
-  left: 0.8rem;
-  bottom: 0.7rem;
+  margin: 0 0.8rem 0.7rem; /* in flow under the dashboard, like the cart pill */
   display: flex;
   gap: 0.25rem;
 }

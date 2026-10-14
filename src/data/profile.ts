@@ -36,7 +36,6 @@ export const caseStudies = [
   {
     name: 'Employee Appraisal System',
     domain: 'HR technology',
-    role: 'Built',
     purpose: 'Streamlines employee evaluations and grade increments.',
     stack: ['Python', 'Flask', 'PostgreSQL', 'REST APIs'],
     icon: 'people',
@@ -44,7 +43,6 @@ export const caseStudies = [
   {
     name: 'Letter Management System',
     domain: 'Operations',
-    role: 'Built',
     purpose: 'Centralises and manages official company correspondence.',
     stack: ['Flask', 'PostgreSQL'],
     icon: 'doc',
@@ -52,7 +50,6 @@ export const caseStudies = [
   {
     name: 'Digital Lending System',
     domain: 'Financial services',
-    role: 'Maintain & enhance',
     purpose: 'Maintained and enhanced within an Agile/Scrum team.',
     stack: ['Performance', 'Security', 'Regulatory compliance'],
     icon: 'lending',
@@ -114,7 +111,6 @@ export const projects = [
     visual: 'data',
     color: 'emerald',
     title: 'Concrete Compressive Strength',
-    repo: 'https://github.com/Sabin78910/concrete-strength-analysis',
     kind: 'ML preprocessing pipeline',
     summary: 'An R pipeline that cleans and prepares concrete compressive-strength data for machine learning.',
     stack: ['R', 'MICE', 'ggplot2', 'PCA'],
@@ -128,7 +124,6 @@ export const projects = [
     visual: 'market',
     color: 'indigo',
     title: 'GrocerEase',
-    repo: 'https://github.com/Sabin78910/GrocerEase',
     kind: 'Multi-vendor marketplace',
     summary:
       'One platform where many local traders sell together, with PayPal checkout, collection-slot booking and email OTP verification.',

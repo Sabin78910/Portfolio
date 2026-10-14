@@ -67,7 +67,7 @@ const commands = [
         <button class="kbd-btn" type="button" data-cmdk-open aria-label="Menu ⌘K" aria-keyshortcuts="Meta+K Control+K">
           <kbd>⌘</kbd><kbd>K</kbd><span class="kbd-btn__touch">Menu</span>
         </button>
-        <a class="btn btn--ghost btn--sm hide-xs" href={profile.cv} download>Résumé</a>
+        <a class="btn btn--ghost btn--sm hide-xs" href={profile.cv} download>CV</a>
         <a class="btn btn--primary btn--sm" href="#contact">Let’s talk</a>
       </div>
     </div>
@@ -80,7 +80,6 @@ const commands = [
       <div class="hero__grid" aria-hidden="true"></div>
       <div class="wrap hero__inner">
         <div class="hero__copy">
-          <p class="badge"><span class="status__dot"></span>Currently at Best Finance Company</p>
           <h1 class="hero__title">
             <span class="line"><span>I engineer secure,</span></span>{' '}
             <span class="line"><span>reliable <span class="grad">backend</span></span></span>{' '}
@@ -92,9 +91,8 @@ const commands = [
           </p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#work">View my work <span aria-hidden="true">→</span></a>
-            <a class="btn btn--ghost" href={profile.cv} download>Download résumé</a>
+            <a class="btn btn--ghost" href={profile.cv} download>Download CV</a>
           </div>
-          <p class="hero__micro">Open to software engineering &amp; QA roles · Kathmandu, UTC+5:45</p>
         </div>
 
         <div class="hero__visual">
@@ -113,7 +111,6 @@ const commands = [
                 <span>Kathmandu</span>
               </div>
             </figcaption>
-            <p class="chip chip--a"><span class="status__dot"></span>Developer at BFC</p>
             <p class="chip chip--b">{education.degree}</p>
           </figure>
         </div>
@@ -134,7 +131,7 @@ const commands = [
         <header class="section__head" data-reveal>
           <p class="eyebrow">Work</p>
           <h2>Systems I build at <span class="grad">Best Finance Company.</span></h2>
-          <p class="section__sub muted">Internal platforms at a regulated finance company. Implementation details are confidential.</p>
+          <p class="section__sub muted">Internal platforms at a regulated finance company.</p>
         </header>
         <div class="cases">
           {caseStudies.map((c) => (
@@ -143,7 +140,6 @@ const commands = [
                 <span class="case__icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={caseIcons[c.icon]} />
                 </span>
-                <span class="pill">{c.role}</span>
               </div>
               <p class="eyebrow">{c.domain}</p>
               <h3>{c.name}</h3>
@@ -174,9 +170,6 @@ const commands = [
                 <ul class="ticks">
                   {p.points.map((pt) => <li>{pt}</li>)}
                 </ul>
-                {'repo' in p && (
-                  <p><a class="link" href={p.repo} target="_blank" rel="noopener">View code <span aria-hidden="true">↗</span><span class="visually-hidden"> for {p.title}</span></a></p>
-                )}
               </div>
             </article>
           ))}
@@ -302,7 +295,7 @@ const commands = [
           <ul class="socials">
             <li><a class="btn btn--ghost btn--sm" href={profile.linkedin} target="_blank" rel="me noopener">LinkedIn ↗</a></li>
             <li><a class="btn btn--ghost btn--sm" href={profile.github} target="_blank" rel="me noopener">GitHub ↗</a></li>
-            <li><a class="btn btn--ghost btn--sm" href={profile.cv} download>Résumé ↓</a></li>
+            <li><a class="btn btn--ghost btn--sm" href={profile.cv} download>CV ↓</a></li>
           </ul>
         </div>
 
