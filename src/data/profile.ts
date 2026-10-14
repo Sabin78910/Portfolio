@@ -4,74 +4,72 @@
 export const profile = {
   name: 'Sabin Khanal',
   role: 'Backend & Web Developer',
+  tagline: 'Bridging AI, APIs & Automation | Data Science | AI Solutions',
   location: 'Kathmandu, Nepal',
   email: 'sabinkhanal13@gmail.com',
   github: 'https://github.com/Sabin78910',
   linkedin: 'https://www.linkedin.com/in/sabin-khanal-950163326',
   cv: '/Sabin-Khanal-CV.pdf',
+  // Resume-section summary, owner's wording.
+  summary:
+    'Technology-driven professional with 3+ years of experience in software development, project management, and technical support, with a strong ability to analyse complex data and deliver innovative solutions. Focused on bridging AI, APIs, and automation to develop intelligent, scalable, and data-driven solutions.',
   description:
     'Backend & Web Developer in Kathmandu, Nepal. I build HR and lending systems with Python, Flask, PostgreSQL and REST APIs, tested with pytest and shipped via CI/CD.',
 };
 
-export const education = { degree: 'BSc (Hons) Computing', school: 'Leeds Beckett University (UK)', delivered: 'The British College, Kathmandu', year: 2025 };
+// Newest first; the first entry is the degree (hero, About, structured data).
+// SEE is from the owner (not on the CV).
+export const education = [
+  {
+    title: 'BSc (Hons) Computing',
+    school: 'Leeds Beckett University (UK)',
+    note: 'Delivered at The British College, Kathmandu',
+    period: 'Jan 2022 — May 2025',
+  },
+  { title: 'Intermediate (+2), Management & Computer Science', school: 'Uniglobe SS/College, Kathmandu', period: '2019 — 2021' },
+  { title: 'Secondary Education Examination (SEE)', school: 'Little Angels’ School', period: '2009 — 2019' },
+];
 
 export const nav = [
-  { href: '#work', label: 'Work' },
-  { href: '#projects', label: 'Projects' },
   { href: '#about', label: 'About' },
   { href: '#experience', label: 'Experience' },
+  { href: '#education', label: 'Education' },
+  { href: '#projects', label: 'Projects' },
   { href: '#skills', label: 'Skills' },
   { href: '#contact', label: 'Contact' },
 ];
 
-export const stack = [
-  'Python', 'Flask', 'FastAPI', 'PostgreSQL', 'REST APIs', 'pytest', 'Docker', 'GitHub Actions', 'AWS',
-  'React', 'Next.js', 'Laravel 11', 'PHP', 'MySQL', 'Oracle APEX', 'SQL', 'Linux', 'Agile / Scrum', 'QA & UAT',
-];
-
-export const principles = ['Correct before clever', 'Secure by default', 'Tested before shipped'];
-
-// Internal systems at Best Finance Company — wording from the CV; no confidential detail.
-export const caseStudies = [
-  {
-    name: 'Employee Appraisal System',
-    domain: 'HR technology',
-    purpose: 'Streamlines employee evaluations and grade increments.',
-    stack: ['Python', 'Flask', 'PostgreSQL', 'REST APIs'],
-    icon: 'people',
-  },
-  {
-    name: 'Letter Management System',
-    domain: 'Operations',
-    purpose: 'Centralises and manages official company correspondence.',
-    stack: ['Flask', 'PostgreSQL'],
-    icon: 'doc',
-  },
-  {
-    name: 'Digital Lending System',
-    domain: 'Financial services',
-    purpose: 'Maintained and enhanced within an Agile/Scrum team.',
-    stack: ['Performance', 'Security', 'Regulatory compliance'],
-    icon: 'lending',
-  },
-];
-
-// Domains summarised from the systems above.
-export const domains = [
-  { name: 'HR technology', note: 'Employee evaluations and grade increments' },
-  { name: 'Financial services', note: 'Digital lending, security, regulatory requirements' },
-  { name: 'Operations', note: 'Correspondence and internal IT systems' },
-];
+// About section, owner's wording.
+export const about = {
+  paragraphs: [
+    'I am a backend-focused Web Developer and AI Engineer with a BSc (Hons) in Computing and a strong computational foundation, bringing 3+ years of experience in developing and deploying web technologies. I design, build, and maintain secure, scalable, database-driven web applications and RESTful APIs using Laravel, PHP, Python (Flask), React, and SQL, translating business requirements into reliable software.',
+    'My work centers on connecting systems and eliminating manual effort: integrating third-party APIs, automating workflows, and, more recently, embedding AI capabilities into production applications. I prioritize clean, maintainable code, strong performance, and solutions that deliver measurable business impact.',
+    'My background spans software development, web application development, and technical support. This combination gives me a practical understanding of how software behaves for real users, not just how it runs in the codebase.',
+  ],
+  notes: [
+    { label: 'Currently exploring', text: 'AI integration, cloud technologies, and data science.' },
+    { label: 'Open to conversations about', text: 'backend development, API integration, and automation projects.' },
+  ],
+  facts: [
+    { label: 'Profile', value: 'Web Developer & AI Engineer' },
+    { label: 'Domain', value: 'Web Development, Machine Learning, and UI/UX Design' },
+    { label: 'Education', value: education[0].title },
+    { label: 'Programming Languages', value: 'Python (Flask), PHP (Laravel), JavaScript (React), R, SQL' },
+    { label: 'Tools & Other Skills', value: 'Docker, Git, UI/UX Design' },
+    { label: 'Languages', value: 'English, Nepali' },
+    { label: 'Interests', value: 'Gaming, Soccer, Mountain Trekking' },
+  ],
+};
 
 export const experience = [
   {
     company: 'Best Finance Company Ltd.',
     place: 'Kathmandu',
-    period: 'Feb 2026 — Present',
     roles: [
       {
         title: 'Transaction & Digital Banking team',
         period: 'Jun 2026 — Present',
+        tags: ['Python', 'Flask', 'PostgreSQL', 'REST APIs', 'QA', 'Agile / Scrum'],
         points: [
           'Built an Employee Appraisal System (Python, Flask, PostgreSQL, REST APIs) that streamlines evaluations and grade increments.',
           'Built a Letter Management System in Flask and PostgreSQL to centralise official company correspondence.',
@@ -82,6 +80,7 @@ export const experience = [
       {
         title: 'Web Developer, Information Technology',
         period: 'Feb 2026 — Present',
+        tags: ['Web applications', 'Internal IT systems'],
         points: [
           'Develop, maintain and support web applications and internal IT systems behind day-to-day operations.',
           'Work with business and IT teams to resolve technical issues and ship system improvements.',
@@ -92,11 +91,11 @@ export const experience = [
   {
     company: 'Hypen Solution',
     place: 'Remote',
-    period: 'Jun 2024 — Aug 2024',
     roles: [
       {
         title: 'Freelance Tech Support & QA Specialist',
         period: 'Jun 2024 — Aug 2024',
+        tags: ['UAT', 'Functional testing', 'Production testing', 'Android', 'iOS'],
         points: [
           'Ran UAT, functional and production testing on Android and iOS apps to confirm release readiness.',
           'Tested builds across devices and platforms, documenting and reporting defects before release.',

@@ -1,4 +1,5 @@
-import { startHypercube } from './hypercube-view.ts';
+import { heroMode, readHeroEnv } from '../lib/ridge.ts';
+import type { RidgeHandle } from './ridge-view.ts';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -6,9 +7,10 @@ const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector
 const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
 
 // ── Pause motion (WCAG 2.2.2) ────────────────────────────────────────────
-// The toggle lives in the ⌘K menu (WCAG 2.2.2); its hint shows the current state.
+// Two controls, one saved choice: the hero's Play/Pause button and the ⌘K menu item (its hint shows the state).
 const motionHint = $('[data-action="motion"] .cmdk__hint');
-let cube: ReturnType<typeof startHypercube>;
+const motionBtn = $<HTMLButtonElement>('[data-motion-toggle]');
+let ridge: RidgeHandle | null = null;
 const storedPause = (() => {
   try {
     return localStorage.getItem('motion') === 'paused';
@@ -19,7 +21,8 @@ const storedPause = (() => {
 const applyMotion = (paused: boolean) => {
   document.documentElement.classList.toggle('motion-paused', paused);
   if (motionHint) motionHint.textContent = paused ? 'Paused — select to resume' : 'Accessibility';
-  cube?.setPaused(paused);
+  if (motionBtn) motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
+  ridge?.setPaused(paused);
 };
 applyMotion(storedPause);
 const toggleMotion = () => {
@@ -30,20 +33,22 @@ const toggleMotion = () => {
   } catch {}
 };
 
-// ── Hypercube: a live 4D/6D/8D object behind the profile card ────────────
-const cubeCanvas = $<HTMLCanvasElement>('[data-hypercube]');
-if (cubeCanvas) {
-  cube = startHypercube(cubeCanvas, reduced);
-  cube?.setPaused(document.documentElement.classList.contains('motion-paused'));
-  const label = $('[data-dim-label]');
-  $$<HTMLButtonElement>('[data-dim]').forEach((btn) =>
-    btn.addEventListener('click', () => {
-      const d = Number(btn.dataset.dim);
-      cube?.setDimension(d);
-      $$('[data-dim]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      if (label) label.textContent = String(d);
-    }),
-  );
+motionBtn?.addEventListener('click', toggleMotion);
+
+// ── Particle Himalaya behind the hero ────────────────────────────────────
+// Loaded when idle and only on devices that can afford it; otherwise the static SVG range stays.
+// The Play/Pause button appears once the animation is running.
+const ridgeCanvas = $<HTMLCanvasElement>('[data-ridge]');
+if (ridgeCanvas && heroMode(readHeroEnv()) === 'webgl') {
+  const start = () =>
+    import('./ridge-view.ts').then(({ startRidge }) => {
+      ridge = startRidge(ridgeCanvas);
+      if (!ridge) return;
+      ridge.setPaused(document.documentElement.classList.contains('motion-paused'));
+      if (motionBtn) motionBtn.hidden = false;
+    });
+  if ('requestIdleCallback' in window) requestIdleCallback(start);
+  else setTimeout(start, 150);
 }
 
 // ── Reveal on scroll ─────────────────────────────────────────────────────
@@ -76,23 +81,6 @@ if (finePointer && !reduced) {
     });
   });
 }
-
-// ── Kathmandu clock ──────────────────────────────────────────────────────
-const clocks = $$('[data-clock]');
-const fmt = (seconds: boolean) =>
-  new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Kathmandu',
-    hour: '2-digit',
-    minute: '2-digit',
-    ...(seconds && { second: '2-digit' }),
-  });
-const [short, long] = [fmt(false), fmt(true)];
-const tick = () => {
-  const now = new Date();
-  clocks.forEach((c) => (c.textContent = (c.hasAttribute('data-seconds') ? long : short).format(now)));
-};
-tick();
-setInterval(tick, 1000);
 
 // ── Copy email ───────────────────────────────────────────────────────────
 async function copy(text: string) {
