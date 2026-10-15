@@ -14,7 +14,7 @@ export const profile = {
   summary:
     'Technology-driven professional with 3+ years of experience in software development, project management, and technical support, with a strong ability to analyse complex data and deliver innovative solutions. Focused on bridging AI, APIs, and automation to develop intelligent, scalable, and data-driven solutions.',
   description:
-    'Backend & Web Developer in Kathmandu, Nepal. I build HR and lending systems with Python, Flask, PostgreSQL and REST APIs, tested with pytest and shipped via CI/CD.',
+    'Backend & Web Developer in Kathmandu, Nepal. I build HR, lending and letter management systems with Python, Flask, PostgreSQL and REST APIs.',
 };
 
 export const githubBand = {
