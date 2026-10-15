@@ -34,6 +34,8 @@ const site = Astro.site!.href;
 const id = (node: string) => `${site}#${node}`;
 const title = `${profile.name} — ${profile.role}`;
 const portraitAlt = `Portrait of ${profile.name}`;
+// The public handle shared by the domain and the email ("sabinkhanal13"); Google reads alternateName as a handle.
+const [handle] = profile.email.split('@');
 const portrait = await getImage({ src: photo, width: 500 });
 const ld = {
   '@context': 'https://schema.org',
@@ -52,6 +54,7 @@ const ld = {
         '@type': 'Person',
         '@id': id('person'),
         name: profile.name,
+        alternateName: handle,
         url: site,
         description: profile.tagline,
         jobTitle: profile.role,
@@ -280,7 +283,7 @@ const commands = [
               <p class="eyebrow">Let’s build something</p>
               <h2>Get in <span class="grad">touch.</span></h2>
             </header>
-            <p class="contact__desc muted">Have a project or role in mind? Let’s talk. Write a message here, or reach me directly.</p>
+            <p class="contact__desc muted">Have a project or role in mind? Let’s talk. Write a message here, or reach me directly at <a href={`mailto:${profile.email}`}>{profile.email}</a>.</p>
             <div class="contact__actions">
               <a class="btn btn--primary" href={`mailto:${profile.email}`}>Email</a>
               <button class="btn" type="button" data-copy={profile.email}>
