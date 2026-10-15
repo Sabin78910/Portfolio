@@ -1,4 +1,5 @@
 import { heroMode, readHeroEnv } from '../lib/ridge.ts';
+import { validateContact } from '../lib/contact.ts';
 import type { RidgeHandle } from './ridge-view.ts';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -181,9 +182,10 @@ if (sent === '0') say('Something went wrong. Please email me directly.', 'err');
 
 form?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  if (!form.checkValidity()) {
-    say('Please fill in your name, a valid email and a message of at least 10 characters.', 'err');
-    form.querySelector<HTMLElement>(':invalid')?.focus();
+  const check = validateContact(Object.fromEntries(new FormData(form)));
+  if (!check.ok && check.field) {
+    say(check.error, 'err');
+    form.querySelector<HTMLElement>(`[name="${check.field}"]`)?.focus();
     return;
   }
   const button = form.querySelector('button')!;
