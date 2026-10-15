@@ -6,7 +6,19 @@ const good = { name: 'Asha Rai', email: 'asha@example.com', message: 'Hi Sabin, 
 
 test('accepts a valid message and trims it', () => {
   const r = validateContact({ ...good, name: '  Asha Rai  ' });
-  assert.deepEqual(r, { ok: true, data: good });
+  assert.deepEqual(r, { ok: true, data: { ...good, topic: 'Other' } });
+});
+
+test('topic comes only from the allowlist, so nothing the visitor types reaches the subject line', () => {
+  const topic = (subject: unknown) => {
+    const r = validateContact({ ...good, subject });
+    return r.ok && r.data.topic;
+  };
+  assert.equal(topic('role'), 'Role');
+  assert.equal(topic('project'), 'Project');
+  assert.equal(topic('Role\r\nBcc: x@evil.test'), 'Other');
+  assert.equal(topic('__proto__'), 'Other');
+  assert.equal(topic(undefined), 'Other');
 });
 
 test('rejects bad input and flags honeypot spam', () => {
