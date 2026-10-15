@@ -3,7 +3,7 @@ Personal portfolio. Research and acceptance targets: `AUDIT.md`.
 
 ## Stack
 Astro 7 (static pages + one server route), vanilla TS, CSS tokens in `src/styles/global.css`.
-Vercel adapter for `POST /api/contact` (Resend). Service worker in `public/sw.js`.
+Vercel adapter for `POST /api/contact` (Gmail SMTP via nodemailer, `src/lib/mailer.ts`). Service worker in `public/sw.js`.
 
 ## Commands
 - Dev: `npm run dev` · Build: `npm run build` · Test: `npm test`
