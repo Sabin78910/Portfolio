@@ -11,8 +11,8 @@ const config = JSON.parse(readFileSync(configFile, 'utf8'));
 const hashes = new Set();
 for (const page of ['index.html', '404.html']) {
   const html = readFileSync(new URL(`static/${page}`, out), 'utf8');
-  for (const [, attrs, body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
-    if (/\bsrc=/.test(attrs) || /application\/ld\+json/.test(attrs)) continue; // external, or data (never executed)
+  for (const [, attrs, body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script[^>]*>/gi)) {
+    if (/\bsrc=/i.test(attrs) || /application\/ld\+json/i.test(attrs)) continue; // external, or data (never executed)
     hashes.add(`'sha256-${createHash('sha256').update(body).digest('base64')}'`);
   }
 }
