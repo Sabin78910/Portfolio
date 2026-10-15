@@ -62,12 +62,12 @@ test('JSON: missing email config is a 503', async () => {
 test('JSON: valid message goes to the owner with the visitor as reply-to', async () => {
   configure();
   fakeSmtp(true);
-  const res = await json(good);
+  const res = await json({ ...good, subject: 'role' });
   assert.equal(res.status, 200);
   assert.deepEqual(await res.json(), { ok: true });
   assert.equal(calls[0].to, 'owner@example.com');
   assert.equal(calls[0].replyTo, good.email);
-  assert.match(calls[0].subject, /Asha Rai/);
+  assert.equal(calls[0].subject, '[Role] Portfolio message from Asha Rai');
   assert.match(calls[0].text, /backend role/);
 });
 
