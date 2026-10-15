@@ -214,7 +214,7 @@ Lighthouse, served with these headers, compression and immutable caching: **mobi
 3. **Email on the domain.** If any email uses `@sabinkhanal13.com.np`, copy its MX/TXT records into Vercel DNS *before* switching nameservers.
 4. **Contact form** sends through Gmail SMTP with an app password (`SMTP_USER`, `SMTP_PASS`, `CONTACT_TO` in Vercel, set 15 October 2026). If the app password is revoked or the Google password changes, the form returns 502 until `SMTP_PASS` is updated in Vercel and the site is redeployed. Without the variables it returns 503; both tell visitors to use the email address shown on the page.
 5. **Rate limit** is held in memory per serverless instance. That is enough for a portfolio; move it to a shared store (e.g. Upstash Redis) if the form is ever abused.
-6. **CodeQL check** on the private repository fails only at the upload step, because GitHub code scanning isn't enabled for private repos without GitHub Code Security. The analysis itself finds nothing, and the site's `test-and-build` CI passes.
+6. **CodeQL** can't upload to code scanning on a private repo without GitHub Code Security, so since 15 October 2026 it skips the upload and fails the job on any finding instead (findings print in the job log). Branch protection is likewise unavailable on a private free repo, so "merge when CI is green" is enforced by habit, not by GitHub.
 7. **Evidence gap:** Android development and game development appear in Skills without a matching project on the CV. Be ready to show work if a recruiter asks.
 
 ## 9. Launch checklist
