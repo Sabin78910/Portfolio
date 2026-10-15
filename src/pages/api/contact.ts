@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { validateContact, allowRequest, limitKey, readBody } from '../../lib/contact.ts';
+import { mailer } from '../../lib/mailer.ts';
 
 export const prerender = false;
 
@@ -38,25 +39,17 @@ export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
     return fail(result.error, 400);
   }
 
-  const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO;
-  if (!key || !to) return fail('Email service is not configured yet.', 503);
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !to) return fail('Email service is not configured yet.', 503);
 
   const { name, email, message } = result.data;
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      // onboarding@resend.dev works until a sending domain is verified in Resend.
-      from: process.env.CONTACT_FROM ?? 'Portfolio <onboarding@resend.dev>',
-      to: [to],
-      reply_to: email,
-      subject: `Portfolio message from ${name}`,
-      text: `${message}\n\n— ${name} <${email}>`, // plain text only: nothing the visitor typed is ever rendered as HTML
-    }),
-    signal: AbortSignal.timeout(10_000), // don't hold the visitor for the whole function timeout
-  }).catch(() => null);
+  const sent = await mailer.send({
+    to,
+    replyTo: email,
+    subject: `Portfolio message from ${name}`,
+    text: `${message}\n\n— ${name} <${email}>`, // plain text only: nothing the visitor typed is ever rendered as HTML
+  });
 
-  if (!res?.ok) return fail('Could not send right now — please email me directly.', 502);
+  if (!sent) return fail('Could not send right now — please email me directly.', 502);
   return isForm ? redirect('/?sent=1#contact', 303) : json({ ok: true });
 };

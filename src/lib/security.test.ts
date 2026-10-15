@@ -2,23 +2,26 @@ import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { POST } from '../pages/api/contact.ts';
 import { validateContact, limitKey, allowRequest, rateLimitKeys } from './contact.ts';
+import { mailer, type Mail } from './mailer.ts';
 
-// Attack suite for POST /api/contact: drives the real handler with hostile input and a fake Resend (no network).
-const realFetch = globalThis.fetch;
-let sent: Record<string, unknown>[] = [];
+// Attack suite for POST /api/contact: drives the real handler with hostile input and a fake SMTP transport (no network).
+const realSend = mailer.send;
+let sent: Mail[] = [];
 afterEach(() => {
-  globalThis.fetch = realFetch;
-  delete process.env.RESEND_API_KEY;
+  mailer.send = realSend;
+  delete process.env.SMTP_USER;
+  delete process.env.SMTP_PASS;
   delete process.env.CONTACT_TO;
 });
 const armed = () => {
-  process.env.RESEND_API_KEY = 're_test';
+  process.env.SMTP_USER = 'owner@gmail.com';
+  process.env.SMTP_PASS = 'app password';
   process.env.CONTACT_TO = 'owner@example.com';
   sent = [];
-  globalThis.fetch = (async (_url: string, init: RequestInit) => {
-    sent.push(JSON.parse(init.body as string));
-    return new Response('{}', { status: 200 });
-  }) as typeof fetch;
+  mailer.send = async (mail: Mail) => {
+    sent.push(mail);
+    return true;
+  };
 };
 
 let n = 0;

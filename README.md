@@ -1,6 +1,6 @@
 # Sabin Khanal — Portfolio
 
-Production portfolio for **sabinkhanal13.com.np**: Astro 7, an animated 4D hypercube hero, a contact API, and offline/PWA support.
+Production portfolio for **sabinkhanal13.com.np**: Astro 7, a WebGL particle-Himalaya hero (static SVG fallback, Play/Pause motion), a contact API, and offline/PWA support.
 Research, competitor audit and measured results: [AUDIT.md](AUDIT.md).
 
 ```bash

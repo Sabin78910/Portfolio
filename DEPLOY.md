@@ -13,31 +13,34 @@ Once this is set up, every push to `main` redeploys automatically. Your laptop c
 - Until the domain is live, the site works at its `….vercel.app` address (step 2). Use that link if you need to share the portfolio before then.
 
 ## 1. Put the code on GitHub
-The code lives in **github.com/Sabin78910/Porfolio** (private). Merge the `feat/portfolio-v2` pull request into `main`.
+The code lives in **github.com/Sabin78910/Portfolio** (public). Merge the `feat/smtp-contact-form` pull request (#7) into `main`.
 CI (tests + build) and CodeQL run on that PR first.
 
 ## 2. Create the Vercel project (5 min)
 1. Go to **vercel.com** → **Sign up** → **Continue with GitHub** (the free Hobby plan is fine for a personal portfolio).
-2. Click **Add New… → Project** and **Import** `Sabin78910/Porfolio`. If it isn't listed, choose
+2. Click **Add New… → Project** and **Import** `Sabin78910/Portfolio`. If it isn't listed, choose
    *Adjust GitHub App Permissions* and give Vercel access to that repo.
 3. Vercel detects **Astro** automatically. Leave every build setting at its default and click **Deploy**.
 4. You get a URL like `porfolio-xxxx.vercel.app`. Open it and check the site loads.
 
 ## 3. Turn on the contact form (5 min)
-The form sends email through **Resend** (free: 3,000 emails/month).
-1. Sign up at **resend.com** → **API Keys** → **Create API key** (permission: *Sending access*). Copy it.
+The form sends email through **Gmail SMTP** with an app password (Google's limit: 500 messages/day, plenty here).
+1. Google Account → **Security** → turn on **2-Step Verification** (required), then
+   **myaccount.google.com/apppasswords** → create one named `portfolio`. Copy the 16 characters.
 2. In Vercel → your project → **Settings → Environment Variables**, add:
 
    | Name | Value |
    |---|---|
-   | `RESEND_API_KEY` | the key from Resend (starts with `re_`) |
+   | `SMTP_USER` | `sabinkhanal13@gmail.com` (the account the app password belongs to) |
+   | `SMTP_PASS` | the 16-character app password (spaces are fine, they get stripped) |
    | `CONTACT_TO` | `sabinkhanal13@gmail.com` (or wherever you want messages) |
 
+   `SMTP_HOST` and `SMTP_PORT` default to `smtp.gmail.com` and `465`, so only set them for a different provider.
 3. **Deployments** → ⋯ on the latest one → **Redeploy** (env vars only apply to new deploys).
 4. Send yourself a test message from the site's contact form.
 
-> Until you verify your own domain in Resend (step 6), messages are sent from `onboarding@resend.dev`.
-> Resend only allows that sender to email the address you signed up with, so sign up to Resend with `CONTACT_TO`.
+> Messages arrive from your own Gmail address with the visitor's address as **Reply-To**, so replying goes to them.
+> The same values live in `.env` for local development — that file is git-ignored and must stay that way.
 
 ## 4. Connect the domain (official .np registry, usually 1–3 business days)
 **1. Check your registry account**
@@ -74,13 +77,14 @@ The form sends email through **Resend** (free: 3,000 emails/month).
 - [ ] Submit `https://sabinkhanal13.com.np/sitemap.xml` in **Google Search Console** so Google indexes you
 
 ## 6. Optional: send from your own address
-Resend → **Domains → Add domain** → `sabinkhanal13.com.np` → copy the DNS records it shows into Vercel's DNS records →
-**Verify**. Then add `CONTACT_FROM` = `Portfolio <hello@sabinkhanal13.com.np>` in Vercel and redeploy.
+Gmail can only send as the account that owns the app password. To send as `hello@sabinkhanal13.com.np`, either add that
+address as a verified alias in Gmail (**Settings → Accounts → Send mail as**), or point `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`
+at a provider that hosts the domain's mail. Nothing else in the code changes.
 
 ## 7. Automation (already wired, needs one click each)
-- **CodeRabbit (AI code review + security):** app.coderabbit.ai → sign in with GitHub → install on `Porfolio`.
+- **CodeRabbit (AI code review + security):** app.coderabbit.ai → sign in with GitHub → install on `Portfolio`.
   The repo's `.coderabbit.yaml` already tells it what to check.
-- **devops-hq monitoring:** add `Porfolio` to `devops-hq/repos.txt` so the 6-hourly watcher covers it.
+- **devops-hq monitoring:** add `Portfolio` to `devops-hq/repos.txt` so the 6-hourly watcher covers it.
   The watcher needs read access to private repos (`ORG_READ_TOKEN`, see devops-hq README).
 - **Dependabot + CodeQL:** run automatically from `.github/`. Enable *Dependabot alerts* in the repo's
   **Settings → Code security** if prompted.
@@ -94,7 +98,7 @@ Resend → **Domains → Add domain** → `sabinkhanal13.com.np` → copy the DN
 
    | Name | Type | Value | Use when |
    |---|---|---|---|
-   | `@` | TXT | `v=spf1 -all` | You send no email from this domain. If you later verify it in Resend (step 6), replace this with the SPF value Resend gives you. |
+   | `@` | TXT | `v=spf1 -all` | Still correct: the form sends from Gmail, not from this domain. Replace it only if you start sending mail *as* `@sabinkhanal13.com.np` (step 6). |
    | `_dmarc` | TXT | `v=DMARC1; p=reject; adkim=s; aspf=s` (use `p=none` first if you start sending mail from the domain) | Always |
    | `@` | CAA | `0 issue "letsencrypt.org"` | Always (Vercel's certificates come from Let's Encrypt) |
 
