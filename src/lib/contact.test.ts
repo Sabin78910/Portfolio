@@ -33,6 +33,20 @@ test('rejects bad input and flags honeypot spam', () => {
   assert.equal(spam.ok === false && spam.spam, true);
 });
 
+test('each failure names its field and the specific problem', () => {
+  const err = (patch: object) => {
+    const r = validateContact({ ...good, ...patch });
+    return r.ok ? null : [r.field, r.error];
+  };
+  assert.deepEqual(err({ name: '' }), ['name', 'Please enter your name.']);
+  assert.deepEqual(err({ name: 'A' }), ['name', 'Your name needs at least 2 characters.']);
+  assert.deepEqual(err({ email: ' ' }), ['email', 'Please enter your email address.']);
+  assert.deepEqual(err({ email: 'asha@localhost' }), ['email', 'Please enter a valid email address, like name@example.com.']);
+  assert.deepEqual(err({ message: '' }), ['message', 'Please write a message.']);
+  assert.deepEqual(err({ message: 'Hi there' }), ['message', 'Your message needs at least 10 characters (it has 8).']);
+  assert.equal(err({ company: 'Bots Inc' })?.[0], undefined); // spam names no field, so the browser still posts it
+});
+
 test('rate limit allows 5 per window per key, then blocks, then recovers', () => {
   const t0 = 1_000_000;
   for (let i = 0; i < 5; i++) assert.equal(allowRequest('ip-a', t0 + i), true);
