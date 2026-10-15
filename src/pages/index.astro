@@ -1,11 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectVisual from '../components/ProjectVisual.astro';
 import Icon from '../components/Icon.astro';
 import photo from '../assets/sabin-portrait.webp';
 import { profile, nav, about, experience, projects, projectsIntro, education, stats, githubBand } from '../data/profile';
 import { ridgeHeight } from '../lib/ridge.ts';
+import { contentModified } from '../lib/lastmod.ts';
 
 const year = new Date().getFullYear();
 const [currentJob] = experience;
@@ -27,26 +28,48 @@ const iconLinks = [
   { label: 'Email', icon: 'mail', href: `mailto:${profile.email}`, external: false },
 ];
 
-// Google: WebSite (site name in results) + ProfilePage centred on one Person (about-me pages are eligible).
+// Google: WebSite (site name in results) + ProfilePage centred on one Person (about-me pages are eligible),
+// linked by @id so Google reads them as one entity. Every value is also visible on the page (structured-data policy).
 const site = Astro.site!.href;
-const person = {
-  '@type': 'Person',
-  name: profile.name,
-  description: profile.description,
-  jobTitle: profile.role,
-  url: site,
-  image: new URL('/og.png', Astro.site).href,
-  email: `mailto:${profile.email}`,
-  address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
-  worksFor: { '@type': 'Organization', name: currentJob.company },
-  alumniOf: { '@type': 'CollegeOrUniversity', name: degree.school.replace(' (UK)', '') },
-  sameAs: [profile.github, profile.linkedin],
-};
+const id = (node: string) => `${site}#${node}`;
+const title = `${profile.name} — ${profile.role}`;
+const portraitAlt = `Portrait of ${profile.name}`;
+const portrait = await getImage({ src: photo, width: 500 });
 const ld = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebSite', name: profile.name, url: site },
-    { '@type': 'ProfilePage', url: site, mainEntity: person },
+    { '@type': 'WebSite', '@id': id('website'), url: site, name: profile.name, inLanguage: 'en', publisher: { '@id': id('person') } },
+    {
+      '@type': 'ProfilePage',
+      '@id': id('profile'),
+      url: site,
+      name: title,
+      inLanguage: 'en',
+      isPartOf: { '@id': id('website') },
+      dateCreated: '2026-10-12T15:06:31Z', // the site's first commit
+      dateModified: contentModified(),
+      mainEntity: {
+        '@type': 'Person',
+        '@id': id('person'),
+        name: profile.name,
+        url: site,
+        description: profile.tagline,
+        jobTitle: profile.role,
+        image: {
+          '@type': 'ImageObject',
+          '@id': id('portrait'),
+          url: new URL(portrait.src, Astro.site).href,
+          width: portrait.attributes.width,
+          height: portrait.attributes.height,
+          caption: portraitAlt,
+        },
+        email: `mailto:${profile.email}`,
+        address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
+        worksFor: { '@type': 'Organization', name: currentJob.company },
+        alumniOf: { '@type': 'CollegeOrUniversity', name: degree.school.replace(' (UK)', '') },
+        sameAs: [profile.github, profile.linkedin],
+      },
+    },
   ],
 };
 
@@ -60,7 +83,7 @@ const commands = [
 ];
 ---
 
-<Base title={`${profile.name} — ${profile.role}`} description={profile.description}>
+<Base title={title} description={profile.description}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
 
   <a class="skip" href="#main">Skip to content</a>
@@ -97,7 +120,7 @@ const commands = [
           <p class="eyebrow hero__hello">Hello, I’m</p>
           <h1 class="hero__title"><span class="line"><span class="grad">{profile.name}</span></span></h1>
           <p class="hero__role">{profile.tagline}</p>
-          <p class="hero__loc"><Icon name="pin" />{profile.location}</p>
+          <p class="hero__loc">{profile.role}<span aria-hidden="true">·</span><Icon name="pin" />{profile.location}</p>
           <div class="hero__cta">
             <a class="btn btn--primary" href="#projects">View my work <span aria-hidden="true">→</span></a>
             <a class="btn btn--ghost" href="#contact">Get in touch</a>
@@ -113,7 +136,7 @@ const commands = [
         <div class="hero__visual">
           <figure class="profile" data-tilt>
             <div class="profile__photo">
-              <Image src={photo} alt="Portrait of Sabin Khanal" widths={[340, 500]} sizes="(max-width: 860px) 90vw, 330px" priority />
+              <Image src={photo} alt={portraitAlt} widths={[340, 500]} sizes="(max-width: 860px) 90vw, 330px" priority />
             </div>
           </figure>
         </div>
