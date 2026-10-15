@@ -39,6 +39,7 @@
 | S5 | `/favicon.ico` returned 404 | Crawlers and tools request it regardless of `<link rel="icon">` | 48×48 ICO | ✅ Fixed |
 | S6 | Bing learned about changes only by recrawling | Slower refresh in Bing, Copilot and ChatGPT search | IndexNow ping after every production deploy (`.github/workflows/indexnow.yml`) | ✅ Fixed |
 | S7 | Repo homepages pointed at a dead and a stale `vercel.app` URL | Lost links to the real domain | Both point at `sabinkhanal13.com.np` | ✅ Fixed |
+| S7b | The handle `sabinkhanal13` (domain and email) appeared only in URLs, never as page text | Searches for the handle had no visible text to match | Contact sentence shows the email address; `Person.alternateName` is the handle (Google: "a social media handle") | ✅ Fixed |
 | S8 | `portfolio-five-phi-bj69emirch.vercel.app` serves a full duplicate (200, no `noindex`) | A canonical tag is a hint, not a directive | Vercel → Domains → that row → Edit → Redirect to `sabinkhanal13.com.np` (308) | Owner |
 | S9 | GitHub profile has no website link; name is "Sabin khanal" | GitHub is a strong identity signal | Settings → Profile (values in the owner checklist) | Owner |
 | S10 | LinkedIn shows an "External Redirection" page before the site | LinkedIn's own outbound-link interstitial; a new domain has no reputation yet | Nothing to change on the site; Search Console indexing and LinkedIn Post Inspector build reputation | Time |
