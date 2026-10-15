@@ -1,0 +1,19 @@
+name: IndexNow
+
+# After each successful production deploy, tell IndexNow search engines the home page changed:
+# Bing (which also feeds Copilot and ChatGPT search), Yandex, Seznam, Naver and Yep. Google does not use IndexNow.
+# The key is public by design: engines verify it at https://sabinkhanal13.com.np/<key>.txt.
+on: deployment_status
+
+permissions: {}
+
+jobs:
+  ping:
+    name: Ping IndexNow
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - run: >-
+          curl -fsS -X POST https://api.indexnow.org/indexnow
+          -H 'Content-Type: application/json; charset=utf-8'
+          -d '{"host":"sabinkhanal13.com.np","key":"0d7662c625854d988886f7ea5f081f2d","urlList":["https://sabinkhanal13.com.np/"]}'

@@ -5,6 +5,64 @@
 
 ---
 
+## Post-launch audit: SEO and VAPT on the live site (15 October 2026)
+
+**Scope:** `https://sabinkhanal13.com.np` in production (Vercel, Vercel DNS), the GitHub repository and the owner's public profiles. Testing was non-destructive: no load testing, and no messages were sent through the contact form.
+
+### Scorecard (live production)
+
+| Check | Result |
+|---|---|
+| Lighthouse 13.5, mobile | **100 / 100 / 100 / 100**, LCP 1.5 s, CLS 0, TBT 0 ms |
+| Lighthouse 13.5, desktop | **100 / 100 / 100 / 100**, LCP 0.3 s |
+| Qualys SSL Labs | **A+**. TLS 1.2 and 1.3 only; not vulnerable to Heartbleed, POODLE, ROBOT or Ticketbleed |
+| MDN HTTP Observatory | **A+**, 130/100, 12 of 12 tests passed |
+| Google Safe Browsing | No unsafe content ("no data yet" for a domain that went live today) |
+| `npm audit` | 0 vulnerabilities |
+
+### What ranks a person's name in 2026 (research)
+
+1. **Entities, not keywords.** Google answers a name query by resolving it to one entity. The site now links `WebSite`, `ProfilePage` and `Person` with `@id`, which is how Google says it knows that separate items describe the same thing ([SD policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies)).
+2. **Markup must match visible text.** "Don't mark up content that is not visible to readers of the page." The previous markup declared a job title and a description that the page never showed.
+3. **AI search needs no special files.** Google: "There are no additional requirements to appear in AI Overviews or AI Mode", and no special schema or AI text files ([AI features](https://developers.google.com/search/docs/appearance/ai-features), updated 10 Dec 2025). So no `llms.txt` was added.
+4. **Bing matters beyond Bing.** Its index feeds Copilot and ChatGPT search, and IndexNow tells it about changes within minutes.
+5. **The authority loop.** Profiles that link to the site confirm the entity: LinkedIn already does; both GitHub repo homepages do now; the GitHub profile website field is still empty (owner action).
+
+### Findings and fixes
+
+| # | Finding | Why it matters | Fix | Status |
+|---|---|---|---|---|
+| S1 | `jobTitle` and `description` in the markup were not visible on the page | Breaks Google's structured-data policy; markup can be ignored | Hero now shows "Backend & Web Developer · Kathmandu, Nepal" (as the OG card does); `description` is the visible byline | ✅ Fixed |
+| S2 | `Person.image` was the text-heavy share card | Google: a profile image must represent the person | The real portrait, as an `ImageObject` with size and caption | ✅ Fixed |
+| S3 | `WebSite` and `Person` were unconnected | The site and the person read as two things | One `@id` graph: `WebSite.publisher` → `Person` ← `ProfilePage.mainEntity` | ✅ Fixed |
+| S4 | No `dateCreated`/`dateModified`; sitemap had no `<lastmod>` | Google recommends both dates; Bing weighs `lastmod` | One git-derived content date feeds both (`src/lib/lastmod.ts`, tested) | ✅ Fixed |
+| S5 | `/favicon.ico` returned 404 | Crawlers and tools request it regardless of `<link rel="icon">` | 48×48 ICO | ✅ Fixed |
+| S6 | Bing learned about changes only by recrawling | Slower refresh in Bing, Copilot and ChatGPT search | IndexNow ping after every production deploy (`.github/workflows/indexnow.yml`) | ✅ Fixed |
+| S7 | Repo homepages pointed at a dead and a stale `vercel.app` URL | Lost links to the real domain | Both point at `sabinkhanal13.com.np` | ✅ Fixed |
+| S8 | `portfolio-five-phi-bj69emirch.vercel.app` serves a full duplicate (200, no `noindex`) | A canonical tag is a hint, not a directive | Vercel → Domains → that row → Edit → Redirect to `sabinkhanal13.com.np` (308) | Owner |
+| S9 | GitHub profile has no website link; name is "Sabin khanal" | GitHub is a strong identity signal | Settings → Profile (values in the owner checklist) | Owner |
+| S10 | LinkedIn shows an "External Redirection" page before the site | LinkedIn's own outbound-link interstitial; a new domain has no reputation yet | Nothing to change on the site; Search Console indexing and LinkedIn Post Inspector build reputation | Time |
+| V1 | `main` is **not** protected: GitHub refuses branch protection and rulesets on private repos on the free plan | A leaked token could force-push straight to production | Make the repo public (free protection, secret scanning, push protection, CodeQL upload) or upgrade to GitHub Pro | Owner decision |
+| V2 | Dependabot security alerts were off (only version updates ran) | Known CVEs would go unnoticed | Alerts and automatic security-fix PRs enabled | ✅ Fixed |
+| V3 | No SPF, DMARC or MX records | Anyone can send email that claims to be from the domain | Three DNS records (owner checklist) | Owner |
+| V4 | Vercel's firewall challenged the scanner after about 20 probes | Positive: automated attacks are throttled at the edge. Side effect: the challenge page has no HSTS header, so one SSL Labs endpoint graded A | Platform behaviour | Accepted |
+| V5 | No DNSSEC | Vercel DNS does not sign zones, and `.com.np` has no DS record | — | Accepted |
+| V6 | HSTS is not preloaded | Preloading protects even the first visit, but takes months to undo | `preload` + submission at hstspreload.org | Owner decision |
+
+**Verified secure on production:** `.env`, `.git`, configs and source return 404; no source maps served; `TRACE` 405, other verbs 404; no CORS for foreign origins; cross-site POST 403; `text/plain` 415; 3 MB body 413; XSS payloads rejected and never reflected; no cookies; `X-Forwarded-Host` not reflected; open-redirect probes on the `www` redirect stay on the host; CAA limits certificates to Let's Encrypt, Google Trust Services and Sectigo. No secret reaches public files (the SMTP password is server-only; the SMTP user is the public contact address), and no secrets entered git history after the 13 October scan.
+
+### Owner checklist
+
+1. **Search Console:** add a *Domain* property → copy the TXT value → Vercel DNS: Name `@`, Type `TXT` → Verify. Then submit `https://sabinkhanal13.com.np/sitemap.xml` and run *URL Inspection → Request indexing*.
+2. **Bing Webmaster Tools:** *Import from Google Search Console* (one click once step 1 is done).
+3. **Vercel:** redirect the `vercel.app` alias (S8).
+4. **Vercel DNS, anti-spoofing (V3):** `TXT @ v=spf1 -all` · `TXT _dmarc v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s` · `MX @` priority `0`, value `.` (null MX, RFC 7505; skip it if the form refuses `.`).
+5. **GitHub profile:** Name `Sabin Khanal`, Bio `Backend & Web Developer`, URL `https://sabinkhanal13.com.np`, Location `Kathmandu, Nepal`.
+6. **LinkedIn:** run Post Inspector on the URL.
+7. **Accounts:** two-factor authentication on GitHub, Vercel and Google, and a strong unique password on register.com.np, because whoever controls that account controls the domain.
+
+---
+
 ## 1. Executive summary
 
 The site passes every launch gate this audit could test locally:
