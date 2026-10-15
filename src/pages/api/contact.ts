@@ -42,11 +42,11 @@ export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
   const to = process.env.CONTACT_TO;
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS || !to) return fail('Email service is not configured yet.', 503);
 
-  const { name, email, message } = result.data;
+  const { name, email, message, topic } = result.data;
   const sent = await mailer.send({
     to,
     replyTo: email,
-    subject: `Portfolio message from ${name}`,
+    subject: `[${topic}] Portfolio message from ${name}`,
     text: `${message}\n\n— ${name} <${email}>`, // plain text only: nothing the visitor typed is ever rendered as HTML
   });
 

@@ -17,7 +17,7 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     permissions:
-      security-events: write # upload results to code scanning
+      security-events: read # CodeQL queries its API for feature flags
       contents: read # check out the code
       actions: read # required by CodeQL on private repos
     steps:
@@ -27,4 +27,12 @@ jobs:
       - uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
         with:
           languages: javascript-typescript
+      # Code scanning can't receive uploads on a private repo without GitHub Code Security, so findings fail the job instead.
       - uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          upload: never
+          output: sarif
+      - name: Fail on findings
+        run: |
+          jq -r '.runs[].results[] | "\(.ruleId) \(.locations[0].physicalLocation.artifactLocation.uri):\(.locations[0].physicalLocation.region.startLine) \(.message.text)"' sarif/*.sarif
+          test "$(jq -s '[.[].runs[].results[]] | length' sarif/*.sarif)" -eq 0

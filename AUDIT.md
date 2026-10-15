@@ -39,6 +39,7 @@
 | S5 | `/favicon.ico` returned 404 | Crawlers and tools request it regardless of `<link rel="icon">` | 48×48 ICO | ✅ Fixed |
 | S6 | Bing learned about changes only by recrawling | Slower refresh in Bing, Copilot and ChatGPT search | IndexNow ping after every production deploy (`.github/workflows/indexnow.yml`) | ✅ Fixed |
 | S7 | Repo homepages pointed at a dead and a stale `vercel.app` URL | Lost links to the real domain | Both point at `sabinkhanal13.com.np` | ✅ Fixed |
+| S7b | The handle `sabinkhanal13` (domain and email) appeared only in URLs, never as page text | Searches for the handle had no visible text to match | Contact sentence shows the email address; `Person.alternateName` is the handle (Google: "a social media handle") | ✅ Fixed |
 | S8 | `portfolio-five-phi-bj69emirch.vercel.app` serves a full duplicate (200, no `noindex`) | A canonical tag is a hint, not a directive | Vercel → Domains → that row → Edit → Redirect to `sabinkhanal13.com.np` (308) | Owner |
 | S9 | GitHub profile has no website link; name is "Sabin khanal" | GitHub is a strong identity signal | Settings → Profile (values in the owner checklist) | Owner |
 | S10 | LinkedIn shows an "External Redirection" page before the site | LinkedIn's own outbound-link interstitial; a new domain has no reputation yet | Nothing to change on the site; Search Console indexing and LinkedIn Post Inspector build reputation | Time |
@@ -209,20 +210,20 @@ Lighthouse, served with these headers, compression and immutable caching: **mobi
 
 ## 8. Residual risks and limits
 
-1. **Not live yet.** Production HTTPS, HSTS, the `www` → apex redirect and real-user Core Web Vitals can only be confirmed after deployment. A low-traffic site may never collect enough visits for field data in Search Console. In that case, lab scores are the reference.
+1. **Field data.** Live since 15 October 2026; HTTPS, HSTS and the `www`/`http` → apex 308 redirects are verified. Real-user Core Web Vitals need traffic: a low-traffic site may never collect enough visits for field data in Search Console. In that case, lab scores are the reference.
 2. **Google decides presentation.** Meeting the guidelines makes the site eligible for a site name, favicon and profile signals, but Google does not guarantee they will appear³ ⁵. Ranking first for "Sabin Khanal" mostly depends on links from LinkedIn and GitHub (see §9).
 3. **Email on the domain.** If any email uses `@sabinkhanal13.com.np`, copy its MX/TXT records into Vercel DNS *before* switching nameservers.
-4. **Contact form** needs `RESEND_API_KEY` and `CONTACT_TO` in Vercel. Until they are set, the form tells visitors to use the email address shown on the page.
+4. **Contact form** sends through Gmail SMTP with an app password (`SMTP_USER`, `SMTP_PASS`, `CONTACT_TO` in Vercel, set 15 October 2026). If the app password is revoked or the Google password changes, the form returns 502 until `SMTP_PASS` is updated in Vercel and the site is redeployed. Without the variables it returns 503; both tell visitors to use the email address shown on the page.
 5. **Rate limit** is held in memory per serverless instance. That is enough for a portfolio; move it to a shared store (e.g. Upstash Redis) if the form is ever abused.
-6. **CodeQL check** on the private repository fails only at the upload step, because GitHub code scanning isn't enabled for private repos without GitHub Code Security. The analysis itself finds nothing, and the site's `test-and-build` CI passes.
+6. **CodeQL** can't upload to code scanning on a private repo without GitHub Code Security, so since 15 October 2026 it skips the upload and fails the job on any finding instead (findings print in the job log). Branch protection is likewise unavailable on a private free repo, so "merge when CI is green" is enforced by habit, not by GitHub.
 7. **Evidence gap:** Android development and game development appear in Skills without a matching project on the CV. Be ready to show work if a recruiter asks.
 
 ## 9. Launch checklist
 
 **Deploy (owner, per `DEPLOY.md`)**
-- [ ] Merge the PR into `main`, import the repo into Vercel, and add `RESEND_API_KEY` and `CONTACT_TO`
-- [ ] Add `sabinkhanal13.com.np` and `www` (redirect to the apex) in Vercel; switch nameservers at register.com.np (24–48 h)
-- [ ] Confirm the padlock, the `www` redirect, and a test message arriving from the contact form
+- [x] Merge the PR into `main`, import the repo into Vercel (project `portfolio`), and add the SMTP variables and `CONTACT_TO`
+- [x] Add `sabinkhanal13.com.np` and `www` (redirect to the apex) in Vercel; switch nameservers at register.com.np
+- [x] Confirm the padlock, the `www` redirect, and a test message arriving from the contact form (15 October 2026)
 
 **Google (day of launch)**
 - [ ] Search Console → **Domain** property → add the TXT record in Vercel DNS → Verify
@@ -380,7 +381,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 | Fonts | Space Grotesk (display) + Geist (body), self-hosted via the Astro Fonts API and preloaded; system monospace | No third-party render-blocking request. Metric-matched fallbacks give CLS 0 |
 | Motion | Vanilla JS + CSS (no GSAP/Lenis) | About 20 KB less JS. Native scroll is better for usability |
 | Hero visual | Raw WebGL fragment shader | Stripe-grade gradient for about 2 KB. Pauses offscreen. CSS fallback |
-| Backend | `POST /api/contact` (Vercel function): validation, honeypot, per-IP rate limit, email via Resend | A real contact pipeline with no third-party form widget |
+| Backend | `POST /api/contact` (Vercel function): validation, honeypot, per-IP rate limit, email via Resend *(Gmail SMTP since PR #7)* | A real contact pipeline with no third-party form widget |
 | Offline | Service worker (stale-while-revalidate) + web app manifest | Works offline and installs as an app on Android/desktop |
 | Android | Installable PWA now; Play Store via Trusted Web Activity (Bubblewrap) later | One codebase, no duplicate native app to maintain |
 | SEO | Canonical URL, Open Graph image, JSON-LD `Person`, sitemap, robots | Rich previews when shared on LinkedIn or WhatsApp |
@@ -411,7 +412,7 @@ CLS above 0.25 is "poor" by Google's Core Web Vitals. Both Nepali reference site
 
 ### 8. Known limits / owner actions
 
-- **Email delivery** needs a free Resend account. Set `RESEND_API_KEY` and `CONTACT_TO` in the host's environment. Until then the form falls back to opening the visitor's email app.
+- **Email delivery** *(corrected 15 Oct 2026: now Gmail SMTP, configured and live; see §8.4)* needs a free Resend account. Set `RESEND_API_KEY` and `CONTACT_TO` in the host's environment. Until then the form falls back to opening the visitor's email app.
 - **Play Store listing** needs a Google Play developer account (one-time fee) and a TWA build. That is a separate step.
 - **"Rank #1 forever"** cannot be guaranteed by anyone. What *can* be guaranteed is beating every benchmarked competitor on measured speed, accessibility and SEO, which this plan targets.
 
@@ -534,7 +535,7 @@ Shipped code, gzipped: JS 3.3 KB · CSS 6.4 KB · HTML 19 KB.
 
 #### Owner actions before going live
 1. **Hosting:** *(corrected 13 Oct 2026)* this note described `sabinkhanal.com.np` (no 13), which belongs to someone else. The owner's domain is `sabinkhanal13.com.np`; see `DEPLOY.md` § "Your domain today".
-2. **Email:** set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
+2. **Email:** *(done 15 Oct 2026 with Gmail SMTP instead; see §8.4)* set `RESEND_API_KEY` and `CONTACT_TO` so the form delivers. Until then it shows a fallback with your email address.
 3. **Merge** PR #1, then follow `DEPLOY.md`.
 
 ---

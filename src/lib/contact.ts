@@ -1,4 +1,7 @@
-export type ContactInput = { name: string; email: string; message: string };
+// The form's "What's it about?" options; anything else (old forms, bots) files under "Other".
+const TOPICS = { role: 'Role', project: 'Project', question: 'Question', other: 'Other' } as const;
+
+export type ContactInput = { name: string; email: string; message: string; topic: (typeof TOPICS)[keyof typeof TOPICS] };
 export type ContactResult =
   | { ok: true; data: ContactInput }
   | { ok: false; spam?: true; error: string };
@@ -30,7 +33,9 @@ export function validateContact(raw: unknown): ContactResult {
   if (message.length < 10) return { ok: false, error: 'Your message is a little short — add a few more words.' };
   if (message.length > 5000) return { ok: false, error: 'Please keep your message under 5,000 characters.' };
 
-  return { ok: true, data: { name, email, message } };
+  const key = str('subject');
+  const topic = Object.hasOwn(TOPICS, key) ? TOPICS[key as keyof typeof TOPICS] : TOPICS.other; // hasOwn: "__proto__" is not a topic
+  return { ok: true, data: { name, email, message, topic } };
 }
 
 // Reads at most `max` bytes, checking Content-Length first and then while streaming; null means too large.
