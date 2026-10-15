@@ -13,12 +13,12 @@ Once this is set up, every push to `main` redeploys automatically. Your laptop c
 - Until the domain is live, the site works at its `….vercel.app` address (step 2). Use that link if you need to share the portfolio before then.
 
 ## 1. Put the code on GitHub
-The code lives in **github.com/Sabin78910/Porfolio** (private). Merge the `feat/portfolio-v2` pull request into `main`.
+The code lives in **github.com/Sabin78910/Portfolio** (public). Merge the `feat/smtp-contact-form` pull request (#7) into `main`.
 CI (tests + build) and CodeQL run on that PR first.
 
 ## 2. Create the Vercel project (5 min)
 1. Go to **vercel.com** → **Sign up** → **Continue with GitHub** (the free Hobby plan is fine for a personal portfolio).
-2. Click **Add New… → Project** and **Import** `Sabin78910/Porfolio`. If it isn't listed, choose
+2. Click **Add New… → Project** and **Import** `Sabin78910/Portfolio`. If it isn't listed, choose
    *Adjust GitHub App Permissions* and give Vercel access to that repo.
 3. Vercel detects **Astro** automatically. Leave every build setting at its default and click **Deploy**.
 4. You get a URL like `porfolio-xxxx.vercel.app`. Open it and check the site loads.
@@ -82,9 +82,9 @@ address as a verified alias in Gmail (**Settings → Accounts → Send mail as**
 at a provider that hosts the domain's mail. Nothing else in the code changes.
 
 ## 7. Automation (already wired, needs one click each)
-- **CodeRabbit (AI code review + security):** app.coderabbit.ai → sign in with GitHub → install on `Porfolio`.
+- **CodeRabbit (AI code review + security):** app.coderabbit.ai → sign in with GitHub → install on `Portfolio`.
   The repo's `.coderabbit.yaml` already tells it what to check.
-- **devops-hq monitoring:** add `Porfolio` to `devops-hq/repos.txt` so the 6-hourly watcher covers it.
+- **devops-hq monitoring:** add `Portfolio` to `devops-hq/repos.txt` so the 6-hourly watcher covers it.
   The watcher needs read access to private repos (`ORG_READ_TOKEN`, see devops-hq README).
 - **Dependabot + CodeQL:** run automatically from `.github/`. Enable *Dependabot alerts* in the repo's
   **Settings → Code security** if prompted.
