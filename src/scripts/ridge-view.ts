@@ -1,4 +1,4 @@
-import { ridgeHeight } from '../lib/ridge.ts';
+import { ridgeHeight, isSoftwareRenderer } from '../lib/ridge.ts';
 
 // A particle Himalaya in raw WebGL 1 (no library), ported from Sabin Labs: every point is a vertex,
 // all motion happens in the vertex shader. Dark theme only; colours are the --indigo / --cyan / --text tokens.
@@ -57,6 +57,9 @@ export type RidgeHandle = { setPaused(paused: boolean): void };
 export function startRidge(canvas: HTMLCanvasElement): RidgeHandle | null {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: true, powerPreference: 'low-power' });
   if (!gl) return null;
+  // Chrome ignores failIfMajorPerformanceCaveat for SwiftShader, so ask for the renderer name instead.
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  if (isSoftwareRenderer(String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER)))) return null;
   const shader = (type: number, src: string) => {
     const s = gl.createShader(type)!;
     gl.shaderSource(s, src);
