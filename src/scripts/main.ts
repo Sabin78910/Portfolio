@@ -217,5 +217,6 @@ type TT = { createPolicy(n: string, p: { createScriptURL(u: string): string }): 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   const tt = (window as unknown as { trustedTypes?: TT }).trustedTypes;
   const url = tt?.createPolicy('sw', { createScriptURL: (u) => (u === '/sw.js' ? u : '') }).createScriptURL('/sw.js') ?? '/sw.js';
-  addEventListener('load', () => navigator.serviceWorker.register(url));
+  // Some browsers refuse workers (Google's renderer, private modes); the site works without one.
+  addEventListener('load', () => navigator.serviceWorker.register(url).catch(() => {}));
 }
