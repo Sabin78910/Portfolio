@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import Analytics from '@vercel/analytics/astro';
 import '../styles/global.css';
 
 interface Props {
@@ -44,9 +45,13 @@ const ogImage = new URL('/og.png', Astro.site);
     <Font cssVariable="--font-sans" preload />
     <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again -->
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- Trusted Types: Vercel Analytics sets script.src from a plain string; allow exactly its script, block everything else -->
+    <script is:inline>window.trustedTypes?.createPolicy('default', { createScriptURL: (u) => (u === '/_vercel/insights/script.js' ? u : null) });</script>
     <slot name="head" />
   </head>
   <body>
     <slot />
+    <!-- In <body>, not <head>: an unknown element in <head> makes the parser close it early -->
+    <Analytics />
   </body>
 </html>
