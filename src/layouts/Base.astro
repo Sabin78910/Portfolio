@@ -36,10 +36,10 @@ const ogImage = new URL('/og.png', Astro.site);
 
     <meta name="theme-color" content="#070b16" />
     <meta name="color-scheme" content="dark" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <!-- Google Search favicons must be PNG/ICO etc. (not SVG), square, ideally a multiple of 48px -->
-    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <!-- Google Search favicons must be PNG/ICO etc. (not SVG), square, ideally a multiple of 48px.
+         Every icon link is the portrait so Google can't pick a different one. -->
+    <link rel="icon" href="/favicon.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <Font cssVariable="--font-sans" preload />
