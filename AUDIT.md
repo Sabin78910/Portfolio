@@ -50,7 +50,7 @@
 | V5 | No DNSSEC | Vercel DNS does not sign zones, and `.com.np` has no DS record | — | Accepted |
 | V6 | HSTS is not preloaded | Preloading protects even the first visit, but takes months to undo | `preload` + submission at hstspreload.org | Owner decision |
 
-**Verified secure on production:** `.env`, `.git`, configs and source return 404; no source maps served; `TRACE` 405, other verbs 404; no CORS for foreign origins; cross-site POST 403; `text/plain` 415; 3 MB body 413; XSS payloads rejected and never reflected; no cookies; `X-Forwarded-Host` not reflected; open-redirect probes on the `www` redirect stay on the host; CAA limits certificates to Let's Encrypt, Google Trust Services and Sectigo. No secret reaches public files (the SMTP password is server-only; the SMTP user is the public contact address), and no secrets entered git history after the 13 October scan.
+**Verified secure on production:** `.env`, `.git`, configs and source return 404; no source maps served; `TRACE` 405, other verbs 404; no CORS for foreign origins; cross-site POST 403; `text/plain` 415; 3 MB body 413; XSS payloads rejected and never reflected; no cookies unless the visitor accepts Google Analytics in the consent banner (nothing from Google loads before that; the CSP pins scripts to `/gtag/js` only, not all of googletagmanager.com); `X-Forwarded-Host` not reflected; open-redirect probes on the `www` redirect stay on the host; CAA limits certificates to Let's Encrypt, Google Trust Services and Sectigo. No secret reaches public files (the SMTP password is server-only; the SMTP user is the public contact address), and no secrets entered git history after the 13 October scan.
 
 ### Owner checklist
 

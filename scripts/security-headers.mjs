@@ -20,21 +20,24 @@ assert.ok(hashes.size > 0, 'expected the inline reveal script in the built HTML'
 
 const csp = [
   "default-src 'self'",
-  `script-src 'self' ${[...hashes].join(' ')}`,
+  // Google Analytics (loaded only after cookie consent, see src/scripts/consent.ts). The script source is pinned to the
+  // /gtag/js path: a bare googletagmanager.com host would also allow any attacker's GTM container (gtm.js).
+  `script-src 'self' ${[...hashes].join(' ')} https://www.googletagmanager.com/gtag/js`,
   "style-src 'self' 'unsafe-inline'", // style="--brand:…" attributes and Astro's font-face block
-  "img-src 'self' data:",
+  "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
   "manifest-src 'self'",
   "worker-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  // Trusted Types: DOM XSS sinks (innerHTML, script URLs...) reject plain strings. Only two policies may exist:
-  // "sw" (service worker URL) and "default" (Vercel Analytics: same-origin script.js URLs only, see Base.astro).
+  // Trusted Types: DOM XSS sinks (innerHTML, script URLs...) reject plain strings. Only three policies may exist:
+  // "sw" (service worker URL), "ga" (the GA script URL, see consent.ts) and "default" (Vercel Analytics:
+  // same-origin script.js URLs only, see Base.astro).
   "require-trusted-types-for 'script'",
-  'trusted-types sw default',
+  'trusted-types sw ga default',
   'upgrade-insecure-requests',
 ].join('; ');
 
