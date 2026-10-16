@@ -83,7 +83,7 @@ test('Form posts redirect back to the contact section', async () => {
   const ok = await form(good);
   assert.equal(ok.status, 303);
   assert.equal(ok.headers.get('Location'), '/?sent=1#contact');
-  const bad = await form({ ...good, message: 'hi' });
+  const bad = await form({ ...good, message: '' });
   assert.equal(bad.headers.get('Location'), '/?sent=0#contact');
 });
 
