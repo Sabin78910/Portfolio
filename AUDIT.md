@@ -112,7 +112,7 @@ Lighthouse also raises four "insight" notices (caching, compression, request cha
 | `sitemap.xml` | ✅ | Lists the home page |
 | Site name in results | ✅ | `WebSite` structured data (`name`, `url`) on the home page, as Google requires³ |
 | Person profile | ✅ | `ProfilePage` → `Person` (name, job title, description, image, employer, university, GitHub/LinkedIn `sameAs`). Google lists personal "About me" pages as eligible⁴. |
-| Favicon in results | ✅ | 192×192 PNG `rel="icon"` (a multiple of 48 px; Google's list of favicon formats does not include SVG⁵), plus an SVG favicon for browsers and an Apple touch icon |
+| Favicon in results | ✅ | 192×192 PNG `rel="icon"` (a multiple of 48 px; Google's list of favicon formats does not include SVG⁵), the same portrait as the Apple touch icon and `/favicon.ico` |
 | Large image previews | ✅ | `max-image-preview:large` |
 | Social and LinkedIn preview | ✅ | Open Graph title, description, URL, `og:site_name`, a 1200×630 image with width/height tags (LinkedIn's minimum is 1200×627⁶), and a Twitter large card |
 | Language | ✅ | `<html lang="en">` |
