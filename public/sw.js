@@ -18,7 +18,8 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const { request } = e;
   const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== location.origin || url.pathname.startsWith('/api/')) return;
+  // /api/ and Vercel's /_vercel/ (analytics) must always hit the network.
+  if (request.method !== 'GET' || url.origin !== location.origin || /^\/(api|_vercel)\//.test(url.pathname)) return;
 
   if (request.mode === 'navigate') {
     e.respondWith(
