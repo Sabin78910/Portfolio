@@ -32,7 +32,7 @@ const csp = [
   "form-action 'self'",
   "frame-ancestors 'none'",
   // Trusted Types: DOM XSS sinks (innerHTML, script URLs...) reject plain strings. Only two policies may exist:
-  // "sw" (service worker URL) and "default" (Vercel Analytics' script URL, see Base.astro).
+  // "sw" (service worker URL) and "default" (Vercel Analytics: same-origin script.js URLs only, see Base.astro).
   "require-trusted-types-for 'script'",
   'trusted-types sw default',
   'upgrade-insecure-requests',
