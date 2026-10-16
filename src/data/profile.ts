@@ -48,7 +48,7 @@ export const nav = [
 // About section, owner's wording.
 export const about = {
   paragraphs: [
-    'I am a backend-focused Web Developer and AI Engineer with a BSc (Hons) in Computing and a strong computational foundation, bringing 3+ years of experience in developing and deploying web technologies. I design, build, and maintain secure, scalable, database-driven web applications and RESTful APIs using Laravel, PHP, Python (Flask), React, and SQL, translating business requirements into reliable software.',
+    'I am a backend focused Web Developer and AI Engineer with a BSc (Hons) in Computing and a strong computational foundation, bringing 3+ years of experience in developing and deploying web technologies. I design, build, and maintain secure, scalable, database-driven web applications and RESTful APIs using Laravel, PHP, Python (Flask), React, and SQL, translating business requirements into reliable software.',
     'My work centers on connecting systems and eliminating manual effort: integrating third-party APIs, automating workflows, and, more recently, embedding AI capabilities into production applications. I prioritize clean, maintainable code, strong performance, and solutions that deliver measurable business impact.',
     'My background spans software development, web application development, and technical support. This combination gives me a practical understanding of how software behaves for real users, not just how it runs in the codebase.',
   ],
