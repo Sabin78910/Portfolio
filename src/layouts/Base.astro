@@ -43,8 +43,9 @@ const ogImage = new URL('/og.png', Astro.site);
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <Font cssVariable="--font-sans" preload />
-    <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again -->
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again, and paint the cookie banner with the page
+         (not after scripts, which made it the late LCP element) only until a choice is stored; mirrors readConsent() -->
+    <script is:inline>document.documentElement.classList.add('js'); try { if (/^(granted|denied)$/.test(localStorage.getItem('consent'))) document.documentElement.classList.add('consent-chosen'); } catch {}</script>
     <!-- Trusted Types: Vercel Analytics sets script.src from a plain string, at a per-project path (/<id>/script.js).
          Allow only same-origin script.js URLs; HTML and inline-script sinks stay blocked (no createHTML/createScript). -->
     <script is:inline>window.trustedTypes?.createPolicy('default', { createScriptURL: (u) => (new URL(u, location.href).origin === location.origin && u.endsWith('/script.js') ? u : null) });</script>
@@ -52,6 +53,17 @@ const ogImage = new URL('/og.png', Astro.site);
   </head>
   <body>
     <slot />
+    <!-- Visible until the visitor chooses (see the head script); equal-weight buttons, so declining is as easy as accepting -->
+    <section class="consent card" data-consent aria-label="Cookie consent">
+      <p>May I use Google Analytics cookies to see how visitors find this site? Nothing from Google loads unless you accept.</p>
+      <div class="consent__actions">
+        <button class="btn btn--sm" type="button" data-choice="denied">Decline</button>
+        <button class="btn btn--sm" type="button" data-choice="granted">Accept</button>
+      </div>
+    </section>
+    <script>
+      import '../scripts/consent.ts';
+    </script>
     <!-- In <body>, not <head>: an unknown element in <head> makes the parser close it early -->
     <Analytics />
   </body>
