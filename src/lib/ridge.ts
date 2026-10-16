@@ -10,6 +10,10 @@ export function heroMode(env: HeroEnv): HeroMode {
   return 'webgl';
 }
 
+/** Software WebGL (no usable GPU, e.g. headless Chrome's SwiftShader) runs the particle shader on the CPU:
+ *  2.4 s of main-thread work in Lighthouse (PageSpeed: 3.2 s), so those renderers keep the static poster too. */
+export const isSoftwareRenderer = (renderer: string) => /swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer);
+
 export function readHeroEnv(): HeroEnv {
   const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
   return {
