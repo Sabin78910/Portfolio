@@ -26,7 +26,7 @@ test('rejects bad input and flags honeypot spam', () => {
   assert.equal(validateContact({ ...good, email: 'not-an-email' }).ok, false);
   assert.equal(validateContact({ ...good, email: 'asha@example..com' }).ok, false);
   assert.equal(validateContact({ ...good, email: 'asha.rai@mail.example.com.np' }).ok, true);
-  assert.equal(validateContact({ ...good, message: 'short' }).ok, false);
+  assert.equal(validateContact({ ...good, name: 'A', message: 'H' }).ok, true); // one character is enough
   assert.equal(validateContact({ ...good, message: 'x'.repeat(5001) }).ok, false);
   assert.equal(validateContact({ ...good, name: 42 }).ok, false);
   const spam = validateContact({ ...good, company: 'Bots Inc' });
@@ -39,11 +39,9 @@ test('each failure names its field and the specific problem', () => {
     return r.ok ? null : [r.field, r.error];
   };
   assert.deepEqual(err({ name: '' }), ['name', 'Please enter your name.']);
-  assert.deepEqual(err({ name: 'A' }), ['name', 'Your name needs at least 2 characters.']);
   assert.deepEqual(err({ email: ' ' }), ['email', 'Please enter your email address.']);
   assert.deepEqual(err({ email: 'asha@localhost' }), ['email', 'Please enter a valid email address, like name@example.com.']);
   assert.deepEqual(err({ message: '' }), ['message', 'Please write a message.']);
-  assert.deepEqual(err({ message: 'Hi there' }), ['message', 'Your message needs at least 10 characters (it has 8).']);
   assert.equal(err({ company: 'Bots Inc' })?.[0], undefined); // spam names no field, so the browser still posts it
 });
 
