@@ -1257,6 +1257,44 @@ kbd {
 .footer__inner {
   text-align: center;
 }
+.footer__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Cookie consent: fixed, so showing it never shifts the layout (CLS 0) */
+.consent {
+  position: fixed;
+  right: var(--pad);
+  bottom: var(--pad);
+  left: var(--pad);
+  z-index: 60;
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.9);
+}
+.js:not(.consent-chosen) .consent {
+  display: flex;
+}
+.consent p {
+  flex: 1 1 16rem;
+}
+.consent__actions {
+  display: flex;
+  gap: 0.5rem;
+}
 
 /* ── Command palette ─────────────────────────────────────────────────── */
 .cmdk {
