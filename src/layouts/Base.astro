@@ -45,8 +45,9 @@ const ogImage = new URL('/og.png', Astro.site);
     <Font cssVariable="--font-sans" preload />
     <!-- Lets CSS hide reveal-on-scroll content only when JS can reveal it again -->
     <script is:inline>document.documentElement.classList.add('js');</script>
-    <!-- Trusted Types: Vercel Analytics sets script.src from a plain string; allow exactly its script, block everything else -->
-    <script is:inline>window.trustedTypes?.createPolicy('default', { createScriptURL: (u) => (u === '/_vercel/insights/script.js' ? u : null) });</script>
+    <!-- Trusted Types: Vercel Analytics sets script.src from a plain string, at a per-project path (/<id>/script.js).
+         Allow only same-origin script.js URLs; HTML and inline-script sinks stay blocked (no createHTML/createScript). -->
+    <script is:inline>window.trustedTypes?.createPolicy('default', { createScriptURL: (u) => (new URL(u, location.href).origin === location.origin && u.endsWith('/script.js') ? u : null) });</script>
     <slot name="head" />
   </head>
   <body>
