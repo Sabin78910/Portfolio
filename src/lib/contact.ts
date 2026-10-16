@@ -31,12 +31,10 @@ export function validateContact(raw: unknown): ContactResult {
   // One specific message per failure; the browser runs this too, so it can name and focus the field.
   const fail = (field: 'name' | 'email' | 'message', error: string): ContactResult => ({ ok: false, field, error });
   if (!name) return fail('name', 'Please enter your name.');
-  if (name.length < 2) return fail('name', 'Your name needs at least 2 characters.');
   if (name.length > 100) return fail('name', 'Please keep your name under 100 characters.');
   if (!email) return fail('email', 'Please enter your email address.');
   if (email.length > 254 || !EMAIL.test(email)) return fail('email', 'Please enter a valid email address, like name@example.com.');
   if (!message) return fail('message', 'Please write a message.');
-  if (message.length < 10) return fail('message', `Your message needs at least 10 characters (it has ${message.length}).`);
   if (message.length > 5000) return fail('message', 'Please keep your message under 5,000 characters.');
 
   const key = str('subject');

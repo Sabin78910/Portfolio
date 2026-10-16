@@ -298,7 +298,7 @@ const commands = [
           <form class="form" action="/api/contact" method="post" data-contact novalidate>
             <div class="field">
               <label for="f-name">Your name</label>
-              <input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" />
+              <input id="f-name" name="name" autocomplete="name" required maxlength="100" />
             </div>
             <div class="field">
               <label for="f-email">Your email</label>
@@ -315,7 +315,7 @@ const commands = [
             </div>
             <div class="field">
               <label for="f-message">Message</label>
-              <textarea id="f-message" name="message" rows="5" required minlength="10" maxlength="5000"></textarea>
+              <textarea id="f-message" name="message" rows="5" required maxlength="5000"></textarea>
             </div>
             <div class="hp" aria-hidden="true">
               <label for="f-company">Company</label>
