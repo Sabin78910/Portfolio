@@ -12,7 +12,7 @@
     "@astrojs/vercel": "^11.0.14",
     "@vercel/analytics": "^2.0.1",
     "astro": "^7.3.8",
-    "nodemailer": "^10.1.1",
+    "nodemailer": "^10.2.1",
     "simple-icons": "^16.35.0"
   },
   "engines": {
@@ -21,6 +21,9 @@
   "overrides": {
     "@vercel/routing-utils": {
       "path-to-regexp": "6.3.0"
+    },
+    "@vercel/cli-config": {
+      "zod": "^4.6.6"
     }
   },
   "devDependencies": {

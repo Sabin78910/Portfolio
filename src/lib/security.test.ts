@@ -60,7 +60,9 @@ test('Header injection: CR/LF in name cannot add headers; in email it is refused
 });
 
 test('Address smuggling: lists, quotes, angle brackets and IP literals are refused', () => {
-  for (const email of ['a@example.com,b@example.com', 'a@example.com>,<b@example.com', '"a b"@example.com', 'a@[127.0.0.1]', 'a@localhost', 'a@exa_mple.com'])
+  // Second row: nodemailer addressparser bugs (GHSA-8c8m-p3m8-cjg8, -m943-m63m-w62w, -85x2-q946-cp5h), refused before they reach it.
+  for (const email of ['a@example.com,b@example.com', 'a@example.com>,<b@example.com', '"a b"@example.com', 'a@[127.0.0.1]', 'a@localhost', 'a@exa_mple.com',
+    'a((x)evil@attacker.com)@example.com', 'g:a@example.com;b@attacker.com', '"a>"@attacker.com', 'a(;b@attacker.com)@example.com'])
     assert.equal(validateContact({ ...good, email }).ok, false, email);
   for (const email of ['asha.rai+jobs@mail.example.com.np', "o'neil@example.co.uk"]) assert.equal(validateContact({ ...good, email }).ok, true, email);
 });
