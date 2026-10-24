@@ -480,11 +480,11 @@ The owner felt v3 was too playful and asked for something more professional. Ins
 
 The owner chose **B**. The full site now follows it:
 
-- **Base:** deep navy `#070B16` with a crisp indigo radial glow and a faint masked grid. The muddy WebGL smoke from v2 is not coming back.
+- **Base:** deep navy `#070B16` with a crisp blue radial glow and a faint masked grid. The muddy WebGL smoke from v2 is not coming back.
 - **Type:** Geist only, with one font family. That made mobile LCP faster: 1.8 s, down from 2.0 s.
-- **Accent:** gradient text (`#A5B4FC → #818CF8 → #22D3EE`) on key phrases only. Gradient borders on the profile card, the hovered project cards, the story tile and the form.
+- **Accent:** gradient text (`#93C5FD → #60A5FA → #22D3EE`) on key phrases only. Gradient borders on the profile card, the hovered project cards, the story tile and the form.
 - **Actions:** white primary buttons, outlined secondaries, and glass chips.
-- **Hero:** stat strip under the hero, all values from the CV: 3 systems built and maintained at BFC, 3 projects, BSc (Hons), core stack. The hypercube stays (indigo/cyan/emerald, subtle).
+- **Hero:** stat strip under the hero, all values from the CV: 3 systems built and maintained at BFC, 3 projects, BSc (Hons), core stack. The hypercube stays (blue/cyan/emerald, subtle).
 
 **Contrast (WCAG):**
 
@@ -493,8 +493,11 @@ The owner chose **B**. The full site now follows it:
 | text on bg | 16.6 |
 | muted `#9AA4B8` on bg | 7.8 |
 | muted-2 `#8590A6` on surface | 5.8 |
-| indigo `#818CF8` on bg | 6.6 |
+| blue `#60A5FA` on bg / surface-2 | 7.7 / 6.9 |
+| blue-soft `#93C5FD` on bg / surface-2 | 10.9 / 9.7 |
 | dark text on white button | 19.7 |
+
+**2026-10-24, purple out:** the owner asked for a more professional colour than purple. Indigo (`#818CF8`, which reads violet) is now blue (`#60A5FA`, soft `#93C5FD`, glow `#3B82F6`). Blue is the trust colour of finance and tech, sits naturally on the navy base and flows into the existing cyan. The CV headings moved from `#3730A3` to `#1E40AF` (8.7:1 on white).
 
 **Result:** Lighthouse mobile 99 / 100 / 100 / 100 (LCP 1.8 s, TBT 0 ms) and desktop 100 / 100 / 100 / 100. CLS 0. 139 KB.
 

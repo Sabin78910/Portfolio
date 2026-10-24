@@ -1,5 +1,5 @@
 /* ── v4 "Midnight Premium" design system (chosen from three mockups; AUDIT.md v4) ──
-   Deep navy base, crisp indigo glow, gradient-border glass, white primary actions.
+   Deep navy base, crisp blue glow, gradient-border glass, white primary actions.
    Every text/background pair is ≥ AA (table in AUDIT.md). */
 :root {
   --bg: #070b16;
@@ -11,12 +11,12 @@
   --text: #e8ecf4;
   --muted: #9aa4b8;
   --muted-2: #8590a6;
-  --indigo: #818cf8;
-  --indigo-soft: #a5b4fc;
+  --blue: #60a5fa;
+  --blue-soft: #93c5fd;
   --cyan: #22d3ee;
   --emerald: #34d399;
-  --grad: linear-gradient(90deg, #a5b4fc 0%, #818cf8 40%, #22d3ee 100%);
-  --border-grad: linear-gradient(140deg, rgb(129 140 248 / 0.7), rgb(34 211 238 / 0.25), rgb(255 255 255 / 0.06));
+  --grad: linear-gradient(90deg, #93c5fd 0%, #60a5fa 40%, #22d3ee 100%);
+  --border-grad: linear-gradient(140deg, rgb(96 165 250 / 0.7), rgb(34 211 238 / 0.25), rgb(255 255 255 / 0.06));
 
   --sans: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, monospace;
@@ -77,10 +77,10 @@ textarea {
   color: inherit;
 }
 ::selection {
-  background: rgb(129 140 248 / 0.4);
+  background: rgb(96 165 250 / 0.4);
 }
 :focus-visible {
-  outline: 2px solid var(--indigo-soft);
+  outline: 2px solid var(--blue-soft);
   outline-offset: 3px;
   border-radius: 10px;
 }
@@ -147,7 +147,7 @@ kbd {
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--indigo-soft);
+  color: var(--blue-soft);
 }
 .num {
   font-family: var(--mono);
@@ -158,12 +158,12 @@ kbd {
 .link {
   font-weight: 500;
   text-decoration: none;
-  background: linear-gradient(var(--indigo), var(--indigo)) 0 100% / 100% 1px no-repeat;
+  background: linear-gradient(var(--blue), var(--blue)) 0 100% / 100% 1px no-repeat;
   padding-bottom: 2px;
   transition: color 0.2s, background-size 0.3s var(--ease);
 }
 .link:hover {
-  color: var(--indigo-soft);
+  color: var(--blue-soft);
   background-size: 0 1px;
 }
 .icon {
@@ -188,8 +188,8 @@ kbd {
 }
 .icon-btn:hover {
   transform: translateY(-2px);
-  border-color: rgb(165 180 252 / 0.5);
-  background: rgb(129 140 248 / 0.08);
+  border-color: rgb(147 197 253 / 0.5);
+  background: rgb(96 165 250 / 0.08);
   color: var(--text);
 }
 .icon-btn .icon {
@@ -203,12 +203,12 @@ kbd {
 }
 .tags li {
   padding: 0.3rem 0.75rem;
-  border: 1px solid rgb(129 140 248 / 0.3);
+  border: 1px solid rgb(96 165 250 / 0.3);
   border-radius: 999px;
-  background: rgb(129 140 248 / 0.08);
+  background: rgb(96 165 250 / 0.08);
   font-size: 0.78rem;
   font-weight: 500;
-  color: var(--indigo-soft);
+  color: var(--blue-soft);
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────── */
@@ -232,8 +232,8 @@ kbd {
 }
 .btn:hover {
   transform: translateY(-1px);
-  border-color: rgb(165 180 252 / 0.5);
-  background: rgb(129 140 248 / 0.08);
+  border-color: rgb(147 197 253 / 0.5);
+  background: rgb(96 165 250 / 0.08);
 }
 .btn:active {
   transform: translateY(1px);
@@ -246,7 +246,7 @@ kbd {
 .btn--primary:hover {
   border-color: #fff;
   background: #fff;
-  box-shadow: 0 10px 40px -10px rgb(129 140 248 / 0.75);
+  box-shadow: 0 10px 40px -10px rgb(96 165 250 / 0.75);
 }
 .btn .icon {
   width: 1em;
@@ -277,7 +277,7 @@ kbd {
     var(--border-grad) border-box;
 }
 .project:hover {
-  box-shadow: 0 30px 80px -40px rgb(99 102 241 / 0.55);
+  box-shadow: 0 30px 80px -40px rgb(59 130 246 / 0.55);
 }
 .ticks {
   display: grid;
@@ -402,7 +402,7 @@ kbd {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(45% 55% at 22% 32%, rgb(99 102 241 / 0.28), transparent 70%),
+    radial-gradient(45% 55% at 22% 32%, rgb(59 130 246 / 0.28), transparent 70%),
     radial-gradient(35% 45% at 82% 38%, rgb(34 211 238 / 0.13), transparent 70%);
 }
 .hero__grid {
@@ -445,13 +445,13 @@ kbd {
   opacity: 0;
 }
 .ridge--far {
-  fill: rgb(129 140 248 / 0.12);
+  fill: rgb(96 165 250 / 0.12);
 }
 .ridge--mid {
   fill: rgb(34 211 238 / 0.07);
 }
 .ridge--near {
-  fill: rgb(129 140 248 / 0.14);
+  fill: rgb(96 165 250 / 0.14);
 }
 .hero__motion {
   position: absolute;
@@ -581,7 +581,7 @@ kbd {
   animation: fade 0.9s 0.42s var(--ease) both;
 }
 .hero__loc .icon {
-  color: var(--indigo-soft);
+  color: var(--blue-soft);
 }
 .hero__cta {
   display: flex;
@@ -618,7 +618,7 @@ kbd {
   background:
     linear-gradient(var(--surface), var(--surface)) padding-box,
     var(--border-grad) border-box;
-  box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.9), 0 0 80px -30px rgb(99 102 241 / 0.6);
+  box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.9), 0 0 80px -30px rgb(59 130 246 / 0.6);
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.5s var(--ease);
   animation: float-in 1s 0.2s var(--ease) both;
@@ -671,7 +671,7 @@ kbd {
   line-height: 0.8;
   letter-spacing: -0.05em;
   white-space: nowrap;
-  color: rgb(129 140 248 / 0.11);
+  color: rgb(96 165 250 / 0.11);
   pointer-events: none;
   user-select: none;
 }
@@ -687,7 +687,7 @@ kbd {
   width: 100%;
   height: 1px;
   margin-top: 1rem;
-  background: linear-gradient(90deg, transparent, var(--indigo) 25%, var(--cyan) 75%, transparent);
+  background: linear-gradient(90deg, transparent, var(--blue) 25%, var(--cyan) 75%, transparent);
 }
 .js [data-reveal] {
   opacity: 0;
@@ -746,7 +746,7 @@ kbd {
   isolation: isolate;
   padding-block: clamp(4.5rem, 10vw, 7rem);
   border-bottom: 1px solid var(--line);
-  background: radial-gradient(50% 70% at 50% 0%, rgb(99 102 241 / 0.2), transparent 70%), var(--bg);
+  background: radial-gradient(50% 70% at 50% 0%, rgb(59 130 246 / 0.2), transparent 70%), var(--bg);
 }
 .gh__ridge {
   position: absolute;
@@ -758,13 +758,13 @@ kbd {
   -webkit-mask-image: linear-gradient(#000 60%, transparent);
 }
 .gh .ridge--far {
-  fill: rgb(129 140 248 / 0.2);
+  fill: rgb(96 165 250 / 0.2);
 }
 .gh .ridge--mid {
   fill: rgb(34 211 238 / 0.12);
 }
 .gh .ridge--near {
-  fill: rgb(129 140 248 / 0.22);
+  fill: rgb(96 165 250 / 0.22);
 }
 .gh__inner {
   display: grid;
@@ -812,14 +812,14 @@ kbd {
   border-radius: 16px;
   background: var(--surface-2);
 }
-.glow--indigo .pv {
-  background: radial-gradient(80% 70% at 20% 0%, rgb(99 102 241 / 0.32), transparent 60%), radial-gradient(70% 60% at 100% 100%, rgb(34 211 238 / 0.14), transparent 60%), var(--surface-2);
+.glow--blue .pv {
+  background: radial-gradient(80% 70% at 20% 0%, rgb(59 130 246 / 0.32), transparent 60%), radial-gradient(70% 60% at 100% 100%, rgb(34 211 238 / 0.14), transparent 60%), var(--surface-2);
 }
 .glow--cyan .pv {
-  background: radial-gradient(80% 70% at 80% 0%, rgb(34 211 238 / 0.25), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgb(129 140 248 / 0.25), transparent 60%), var(--surface-2);
+  background: radial-gradient(80% 70% at 80% 0%, rgb(34 211 238 / 0.25), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgb(96 165 250 / 0.25), transparent 60%), var(--surface-2);
 }
 .glow--emerald .pv {
-  background: radial-gradient(80% 70% at 50% 0%, rgb(52 211 153 / 0.2), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgb(129 140 248 / 0.2), transparent 60%), var(--surface-2);
+  background: radial-gradient(80% 70% at 50% 0%, rgb(52 211 153 / 0.2), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgb(96 165 250 / 0.2), transparent 60%), var(--surface-2);
 }
 .pv-window {
   display: flex;
@@ -870,7 +870,7 @@ kbd {
 }
 .pv-filters b:first-child {
   width: 70%;
-  background: rgb(129 140 248 / 0.6);
+  background: rgb(96 165 250 / 0.6);
 }
 .pv-grid {
   display: grid;
@@ -904,9 +904,9 @@ kbd {
   font: 500 0.64rem var(--mono);
 }
 .pv-pill--cart {
-  border-color: rgb(129 140 248 / 0.4);
-  background: rgb(129 140 248 / 0.15);
-  color: var(--indigo-soft);
+  border-color: rgb(96 165 250 / 0.4);
+  background: rgb(96 165 250 / 0.15);
+  color: var(--blue-soft);
 }
 .pv-dash {
   flex: 1;
@@ -928,7 +928,7 @@ kbd {
   flex: 1;
   height: var(--v);
   border-radius: 4px 4px 2px 2px;
-  background: linear-gradient(180deg, var(--cyan), rgb(129 140 248 / 0.5));
+  background: linear-gradient(180deg, var(--cyan), rgb(96 165 250 / 0.5));
 }
 .pv-rows {
   display: grid;
@@ -978,7 +978,7 @@ kbd {
   stroke: rgb(255 255 255 / 0.14);
 }
 .pv-plot .pc {
-  stroke: var(--indigo);
+  stroke: var(--blue);
   stroke-width: 1.5;
   stroke-dasharray: 4 4;
 }
@@ -986,7 +986,7 @@ kbd {
   fill: var(--cyan);
 }
 .pv-plot .pt--1 {
-  fill: var(--indigo);
+  fill: var(--blue);
 }
 .pv-plot .pt--2 {
   fill: var(--emerald);
@@ -1023,7 +1023,7 @@ kbd {
 }
 .about__notes li {
   padding-left: 0.9rem;
-  border-left: 2px solid var(--indigo);
+  border-left: 2px solid var(--blue);
   color: var(--muted);
 }
 .about__notes strong {
@@ -1086,7 +1086,7 @@ kbd {
 .entry__period {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--indigo-soft);
+  color: var(--blue-soft);
 }
 .entry h3 {
   font-size: clamp(1.15rem, 2vw, 1.35rem);
@@ -1125,7 +1125,7 @@ kbd {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(40% 60% at 15% 40%, rgb(99 102 241 / 0.22), transparent 70%),
+    radial-gradient(40% 60% at 15% 40%, rgb(59 130 246 / 0.22), transparent 70%),
     radial-gradient(35% 50% at 90% 70%, rgb(34 211 238 / 0.1), transparent 70%);
 }
 .contact__card {
@@ -1212,8 +1212,8 @@ kbd {
 .field textarea:focus,
 .field select:focus {
   outline: none;
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 4px rgb(129 140 248 / 0.18);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgb(96 165 250 / 0.18);
 }
 .hp {
   position: absolute;
@@ -1307,7 +1307,7 @@ kbd {
   backdrop-filter: blur(24px) saturate(1.5);
   -webkit-backdrop-filter: blur(24px) saturate(1.5);
   color: var(--text);
-  box-shadow: 0 40px 120px -20px rgb(0 0 0 / 0.9), 0 0 0 1px rgb(129 140 248 / 0.12);
+  box-shadow: 0 40px 120px -20px rgb(0 0 0 / 0.9), 0 0 0 1px rgb(96 165 250 / 0.12);
 }
 .cmdk[open] {
   animation: pop 0.22s var(--ease);
@@ -1334,7 +1334,7 @@ kbd {
   outline: none;
 }
 .cmdk__input:focus-visible {
-  box-shadow: inset 0 -2px 0 var(--indigo);
+  box-shadow: inset 0 -2px 0 var(--blue);
 }
 .cmdk__list {
   max-height: 22rem;
@@ -1352,7 +1352,7 @@ kbd {
 }
 .cmdk__list [aria-selected='true'] a,
 .cmdk__list a:hover {
-  background: rgb(129 140 248 / 0.14);
+  background: rgb(96 165 250 / 0.14);
 }
 .cmdk__hint {
   overflow: hidden;

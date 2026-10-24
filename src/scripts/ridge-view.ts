@@ -1,7 +1,7 @@
 import { ridgeHeight, isSoftwareRenderer } from '../lib/ridge.ts';
 
 // A particle Himalaya in raw WebGL 1 (no library), ported from Sabin Labs: every point is a vertex,
-// all motion happens in the vertex shader. Dark theme only; colours are the --indigo / --cyan / --text tokens.
+// all motion happens in the vertex shader. Dark theme only; colours are the --blue / --cyan / --text tokens.
 const VS = `
 attribute vec3 aPos;
 attribute float aSeed;
@@ -43,7 +43,7 @@ varying float vH, vA, vLift;
 void main() {
   float r = length(gl_PointCoord - 0.5);
   if (r > 0.5) discard;
-  vec3 lo = vec3(0.51, 0.55, 0.97);
+  vec3 lo = vec3(0.38, 0.65, 0.98);
   vec3 mid = vec3(0.13, 0.83, 0.93);
   vec3 hi = vec3(0.91, 0.93, 0.96);
   vec3 c = vH < 0.45 ? mix(lo, mid, vH / 0.45) : mix(mid, hi, (vH - 0.45) / 0.55);
