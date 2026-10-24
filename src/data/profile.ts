@@ -130,7 +130,7 @@ export const projects = [
   },
   {
     visual: 'market',
-    color: 'indigo',
+    color: 'blue',
     title: 'GrocerEase',
     kind: 'Multi-vendor marketplace',
     summary:
