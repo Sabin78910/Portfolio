@@ -161,7 +161,7 @@ Lighthouse also raises four "insight" notices (caching, compression, request cha
 | Trusted Types (new) | DOM XSS sinks reject plain strings. The only policy allowed is `sw`, pinned to `/sw.js`. |
 | Cross-Origin-Resource-Policy (new) | `same-origin`: other sites can't embed the site's resources |
 | Cross-Origin-Opener-Policy | `same-origin` |
-| Permissions-Policy | Camera, microphone, geolocation, payment, USB, Bluetooth, serial, HID, MIDI, display capture and **Topics API** all disabled |
+| Permissions-Policy | Camera, microphone, geolocation, payment, USB, serial, HID, MIDI, display capture and **Topics API** all disabled (`bluetooth` is left out: Chrome logs it as an unrecognised feature) |
 | HSTS · nosniff · Referrer-Policy | 1 year + subdomains · `nosniff` · `strict-origin-when-cross-origin` |
 | `/.well-known/security.txt` (new) | RFC 9116 vulnerability-disclosure contact, expires 13 Oct 2027 |
 
